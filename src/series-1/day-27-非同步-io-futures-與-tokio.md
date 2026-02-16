@@ -191,20 +191,26 @@ tower-web ，它就讓你不需要去碰到 tokio 的細節部份。
 ## ASCII 詳細示意圖
 
 ```text
-async/await + Tokio Runtime
+════════════════════════════════════════
+  async/await + Tokio Runtime
+════════════════════════════════════════
 
-async fn task() { ... }
-        |
-        v
-Future state machine
-        |
-        v
-Tokio scheduler poll()
-        |
-   +----+----+
-   | ready   | pending (等待 I/O)
-   v         |
-complete <---+
+  async fn task() { ... }          ← 定義非同步任務
+           │
+           v
+  Future state machine             ← 編譯器產生狀態機
+           │
+           v
+  Tokio scheduler poll()           ← 排程器輪詢 Future
+           │
+     ┌─────┴──────┐
+     │            │
+     v            v
+  ready       pending              ← 等待 I/O 完成
+     │            │
+     v            │
+  complete <──────┘                ← I/O 就緒後再次輪詢
 
+────────────────────────────────────────
 單執行緒也可高併發處理大量 I/O。
 ```

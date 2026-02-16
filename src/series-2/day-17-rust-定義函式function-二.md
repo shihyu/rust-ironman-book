@@ -96,27 +96,34 @@ println!("{}", test(5.));
 ## ASCII 詳細示意圖
 
 ```text
-函式傳參: Copy vs Move
+═══════════════════════════════════════════════
+          函式傳參: Copy vs Move
+═══════════════════════════════════════════════
 
 case 1: i32 (Copy)
 main frame: x=10
 call foo(x)
-foo frame : n=10  (複製)
+foo frame : n=10  (複製)                    ← 位元複製，兩邊皆有效
 main 仍可使用 x
 
+─────────────────────────────────────────────
+
 case 2: String (Move)
-main frame: s -> "hello"(heap)
+main frame: s ──> "hello"(heap)
 call bar(s)
-bar frame : s -> "hello"(heap)
+bar frame : s ──> "hello"(heap)             ← 所有權轉移
 main 的 s 失效
 
-回傳值流程
+─────────────────────────────────────────────
+                回傳值流程
+─────────────────────────────────────────────
+
 bar() -> String
 callee 將所有權移交給 caller 綁定變數
 
-+---------+      move       +---------+
-| caller  | ------------->  | callee  |
-+---------+                 +---------+
-     ^                           |
-     +-------- return move ------+
+┌─────────┐      move       ┌─────────┐
+│ caller  │ ─────────────>  │ callee  │    ← 傳入時移動
+└─────────┘                 └─────────┘
+     ^                           │
+     └──────── return move ──────┘          ← 回傳時移回
 ```

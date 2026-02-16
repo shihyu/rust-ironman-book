@@ -113,29 +113,34 @@ fn main() {
 ## ASCII 詳細示意圖
 
 ```text
-Trait 作為行為契約
+═══════════════════════════════════════════════
+            Trait 作為行為契約
+═══════════════════════════════════════════════
 
-trait Summary {
-  fn summarize(&self) -> String;
-}
+  trait Summary {
+    fn summarize(&self) -> String;
+  }
 
-+---------------------+
-| Trait: Summary      |
-| summarize(&self)    |
-+----------+----------+
-           |
-   +-------+--------+
-   |                |
-   v                v
-+--------+      +--------+
-| News   |      | Tweet  |
-| impl   |      | impl   |
-+--------+      +--------+
+─────────────── Trait 繼承關係 ──────────────────
 
-呼叫點
-fn notify(item: &impl Summary) {
-  item.summarize()
-}
+  ┌─────────────────────┐
+  │  Trait: Summary      │                ← 定義行為契約
+  │  summarize(&self)    │
+  └──────────┬──────────┘
+             │
+     ┌───────┴────────┐
+     │                │
+     v                v
+  ┌────────┐      ┌────────┐
+  │ News   │      │ Tweet  │              ← 各型別實作
+  │ impl   │      │ impl   │
+  └────────┘      └────────┘
 
-編譯期確認：傳入型別必須實作 Summary。
+─────────────── 呼叫點 ─────────────────────────
+
+  fn notify(item: &impl Summary) {
+    item.summarize()
+  }
+
+  編譯期確認：傳入型別必須實作 Summary。
 ```
