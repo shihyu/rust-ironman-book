@@ -239,6 +239,31 @@ for var in set {
 輸出
 100 99 98 97 96 ... 1
 <span class="boring">}</span></code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">for 迴圈與 Iterator desugaring
+
+for x in collection {
+    body(x)
+}
+
+等價概念（簡化）
+let mut iter = IntoIterator::into_iter(collection);
+loop {
+    match iter.next() {
+        Some(x) =&gt; body(x),
+        None =&gt; break,
+    }
+}
+
+資料流
++------------+     next()     +----------------+
+| collection | -------------&gt;  | Iterator state |
++------------+                 +--------+-------+
+                                        |
+                              Some(item)|None
+                                        v
+                                  body / break
+</code></pre>
 
                     </main>
 

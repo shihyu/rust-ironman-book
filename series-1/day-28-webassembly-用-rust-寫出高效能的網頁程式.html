@@ -427,6 +427,23 @@ console error 的那個 crate ，結果沒想到真的遇到了 panic
 ，後來查了才發現，我把型態記錯了，我把 HtmlTextAreaElement 轉型成
 HtmlInputElement，不過還是順利的把這篇文章生出來了。</p>
 <p>下一篇來做個小遊戲。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Rust -&gt; WebAssembly 流程
+
+Rust source
+   |
+   v
+wasm32-unknown-unknown target
+   |
+   v
+cargo build / wasm-pack
+   |
+   +--&gt; pkg/*.wasm
+   +--&gt; JS glue code
+            |
+            v
+Browser runtime (JS &lt;-&gt; WASM)
+</code></pre>
 
                     </main>
 

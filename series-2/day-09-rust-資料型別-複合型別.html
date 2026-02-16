@@ -184,12 +184,12 @@
 <li>發佈時間：2021-09-17 09:34:58</li>
 <li>作者：Ken</li>
 <li>清單瀏覽數：1005</li>
-<li>清單摘要：複合型別是指多個數值組為一個型別 Rust 有兩個基本複合型別 元組型別(tupl) 元組型別是指將多個不同型別組成一個複合型別 固定長度，宣告好就無法增減長度...</li>
+<li>清單摘要：複合型別是指多個數值組為一個型別 Rust 有兩個基本複合型別 元組型別(tuple) 元組型別是指將多個不同型別組成一個複合型別 固定長度，宣告好就無法增減長度...</li>
 </ul>
 <h2 id="內文"><a class="header" href="#內文">內文</a></h2>
 <p>複合型別是指多個數值組為一個型別</p>
 <p>Rust 有兩個基本複合型別</p>
-<h3 id="元組型別tupl"><a class="header" href="#元組型別tupl">元組型別(tupl)</a></h3>
+<h3 id="元組型別tuple"><a class="header" href="#元組型別tuple">元組型別(tuple)</a></h3>
 <p>元組型別是指將多個不同型別組成一個複合型別</p>
 <p>固定長度，宣告好就無法增減長度</p>
 <p>每一格都是一個獨立型別</p>
@@ -246,7 +246,7 @@ let array = [1, 2, 3, 4, 5];
 // 簡化的宣告方式，陣列裡全是hello長度為5
 let array = ["hello"; 5];
 <span class="boring">}</span></code></pre></pre>
-<p>透果索引位址取值的方式</p>
+<p>透過索引位址取值的方式</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let a = [1, 2, 3, 4, 5];
@@ -256,6 +256,34 @@ println!("{} {} {} {} {}", a[0], a[1], a[2], a[3], a[4]);
 輸出
 1 2 3 4 5
 <span class="boring">}</span></code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Tuple / Array / Vec 的資料配置對比
+
+Tuple (固定型別組合)
+let t: (i32, bool, char)
++---------+---------+---------+
+| i32     | bool    | char    |
++---------+---------+---------+
+
+Array (固定長度, 同型別)
+let a: [i32; 4]
++-----+-----+-----+-----+
+| a0  | a1  | a2  | a3  |
++-----+-----+-----+-----+
+  連續記憶體, 長度編譯期已知
+
+Vec&lt;T&gt; (可變長度)
+Stack
++-----------------------------+
+| ptr -&gt; heap                 |
+| len                         |
+| cap                         |
++-----------------------------+
+Heap
++-----+-----+-----+-----+-----+
+| v0  | v1  | v2  | ...       |
++-----+-----+-----+-----+-----+
+</code></pre>
 
                     </main>
 

@@ -205,7 +205,7 @@
 </span><span class="boring">fn main() {
 </span>cargo fmt
 <span class="boring">}</span></code></pre></pre>
-<p>也可以單純檢查並列出沒排好的地放</p>
+<p>也可以單純檢查並列出沒排好的地方</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>rustfmt --check main.rs
@@ -235,6 +235,28 @@ let or = foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo ||
 <p>如果要讓存檔時自動格式化代碼需要修改</p>
 <p>File &gt; Preferences &gt; Settings. 裡面的 editor.formatOnSave 打勾
 就可以了</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">編輯器 + Rust 開發回饋循環
+
++------------------+      儲存檔案       +-----------------------+
+| VSCode / Vim     | ------------------&gt; | rust-analyzer (LSP)   |
+| IntelliJ         |                     | 型別推導/語法檢查      |
++------------------+                     +-----------+-----------+
+                                                     |
+                    +--------------------------------+---------------------+
+                    |                                                      |
+                    v                                                      v
+         +-----------------------+                               +-------------------+
+         | rustfmt              |                               | cargo check       |
+         | 統一格式             |                               | 快速編譯檢查       |
+         +----------------------+                               +---------+---------+
+                                                                         |
+                                                                         v
+                                                              +-------------------+
+                                                              | clippy            |
+                                                              | lint 與最佳實務    |
+                                                              +-------------------+
+</code></pre>
 
                     </main>
 

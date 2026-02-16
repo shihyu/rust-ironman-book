@@ -184,11 +184,11 @@
 <li>發佈時間：2021-09-26 11:40:46</li>
 <li>作者：Ken</li>
 <li>清單瀏覽數：1584</li>
-<li>清單摘要：提前退出 正常情況是必須達到函示的末尾，但是如果編寫包含許多語法的函式通常會在意識到沒有更多計算要做時因此需要提前退出該函式 fn f(x: i32) -&gt;...</li>
+<li>清單摘要：提前退出 正常情況是必須達到函式的末尾，但是如果編寫包含許多語法的函式通常會在意識到沒有更多計算要做時因此需要提前退出該函式 fn f(x: i32) -&gt;...</li>
 </ul>
 <h2 id="內文"><a class="header" href="#內文">內文</a></h2>
 <h3 id="提前退出"><a class="header" href="#提前退出">提前退出</a></h3>
-<p>正常情況是必須達到函示的末尾，但是如果編寫包含許多語法的函式通常會在意識到沒有更多計算要做時因此需要提前退出該函式</p>
+<p>正常情況是必須達到函式的末尾，但是如果編寫包含許多語法的函式通常會在意識到沒有更多計算要做時因此需要提前退出該函式</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn f(x: i32) -&gt; i32 {
@@ -300,6 +300,27 @@ println!("{:?}", arr);
 輸出
 [10, -1, 4, -2, 16]
 <span class="boring">}</span></code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">提前返回、回傳多值、借用修改
+
+1) 提前退出
+fn parse(x) -&gt; Result&lt;T, E&gt; {
+  if invalid { return Err(E); }
+  Ok(v)
+}
+
+2) 回傳多個值 (tuple)
+fn stats() -&gt; (i32, i32, i32)
+caller: let (min, max, sum) = stats();
+
+3) 修改呼叫端變數 (&amp;mut)
+caller value ------borrow mut------&gt; callee
++------------------+                +------------------+
+| String in caller | &lt;---write----- | fn fill(&amp;mut s)  |
++------------------+                +------------------+
+
+規則：同一時間只能有一個可變借用。
+</code></pre>
 
                     </main>
 

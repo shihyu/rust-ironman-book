@@ -314,6 +314,19 @@ thread 'tests::demo' panicked at 'assertion failed: `(left != right)`
 也可以使用 <code>cargo run --release</code> 執行 release 版本的程式。</p>
 <p>下一篇我們要來介紹 Rust 中的函數式程式設計，以及 Rust 中的閉包 (Closure)
 。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Rust 測試結構
+
+src/lib.rs
+  + #[cfg(test)] mod tests
+      + #[test] fn case_x()
+
+test 執行
+cargo test
+   |
+   v
+編譯 test binary -&gt; 執行案例 -&gt; 報告 pass/fail
+</code></pre>
 
                     </main>
 

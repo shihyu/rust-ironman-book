@@ -458,6 +458,23 @@ fn main() {
 }</code></pre></pre>
 <p>大概的使用就這樣，這些應該夠我們建一個留言板了，先把 <code>main</code>
 函式清空吧，明天我們再來繼續建立留言板的後端。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Diesel ORM 資料流
+
+schema.rs + model structs
+        |
+        v
+Diesel Query Builder
+        |
+        v
+SQL (compile-time checked)
+        |
+        v
+DB (Postgres/MySQL/SQLite)
+        |
+        v
+rows -&gt; Rust struct
+</code></pre>
 
                     </main>
 

@@ -194,7 +194,7 @@
 <p>所以如果今天發生了一種情況，你把東西借給別人後，管理每個儲物櫃擁有者的系統馬上把你的使用權收回去呢？會發生什麼事，這沒人說的準，可能儲物櫃還沒被清空，你還是可以拿到借來的東西，或是馬上又換了主人，你已經不是拿到原本的東西了，就像以下的程式碼：</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn foo() -&gt;&amp;i32 {
+</span>fn foo() -&gt; &amp;i32 {
   // 這個變數在離開這個範圍後就消失了
   let a = 42;
   // 但是這邊卻回傳了 borrow
@@ -311,7 +311,7 @@ impl Foo {
 <p>套用規則 1 ：</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn max&lt;'a, 'b&gt;(a: &amp;'a, i32, b: &amp;'b i32) -&gt; &amp;i32 {
+</span>fn max&lt;'a, 'b&gt;(a: &amp;'a i32, b: &amp;'b i32) -&gt; &amp;i32 {
   if a &gt; b {
     a
   } else {
@@ -323,6 +323,120 @@ impl Foo {
 依然是未知，於是就編譯失敗。</p>
 <p>下一篇終於又可以來寫 code 了，同時我們也會介紹 Rust
 中的結構，以及上面出現的 <code>impl</code> 是什麼。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">═══════════════════════════════════════════════════════════════
+              Lifetime：Borrow 的存活時間
+═══════════════════════════════════════════════════════════════
+
+【懸空參照 (Dangling Reference) — 為什麼需要 Lifetime】
+
+  fn foo() -&gt; &amp;i32 {
+      let a = 42;       // a 在 foo 的 scope 中存活
+      &amp;a                 // 回傳 a 的 borrow
+  }                      // a 在此被釋放 → borrow 懸空！
+
+  時間軸：
+  ┌──── foo() 開始 ────────────────── foo() 結束 ──┐
+  │                                                │
+  │  a 存活 ████████████████████████ ← drop(a)     │
+  │                                    ↑           │
+  │  &amp;a 回傳 ──────────────────────────┘           │
+  │                                 這裡 &amp;a 指向    │
+  │                                 已釋放的記憶體！  │
+  └────────────────────────────────────────────────┘
+  ❌ 編譯錯誤：a 的 lifetime 比回傳的 borrow 短
+
+─────────────────────────────────────────────────────────────
+【Lifetime 標記語法】
+
+  fn foo&lt;'a&gt;(x: &amp;'a i32) -&gt; &amp;'a i32 { x }
+         ^^     ^^           ^^
+         │      │            │
+         │      │            └─ 回傳值的 lifetime 也是 'a
+         │      └─ 參數 x 的 borrow lifetime 是 'a
+         └─ 在 &lt;&gt; 中宣告 lifetime 'a
+
+  意義：回傳的 borrow 保證在 'a 的範圍內有效
+
+─────────────────────────────────────────────────────────────
+【兩個 Borrow 的 Lifetime 交集】
+
+  fn max&lt;'a&gt;(a: &amp;'a i32, b: &amp;'a i32) -&gt; &amp;'a i32
+
+  fn main() {
+      let a = 3;               // a 的 scope
+      let m = &amp;a;              // m 借走 a
+      {
+          let b = 2;           // b 的 scope
+          let n = &amp;b;          // n 借走 b
+          println!("{}", max(m, n));  // 'a = m ∩ n 的交集
+      }  // b, n 在此消失
+  }  // a, m 在此消失
+
+  時間軸：
+  │ a ████████████████████████████████████████ │
+  │ m    █████████████████████████████████████ │
+  │ b         ███████████████████████          │
+  │ n            ████████████████████          │
+  │                                            │
+  │              ◄── 'a 的範圍 ──►             │
+  │              (m 與 n 同時存活的區間)         │
+  │              回傳值在此範圍內有效             │
+
+─────────────────────────────────────────────────────────────
+【'static Lifetime — 整個程式都有效】
+
+  let s: &amp;'static str = "Hello";
+
+  程式開始 ──────────────────────────────── 程式結束
+  │                                              │
+  │  "Hello" ████████████████████████████████████ │
+  │  存在於程式的靜態資料區，永遠有效               │
+
+─────────────────────────────────────────────────────────────
+【Lifetime Elision（省略規則）】
+
+  編譯器按以下 3 條規則自動推導 lifetime：
+
+  ┌─────────────────────────────────────────────────────┐
+  │ 規則 1: 每個 borrow 參數各自分配一個 lifetime         │
+  │                                                     │
+  │   fn foo(a: &amp;i32, b: &amp;i32)                          │
+  │   → fn foo&lt;'a, 'b&gt;(a: &amp;'a i32, b: &amp;'b i32)         │
+  ├─────────────────────────────────────────────────────┤
+  │ 規則 2: 若只有一個 borrow 參數，其 lifetime           │
+  │         自動套用到回傳值                              │
+  │                                                     │
+  │   fn foo(a: &amp;i32) -&gt; &amp;i32                           │
+  │   → fn foo&lt;'a&gt;(a: &amp;'a i32) -&gt; &amp;'a i32              │
+  ├─────────────────────────────────────────────────────┤
+  │ 規則 3: 若參數中有 &amp;self，self 的 lifetime           │
+  │         自動套用到回傳值                              │
+  │                                                     │
+  │   fn method(&amp;self, b: &amp;i32) -&gt; &amp;Self                │
+  │   → fn method&lt;'a, 'b&gt;(&amp;'a self, b: &amp;'b i32)        │
+  │              -&gt; &amp;'a Self                             │
+  └─────────────────────────────────────────────────────┘
+
+  若三條規則都無法推導出回傳值的 lifetime → 必須手動標註
+
+─────────────────────────────────────────────────────────────
+【max 函式的推導過程】
+
+  fn max(a: &amp;i32, b: &amp;i32) -&gt; &amp;i32
+
+  套用規則 1:
+  fn max&lt;'a, 'b&gt;(a: &amp;'a i32, b: &amp;'b i32) -&gt; &amp;??? i32
+                                               ↑
+                                          回傳值的 lifetime
+                                          無法確定是 'a 或 'b
+
+  規則 2 不適用（有兩個參數）
+  規則 3 不適用（沒有 &amp;self）
+
+  ❌ 編譯錯誤 → 必須手動標註為：
+  fn max&lt;'a&gt;(a: &amp;'a i32, b: &amp;'a i32) -&gt; &amp;'a i32
+</code></pre>
 
                     </main>
 

@@ -195,7 +195,7 @@
    n2: T2,
 }
 
-let s = S {n1:957, n2:996.1}
+let s = S1 {n1:957, n2:996.1};
 <span class="boring">}</span></code></pre></pre>
 <p>第一句語法宣告了兩個型別T1和T2參數化的泛型結構S1，第一個字段n1為T1第二字段n2為T2</p>
 <p>第二句語法n1字段的參數隱式的替換成i32，n2字段的參數隱式替換成f64</p>
@@ -232,7 +232,7 @@ println!("{:?} {:?}", x, y);
     return (p2, p1);
 }
 
-fn swap_f32_bool(p1: f32, p2: bool) -&gt; (f32, bool) {
+fn swap_f32_bool(p1: f32, p2: bool) -&gt; (bool, f32) {
     return (p2, p1);
 }
 
@@ -251,6 +251,32 @@ println!("{:?} {:?}", x, y);
 Slow Compiler: c++/rust<br />
 Slow Performance: java/scala<br />
 Slow Programmer: go1</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">泛型結構的型別實例化
+
+struct Point&lt;T&gt; {
+  x: T,
+  y: T,
+}
+
+Point&lt;i32&gt; 與 Point&lt;f64&gt; 是不同具體型別
+
+Point&lt;i32&gt;
++-----------+
+| x: i32    |
+| y: i32    |
++-----------+
+
+Point&lt;f64&gt;
++-----------+
+| x: f64    |
+| y: f64    |
++-----------+
+
+方法可分層
+impl&lt;T&gt; Point&lt;T&gt; { ... }        // 全型別通用
+impl Point&lt;f64&gt; { ... }         // 僅 f64 可用
+</code></pre>
 
                     </main>
 

@@ -328,7 +328,7 @@ fn main() {
           show_message(&amp;window, p.label());
         }
       });
-      // 把按鈕加建 box
+      // 把按鈕加進 box
       inner_box.pack_start(&amp;button, true, true, 0);
     }
     outer_box.pack_start(&amp;inner_box, true, true, 0);
@@ -517,6 +517,23 @@ impl Game {
 <p>下一篇我想來講一些我覺得值得提的部份，當然包括 macro
 的寫法，另外還會談談我對於 Rust
 的心得，跟鐵人賽的心得，畢竟是達標的最後一篇了，至於如果之後又有什麼有趣的東西，說不定我還是會寫成文章的。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">GTK 井字棋事件架構
+
+GTK Main Loop
+   |
+   +--&gt; Button click(i,j)
+            |
+            v
+      game state update
+            |
+            +--&gt; 檢查勝負/平手
+            |
+            v
+      redraw board + status label
+
+UI 事件驅動，狀態集中管理。
+</code></pre>
 
                     </main>
 

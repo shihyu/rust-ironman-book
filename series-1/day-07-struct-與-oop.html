@@ -279,10 +279,10 @@ Rust 中並沒有指定建構子的名字，所以稱為 <code>new</code> 只是
 ，使用時要用 <code>Person::new</code> 來呼叫。</p>
 <blockquote>
 <p>多型是指函式可以有同一個名稱，但使用不同的參數，這在 OOP
-也是很常見的一個特性，比如在 C++ 可以建立 <code>Persion()</code> 與
-<code>Persion(string)</code> 兩個建構子，但接受不同的參數</p>
+也是很常見的一個特性，比如在 C++ 可以建立 <code>Person()</code> 與
+<code>Person(string)</code> 兩個建構子，但接受不同的參數</p>
 </blockquote>
-<p><code>say_hello</code> 則是 <code>Persion</code> 的方法，而 <code>self</code>
+<p><code>say_hello</code> 則是 <code>Person</code> 的方法，而 <code>self</code>
 是個特殊的變數，只會在實作時出現<br />
 它代表的是自己，如果要變成 struct 的方法則第一個參數必須是
 <code>self</code>，同時宣告 <code>self</code> 時要決定使用什麼方式宣告，一般最常用的是唯讀的
@@ -309,7 +309,8 @@ Rust 中常會看到建造模式，建造模式是個設計模式，其將會使
 </span><span class="boring">fn main() {
 </span>let output = Command::new("echo")
   .arg("Hello world")
-  .output();
+  .output()
+  .expect("failed to execute");
 println!("{}", String::from_utf8_lossy(&amp;output.stdout));
 <span class="boring">}</span></code></pre></pre>
 <p>像這樣的方式就是建造模式，最後我們要拿到的目標是那個 <code>output</code>
@@ -369,6 +370,102 @@ fn main() {
 當預設值，這樣就可以只指定想要的東西了。</p>
 <p>另外這邊還出現了 <code>#[derive(Debug)]</code> ，這是什麼呢？<br />
 下一篇我們要來介紹 trait ，與泛型 (generic) 。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">═══════════════════════════════════════════════════════════════
+                   Struct 與 OOP 風格
+═══════════════════════════════════════════════════════════════
+
+【Struct 的三種形式】
+
+  1. Named Struct              2. Tuple Struct      3. Unit-like
+  ┌──────────────────┐        ┌──────────────┐     ┌──────┐
+  │ struct Person {   │        │ struct Foo(  │     │struct│
+  │   name: String,  │        │   i32, i32   │     │ Bar; │
+  │   age:  u32,     │        │ );           │     └──────┘
+  │ }                │        └──────────────┘
+  └──────────────────┘
+  存取: person.name            存取: foo.0          無資料
+                                     foo.1
+
+─────────────────────────────────────────────────────────────
+【impl 區塊 — 資料與方法分離定義】
+
+  ┌──────────────────────────┐
+  │  struct Person {          │  ← 只定義資料
+  │    name: String,          │
+  │  }                        │
+  └──────────────────────────┘
+               │
+               v
+  ┌──────────────────────────┐
+  │  impl Person {            │  ← 分開定義方法
+  │                           │
+  │    fn new(name) -&gt; Self   │  ← Associated Method
+  │    ┌────────────────────┐ │     (無 self，用 Person::new 呼叫)
+  │    │ 建構子（慣例名 new）│ │
+  │    └────────────────────┘ │
+  │                           │
+  │    fn say_hello(&amp;self)    │  ← Method
+  │    ┌────────────────────┐ │     (有 self，用 john.say_hello() 呼叫)
+  │    │ 唯讀存取 self      │ │
+  │    └────────────────────┘ │
+  │  }                        │
+  └──────────────────────────┘
+
+─────────────────────────────────────────────────────────────
+【self 的三種形式】
+
+  ┌────────────┬─────────────────────────────────────────┐
+  │   形式     │  意義                                    │
+  ├────────────┼─────────────────────────────────────────┤
+  │  &amp;self     │ 唯讀借用自己（最常用）                    │
+  │            │ → 不會修改也不會消耗 struct               │
+  ├────────────┼─────────────────────────────────────────┤
+  │  &amp;mut self │ 可變借用自己                              │
+  │            │ → 可以修改 struct 的欄位                  │
+  ├────────────┼─────────────────────────────────────────┤
+  │  self      │ 取得自身所有權（較少用）                   │
+  │            │ → 呼叫後 struct 被消耗，不能再使用        │
+  │            │ → 常用於型態轉換                          │
+  └────────────┴─────────────────────────────────────────┘
+
+─────────────────────────────────────────────────────────────
+【Builder Pattern（建造模式）】
+
+  使用情境：參數多、有預設值、不支援多型
+
+  Builder::new(1)         ← 必要參數
+      .y(2)               ← 可選參數（預設 0）
+      .z(3)               ← 可選參數（預設 0）
+      .build()            ← 產出目標物件
+        │
+        v
+  Point { x: 1, y: 2, z: 3 }
+
+  流程圖：
+  ┌──────────┐    ┌───────┐    ┌───────┐    ┌───────┐
+  │ new(x)   │───&gt;│ .y(2) │───&gt;│ .z(3) │───&gt;│.build()│
+  │ x=1,y=0, │    │ y=2   │    │ z=3   │    │→Point │
+  │ z=0      │    │       │    │       │    │       │
+  └──────────┘    └───────┘    └───────┘    └───────┘
+  每個方法回傳 &amp;mut Self，支援鏈式呼叫 (method chaining)
+
+─────────────────────────────────────────────────────────────
+【Rust OOP vs 傳統 OOP】
+
+  傳統 OOP（繼承鏈）           Rust（組合 + Trait）
+  ┌────────────┐              ┌────────────┐
+  │   Animal   │              │ struct Dog  │
+  └─────┬──────┘              │  name: ..   │
+        │ 繼承                │  legs: ..   │
+  ┌─────┴──────┐              └──────┬─────┘
+  │    Dog     │                     │ impl
+  └────────────┘              ┌──────┴─────┐
+  class Dog extends Animal    │ Walkable   │ ← trait
+                              │ Speakable  │ ← trait
+                              └────────────┘
+                              各 trait 獨立實作，無繼承鏈
+</code></pre>
 
                     </main>
 

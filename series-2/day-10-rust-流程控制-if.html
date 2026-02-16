@@ -220,7 +220,7 @@ if (3 &gt; 2) {
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>// 不允許
-i 3 &gt; 2 println!("執行")
+if 3 &gt; 2 println!("執行")
 <span class="boring">}</span></code></pre></pre>
 <p>如果要在條件為false情況執行流程可以使用else關鍵字</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -229,7 +229,7 @@ i 3 &gt; 2 println!("執行")
 
 if n &gt; 5 {
     println!("執行")
-} else 
+} else {
     println!("false執行")
 }
 
@@ -257,6 +257,31 @@ let str = if true { "true_str" }
 // 不允許，因為型別不一樣，一個是字串一個是數字
 let str = if true { "true_str" } else { 9527 }
 <span class="boring">}</span></code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">if / else if / else 決策樹
+
+              +----------------+
+              | cond_1 ?       |
+              +-------+--------+
+                      |
+              +-------+-------+
+              |               |
+              v               v
+        +-----------+   +-------------+
+        | branch_1  |   | cond_2 ?    |
+        +-----------+   +------+------+ 
+                               |
+                       +-------+------+
+                       |              |
+                       v              v
+                 +-----------+   +-----------+
+                 | branch_2  |   | else      |
+                 +-----------+   +-----------+
+
+if 也是 expression:
+let n = if ok { 1 } else { 0 };
+兩分支必須回傳相同型別。
+</code></pre>
 
                     </main>
 

@@ -349,6 +349,19 @@ let b = Rc::clone(&amp;a);
 <code>Weak</code> ， <code>Weak</code> 不會增加 <code>Rc</code> 的持有人數。</p>
 <p>下一篇要來介紹 <code>Cell</code> 與 <code>RefCell</code> ，它們可以讓 Rust 的變數沒有宣告
 <code>mut</code> 也能改變，同時讓 borrow check 的規則延遲到執行時才判斷。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">智慧指標與集合
+
+Box&lt;T&gt; : 單一堆配置所有權
+Rc&lt;T&gt;  : 單執行緒引用計數共享
+Arc&lt;T&gt; : 多執行緒引用計數共享
+
+Vec&lt;T&gt;
+Stack: ptr/len/cap -&gt; Heap contiguous buffer
+
+HashMap&lt;K,V&gt;
+bucket array -&gt; key/value entries
+</code></pre>
 
                     </main>
 

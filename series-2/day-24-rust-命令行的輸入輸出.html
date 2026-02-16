@@ -184,12 +184,12 @@
 <li>發佈時間：2021-10-02 09:46:01</li>
 <li>作者：Ken</li>
 <li>清單瀏覽數：1261</li>
-<li>清單摘要：命令行參數 一般來說編譯好的執行檔都是透過命令行來制執有些時候需要讀取一些命令行參數或是環境參數 程式輸入的最基本形式事示通命令行 例如下面 for arg i...</li>
+<li>清單摘要：命令行參數 一般來說編譯好的執行檔都是透過命令行來執行有些時候需要讀取一些命令行參數或是環境參數 程式輸入的最基本形式是透過命令行 例如下面 for arg i...</li>
 </ul>
 <h2 id="內文"><a class="header" href="#內文">內文</a></h2>
 <h3 id="命令行參數"><a class="header" href="#命令行參數">命令行參數</a></h3>
-<p>一般來說編譯好的執行檔都是透過命令行來制執有些時候需要讀取一些命令行參數或是環境參數</p>
-<p>程式輸入的最基本形式事示通命令行</p>
+<p>一般來說編譯好的執行檔都是透過命令行來執行有些時候需要讀取一些命令行參數或是環境參數</p>
+<p>程式輸入的最基本形式是透過命令行</p>
 <p>例如下面</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -227,7 +227,7 @@ arg3
 ("CARGO_PKG_LICENSE", "")
 ...**
 <span class="boring">}</span></code></pre></pre>
-<p>剛剛是把每個環境變數都印出來假如要讀取特定環境變數可以透過var函示指定key</p>
+<p>剛剛是把每個環境變數都印出來假如要讀取特定環境變數可以透過var函式指定key</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>println!("{:?}", std::env::var("envkey"));
@@ -248,10 +248,41 @@ Ok("env_value")
 </span><span class="boring">fn main() {
 </span>let mut line = String::new();
 
-std::io::stdin().read_line(&amp;mnt line);
+std::io::stdin().read_line(&amp;mut line);
 
 println!("{}", line);
 <span class="boring">}</span></code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">CLI 輸入來源與資料流
+
++------------------------+
+| OS Process 啟動         |
++-----------+------------+
+            |
+   +--------+--------+
+   |                 |
+   v                 v
+std::env::args()   std::env::var()
+(命令列參數)         (環境變數)
+   |                 |
+   +--------+--------+
+            |
+            v
++------------------------+
+| 參數解析/驗證           |
++-----------+------------+
+            |
+            v
++------------------------+
+| stdin.read_line()       |
+| 互動式輸入               |
++-----------+------------+
+            |
+            v
++------------------------+
+| stdout/stderr 輸出       |
++------------------------+
+</code></pre>
 
                     </main>
 

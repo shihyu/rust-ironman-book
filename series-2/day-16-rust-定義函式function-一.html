@@ -195,7 +195,7 @@
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>fn hello_word() {
-    println!("hello word!")
+    println!("hello world!")
 }
 
 hello_word();
@@ -203,9 +203,9 @@ hello_word();
 hello_word();
 
 輸出
-hello word!
-hello word!
-hello word!
+hello world!
+hello world!
+hello world!
 <span class="boring">}</span></code></pre></pre>
 <p>後定義函式</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -215,7 +215,7 @@ let a = 5; // 非法使用變數
 
 hello_word(); // 合法使用後定義的函式
 fn hello_word() {
-    println!("hello word!")
+    println!("hello world!")
 }
 <span class="boring">}</span></code></pre></pre>
 <p>函式屏蔽其他函式</p>
@@ -232,29 +232,29 @@ the name `hello_word` is defined multiple times
 </span><span class="boring">fn main() {
 </span>{
     fn hello_word() {
-        println!("hello word 1")
+        println!("hello world 1")
     }
 
     hello_word();
 }
 {
     fn hello_word() {
-        println!("hello word 2")
+        println!("hello world 2")
     }
 
     hello_word();
 }
 
 輸出
-hello word 1
-hello word 2
+hello world 1
+hello world 2
 <span class="boring">}</span></code></pre></pre>
 <p>每個定義函式只能在塊裡面有效，下面是不合法的</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>{
     fn hello_word() {
-        println!("hello word 2")
+        println!("hello world 2")
     }
 }
 
@@ -267,7 +267,7 @@ cannot find function `hello_word` in this scope
 <p>在main外部定義函式hello_word()，因其內部也定義了hello_word，所以永遠用不到外部的定義函式</p>
 <p>通常編譯器會警告</p>
 <pre><pre class="playground"><code class="language-rust">fn hello_word() {
-    println!("hello word 1")
+    println!("hello world 1")
 }
 
 fn main() {
@@ -276,20 +276,46 @@ fn main() {
     {
         hello_word();
         fn hello_word() {
-            println!("hello word 2")
+            println!("hello world 2")
         }
     }
 
     hello_word();
     fn hello_word() {
-        println!("hello word 3")
+        println!("hello world 3")
     }
 }
 
 這邊輸出
-hello word 3
-hello word 2
-hello word 3</code></pre></pre>
+hello world 3
+hello world 2
+hello world 3</code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">函式定義與呼叫堆疊
+
+main()
+  |
+  +--&gt; add(2, 3)
+          |
+          v
+   +----------------------+
+   | Stack Frame: add     |
+   | a = 2                |
+   | b = 3                |
+   | return slot          |
+   +----------+-----------+
+              |
+              v
+         return 5
+              |
+              v
+   +----------------------+
+   | Stack Frame: main    |
+   | result = 5           |
+   +----------------------+
+
+參數與回傳型別皆需明確，提升可讀性與型別安全。
+</code></pre>
 
                     </main>
 

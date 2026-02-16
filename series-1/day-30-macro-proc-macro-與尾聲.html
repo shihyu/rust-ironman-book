@@ -215,7 +215,7 @@ macro 來減少你的程式碼，比如像昨天使用的 <code>clone!</code> �
 <code>clone!</code> 。</p>
 <p>接下來則是分成兩個部份，模式定義的部份與產生的程式碼，兩邊都必須使用成對的括號包住，中間使用
 <code>=&gt;</code> 分隔，最後則要用 <code>;</code> 結束
-(只有一個定義時可以不用)，左邊的模式幾乎可以隨便定義，只是還是有些規則在，主要是不能造成編譯器出現岐義的情況，也就是同一段程式碼能有兩種不同的解釋，像
+(只有一個定義時可以不用)，左邊的模式幾乎可以隨便定義，只是還是有些規則在，主要是不能造成編譯器出現歧義的情況，也就是同一段程式碼能有兩種不同的解釋，像
 macro 中能用 <code>expr</code> 去比對運算式，但是運算式後就規定不能出現運算子 (+
 、 - 、 * 、 / 等等) 。</p>
 <p>上面的 <code>$name:ident</code> 代表的是比對一個識別字 (變數或 struct
@@ -459,6 +459,24 @@ Rust By Examples
 做井字棋可說完全是因為那則留言而產生的。</p>
 <p>對了，原本我還想在這篇示範怎麼發佈個 crate ，然後把之前寫的那個
 hastebin-client 發上去的，不過我還是先把程式碼整理一下吧。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Macro 與 Proc-macro 編譯階段
+
+source tokens
+   |
+   +--&gt; declarative macro_rules!
+   |        |
+   |        v
+   |    token expansion
+   |
+   +--&gt; procedural macro crate
+            |
+            v
+       AST transform
+            |
+            v
+expanded Rust code -&gt; normal compile pipeline
+</code></pre>
 
                     </main>
 

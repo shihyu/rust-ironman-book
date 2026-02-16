@@ -194,9 +194,9 @@
 <li>經典的C語言風格結構體(C struct)</li>
 <li>單元結構體(unit struct)，不帶字段，在泛型中很有用</li>
 </ul>
-<p>前幾篇所講的元組型別(tupl)，只要元組包含少量的字段就很好用但是當字段一多就容易將它們搞混<br />
-並且代碼也很容易理解</p>
-<p>例如下面的代碼，不能很輕易的知道哪個字段相加，而且元組型別是有序的如果在開頭增加字段哪變成後面的字段都需要往後遞延非常不直覺</p>
+<p>前幾篇所講的元組型別(tuple)，只要元組包含少量的字段就很好用但是當字段一多就容易將它們搞混<br />
+並且代碼也不容易理解</p>
+<p>例如下面的代碼，不能很輕易的知道哪個字段相加，而且元組型別是有序的如果在開頭增加字段那變成後面的字段都需要往後遞延非常不直覺</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let data = (1, 'a', 'b', 199.199, true, -100);
@@ -248,6 +248,33 @@ println!("{} {} {}", user.0, user.1, user.2)
 
 let subject = AlwaysEqual;
 <span class="boring">}</span></code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Struct 欄位佈局與方法呼叫
+
+struct User {
+  id: u64,
+  active: bool,
+  name: String,
+}
+
+Stack (User)
++------------------------------------------+
+| id (8) | active (1) | padding | name(...)|
++------------------------------------------+
+                           |
+                           v
+                     String header
+                     +-------------------------+
+                     | ptr | len | cap        |
+                     +-------------------------+
+                               |
+                               v
+                            Heap bytes
+
+方法呼叫
+user.activate()
+== User::activate(&amp;mut user)
+</code></pre>
 
                     </main>
 

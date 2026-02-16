@@ -222,13 +222,13 @@ true false true
 <p>&lt;：小於</p>
 </li>
 <li>
-<p>：大於</p>
+<p>&gt;：大於</p>
 </li>
 <li>
 <p>&lt;=：小於或是等於</p>
 </li>
 <li>
-<p>=：大於或是等於</p>
+<p>&gt;=：大於或是等於</p>
 </li>
 </ul>
 <p>跟常見語言都一樣</p>
@@ -269,6 +269,30 @@ print!("{} {} {} {}", true_var || true_var, false_var || false_var, true_var || 
 輸出
 true false true true
 <span class="boring">}</span></code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">布林值與條件分支
+
+bool 只有兩種值: true / false
+
+if 條件判斷流程
++-----------------------+
+| condition: bool       |
++-----------+-----------+
+            |
+      +-----+-----+
+      |           |
+      v           v
++-----------+  +-----------+
+| true path |  | false path|
++-----------+  +-----------+
+
+邏輯運算
+A &amp;&amp; B  : A=false 時短路，不評估 B
+A || B  : A=true  時短路，不評估 B
+!A      : 反轉布林值
+
+Rust 不允許以非 bool 當條件，避免隱式轉型錯誤。
+</code></pre>
 
                     </main>
 

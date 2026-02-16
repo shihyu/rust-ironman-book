@@ -245,7 +245,7 @@ use self::b::bar;
 fn main() {
   r#match();
 }</code></pre></pre>
-<p>要加上 <code>r#</code> 還有是點麻煩。</p>
+<p>要加上 <code>r#</code> 還是有點麻煩。</p>
 <h2 id="匿名-lifetime"><a class="header" href="#匿名-lifetime">匿名 lifetime</a></h2>
 <p>現在可以使用 <code>'_</code> 在某些非得加上 lifetime
 的地方，讓編譯器自動推導了，不過這個功能目前還很不穩定，很容易就把編譯器弄當了，雖然
@@ -276,6 +276,19 @@ Book</a>
 這邊列出了目前還不穩定的功能，雖然大部份都只有名稱跟連結而已，並沒有介紹。</p>
 <p>接下來就要開始進入應用篇了，下一篇我要來介紹一些個人覺得常用或好用的
 crate 。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Rust 2018 生態更新圖
+
+語言版次(editions)
+2015 -&gt; 2018 -&gt; 2021 -&gt; 2024
+   |
+   +-- 相容性保留 (同編譯器支援多版)
+
+2018 重點
+- module 路徑簡化
+- non-lexical lifetimes
+- async/await 生態鋪路
+</code></pre>
 
                     </main>
 

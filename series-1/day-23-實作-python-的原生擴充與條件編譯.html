@@ -391,6 +391,23 @@ fn foo() {
 C 就能透過 Rust 實作，有著接近 C 的速度，卻有如此大量的社群套件支援，用
 Rust 來實作這些原生套件真的不失一個選擇。</p>
 <p>下一篇來寫點應用程式吧，我們試著用 clap 來建一個指令列的程式。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Python 擴充模組與條件編譯
+
+Rust crate (cdylib)
+  + pyo3 / cpython bindings
+  + #[cfg(target_os = "...")]
+
+cargo build --release
+        |
+        v
+生成 .so/.pyd
+        |
+        v
+Python import module
+
+同一份程式可依 target 啟用不同實作。
+</code></pre>
 
                     </main>
 

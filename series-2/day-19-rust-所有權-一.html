@@ -184,11 +184,11 @@
 <li>發佈時間：2021-09-29 09:39:33</li>
 <li>作者：Ken</li>
 <li>清單瀏覽數：1339</li>
-<li>清單摘要：所有權可以說是Rust核心概念，這讓Rust不需要垃圾回收(garbage collector)就可以保障記憶體安全。Rust的安全性和所有權的概念息息相，因此...</li>
+<li>清單摘要：所有權可以說是Rust核心概念，這讓Rust不需要垃圾回收(garbage collector)就可以保障記憶體安全。Rust的安全性和所有權的概念息息相關，因此...</li>
 </ul>
 <h2 id="內文"><a class="header" href="#內文">內文</a></h2>
 <p>所有權可以說是Rust核心概念，這讓Rust不需要垃圾回收(garbage
-collector)就可以保障記憶體安全。Rust的安全性和所有權的概念息息相，因此理解Rust中的所有權如何運作是非常重要的</p>
+collector)就可以保障記憶體安全。Rust的安全性和所有權的概念息息相關，因此理解Rust中的所有權如何運作是非常重要的</p>
 <h3 id="所有權的規則"><a class="header" href="#所有權的規則">所有權的規則</a></h3>
 <ul>
 <li>Rust 中每個數值都會有一個變數作為它的<strong>擁有者（owner）</strong>。</li>
@@ -227,7 +227,7 @@ GC)的語言中，GC會追蹤並清除不再使用的記憶體，如果沒有GC�
     // 使用 s
 } // 此作用域結束，釋放s變數     
 <span class="boring">}</span></code></pre></pre>
-<p>當變數離開作用域(大括號結束)時會自動呼叫特殊函示drop來釋放記憶體</p>
+<p>當變數離開作用域(大括號結束)時會自動呼叫特殊函式drop來釋放記憶體</p>
 <h3 id="變數與資料互動的方式"><a class="header" href="#變數與資料互動的方式">變數與資料互動的方式</a></h3>
 <p><strong>移動(Move)</strong></p>
 <p>變數可以在Rust中以不同的方式與相同的資料進行互動</p>
@@ -250,7 +250,7 @@ let y = x;
 </span>let s1 = String::from("hello");
 let s2 = s1;
 <span class="boring">}</span></code></pre></pre>
-<p>String物件的值"hello"為不固定長度長度型別所以被分配到堆(heap)</p>
+<p>String物件的值"hello"為不固定長度型別所以被分配到堆(heap)</p>
 <p>當s1賦值給s2，String的資料會被拷貝，不過我們拷貝是指標、長度和容量。我們不會拷貝指標指向的資料</p>
 <p>前面説當變數超出作用域時，Rust自動調用釋放資源函數並清理該變數的記憶體。但是s1和s2都被釋放的話堆(heap)區中的"hello"被釋放兩次，這是不被系統允許的。為了確保安全，在給s2賦值時
 s1已經無效了</p>
@@ -271,6 +271,27 @@ println!("{} {}", s1, s2);
 輸出
 hello hello
 <span class="boring">}</span></code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">所有權核心模型: Stack/Heap + Move/Clone
+
+let s1 = String::from("hello");
+
+Stack(s1)                    Heap
++-------------------+        +-------------------+
+| ptr --------------+------&gt; | h e l l o         |
+| len = 5           |        +-------------------+
+| cap = 5           |
++-------------------+
+
+let s2 = s1;   // move
+s1 失效, s2 成為唯一 owner
+
+let s3 = s2.clone(); // deep copy
+s2 與 s3 各自擁有不同 heap buffer
+
+scope 結束時
+owner -&gt; drop() -&gt; 釋放 heap
+</code></pre>
 
                     </main>
 

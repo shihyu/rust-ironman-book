@@ -247,6 +247,28 @@ fn takes_and_gives_back(a_string: String) -&gt; String {
 <span class="boring">}</span></code></pre></pre>
 <p>編譯時會產生錯誤 missing lifetime specifier</p>
 <p>這個有關於生命週期的會在下一篇講</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">所有權在函式邊界的移轉
+
+fn take(s: String) { ... }      // 取得所有權
+fn give() -&gt; String { ... }     // 回傳所有權
+fn borrow(s: &amp;String) { ... }   // 借用
+
+caller
+  |
+  +--&gt; take(name)      : name moved, caller 不可再用
+  |
+  +--&gt; borrow(&amp;name2)  : 只讀借用, caller 仍擁有
+  |
+  +&lt;-- give()          : 新所有權回到 caller
+
+生命週期概念圖
++-----------+ borrow +-----------+
+| owner     |-------&gt;| borrower  |
++-----------+&lt;-------+-----------+
+     |          end borrow   |
+     +----- owner 才能 move/drop--+
+</code></pre>
 
                     </main>
 

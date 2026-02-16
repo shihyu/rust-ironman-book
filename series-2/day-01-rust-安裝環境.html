@@ -213,7 +213,7 @@ cargo cargo-clippy cargo-fmt cargo-miri clippy-driver rls rust-gdb rust-lldb rus
 <pre><code class="language-bash">rustup update
 </code></pre>
 <h3 id="切換rust版本"><a class="header" href="#切換rust版本">切換rust版本</a></h3>
-<p>查看目前所以安裝的版本</p>
+<p>查看目前所有安裝的版本</p>
 <pre><code class="language-bash">ls ~/.rustup/toolchains/
 
 beta-x86_64-apple-darwin
@@ -242,6 +242,32 @@ info: override toolchain for '/Users/ken_jan/rust/hello' set to 'beta-x86_64-app
 <p><a href="https://play.rust-lang.org/">Rust Playground</a></p>
 <p>相對於golang的安裝，rust官方就內建版本控制方便許多</p>
 <p>這部分rust大勝</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Rust 安裝與工具鏈關係圖
+
++------------------+       +------------------------------+
+| 使用者 Shell     | ----&gt; | rustup-init / rustup update |
++------------------+       +------------------------------+
+                                      |
+                                      v
+                         +-------------------------------+
+                         | ~/.cargo/bin                  |
+                         | - rustup                      |
+                         | - rustc                       |
+                         | - cargo                       |
+                         +-------------------------------+
+                                      |
+                                      v
+                  +--------------------------------------------+
+                  | rustup toolchain                           |
+                  | stable (預設) / beta / nightly             |
+                  +--------------------------------------------+
+                                      |
+                                      v
+                +----------------------------------------------+
+                | cargo new -&gt; cargo build -&gt; cargo run/test   |
+                +----------------------------------------------+
+</code></pre>
 
                     </main>
 

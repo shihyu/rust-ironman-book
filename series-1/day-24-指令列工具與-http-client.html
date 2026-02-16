@@ -407,6 +407,23 @@ Go 的話要不要試著寫一個來比較看看呢？</p>
 </ul>
 <p>或許你也可以想想看有什麼地方能改進的。</p>
 <p>下一篇我們來玩玩資料庫吧。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">CLI + HTTP Client 流程
+
+args/env/stdin
+   |
+   v
+parse config
+   |
+   v
+build request (URL/header/body)
+   |
+   v
+HTTP client send
+   |
+   v
+response -&gt; parse -&gt; stdout/stderr
+</code></pre>
 
                     </main>
 

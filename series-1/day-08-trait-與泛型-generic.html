@@ -449,7 +449,7 @@ Rust 所推的 zero-cost abstract。</p>
 <p>另外你可以回傳實作了某種 trait 的回傳值，同樣是 1.27 的語法：</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>fn return_addable() -&gt; impl Add&lt;i32, Output = i32&gt;) {
+</span>fn return_addable() -&gt; impl Add&lt;i32, Output = i32&gt; {
   42
 }
 <span class="boring">}</span></code></pre></pre>
@@ -515,6 +515,113 @@ impl Handle&lt;f64&gt; for Handler {
 <p>下一篇要介紹的是 enum 與模式比對，我個人覺得 Rust 的 enum
 很有趣，畢竟和其它語言的不太一樣啊，模式比對也是 Functional Programming
 一個重要的特性。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">═══════════════════════════════════════════════════════════════
+                Trait 與泛型 (Generic)
+═══════════════════════════════════════════════════════════════
+
+【Trait 的兩大功能】
+
+  1. 統一介面                    2. 提供預設實作 (mixin)
+  ┌────────────────────┐        ┌────────────────────┐
+  │ trait Greeter {     │        │ trait Greeter {     │
+  │   fn message()      │        │   fn greet(&amp;self) { │
+  │     -&gt; &amp;str;        │        │     // 預設實作     │
+  │ }                   │        │   }                 │
+  └─────────┬──────────┘        │   fn message()      │
+            │                    │     -&gt; &amp;str;  // 必須│
+  ┌─────────┴──────────┐        └────────────────────┘
+  │                    │
+  v                    v
+  impl for A      impl for B
+  各自實作         各自實作
+
+─────────────────────────────────────────────────────────────
+【常用的內建 Trait】
+
+  ┌─────────────┬──────────────────────────────────────┐
+  │ Trait       │ 功能                                  │
+  ├─────────────┼──────────────────────────────────────┤
+  │ Display     │ 讓型態能被 println!("{}", x) 印出     │
+  │ Debug       │ 讓型態能被 println!("{:?}", x) 印出   │
+  │ From/Into   │ 型態之間的轉換                         │
+  │ Add/Sub/... │ 運算子重載 (+, -, *, / ...)           │
+  │ Deref       │ 解參照，可「繼承」內部型態的方法       │
+  │ Default     │ 提供預設值                             │
+  │ Clone       │ 可被複製（有成本）                     │
+  │ Copy        │ 可被簡單複製（無成本，marker trait）   │
+  └─────────────┴──────────────────────────────────────┘
+
+─────────────────────────────────────────────────────────────
+【泛型 — 靜態分派 (Monomorphization)】
+
+  原始碼：
+  fn print_add_one&lt;T: Add&lt;i32, Output=i32&gt;&gt;(n: T) {
+      println!("{}", n + 1);
+  }
+
+  呼叫：
+  print_add_one(10_i32);     // T = i32
+  print_add_one(my_num);     // T = Num
+
+  編譯後產生（單型化）：
+  ┌─────────────────────┐    ┌─────────────────────┐
+  │ print_add_one_i32   │    │ print_add_one_Num   │
+  │  (n: i32)           │    │  (n: Num)           │
+  │  n + 1              │    │  n + 1              │
+  └─────────────────────┘    └─────────────────────┘
+
+  ✓ 每個型態產生專屬的機器碼
+  ✓ 零成本抽象 (zero-cost abstraction)
+  ✓ 靜態分派，編譯期就確定呼叫目標
+
+─────────────────────────────────────────────────────────────
+【泛型的三種寫法】
+
+  // 1. 傳統寫法：在 &lt;&gt; 中限制
+  fn foo&lt;T: Add&lt;i32, Output=i32&gt;&gt;(n: T) { ... }
+
+  // 2. where 子句：型態太長時較清晰
+  fn foo&lt;T&gt;(n: T) where T: Add&lt;i32, Output=i32&gt; { ... }
+
+  // 3. impl Trait 語法（Rust 1.27+）：最簡潔
+  fn foo(n: impl Add&lt;i32, Output=i32&gt;) { ... }
+
+─────────────────────────────────────────────────────────────
+【Deref 自動解參照鏈】
+
+  struct Num(i32);
+  impl Deref for Num { type Target = i32; }
+
+  let n = Num(42);
+
+  n.inc_one()     ← 先在 Num 本身找方法
+       │
+       │ 找不到？自動 Deref
+       v
+  (*n).abs()      ← 在 i32 上找方法
+       │
+       v
+  呼叫 i32::abs
+
+  Num ──Deref──&gt; i32
+  n 可以使用 Num 的方法，也可以使用 i32 的方法
+
+─────────────────────────────────────────────────────────────
+【Trait 中的泛型 vs 型態別名】
+
+  泛型（同一型態可有多個實作）     型態別名（一個型態一個實作）
+  ┌──────────────────────┐       ┌──────────────────────┐
+  │ trait Handle&lt;T&gt; {     │       │ trait Foo {           │
+  │   fn handle(T);       │       │   type Item;          │
+  │ }                     │       │   fn foo() -&gt; Item;   │
+  │                       │       │ }                     │
+  │ impl Handle&lt;i32&gt; for H│       │                       │
+  │ impl Handle&lt;f64&gt; for H│       │ impl Foo for Bar {    │
+  │  ← 可對不同型態       │       │   type Item = i32;    │
+  │    有不同處理          │       │ }                     │
+  └──────────────────────┘       └──────────────────────┘
+</code></pre>
 
                     </main>
 

@@ -193,7 +193,7 @@
 <h2 id="clippy"><a class="header" href="#clippy">Clippy</a></h2>
 <p>Clippy 是個 Rust 的 linter (程式碼的風格與錯誤檢查工具) ，可以直接用
 <code>rustup</code> 安裝：</p>
-<pre><code class="language-shell">$ rustup component add clippy-preview
+<pre><code class="language-shell">$ rustup component add clippy
 </code></pre>
 <p>使用也非常簡單，只要在專案裡用以下指令就會做檢查了：</p>
 <pre><code class="language-shell">$ cargo clippy
@@ -249,7 +249,7 @@ Github 在 <a href="https://github.com/google/evcxr">https://github.com/google/e
 <pre><code class="language-shell">$ cargo install evcxr_repl
 </code></pre>
 <p>然後就可以在終端機下輸入 <code>evcxr</code> 來使用了，不過它目前很陽春， <code>if</code>
-之類的必須輸入在同一樣，也只能用 <code>Ctrl + D</code> 關掉 (Windows 下是
+之類的必須輸入在同一行，也只能用 <code>Ctrl + D</code> 關掉 (Windows 下是
 <code>Ctrl + Z</code> ，不過作者並沒有測試過) 。</p>
 <h2 id="crates"><a class="header" href="#crates">Crates</a></h2>
 <p>先說一下可以去哪邊找 crate ，首先是
@@ -352,6 +352,21 @@ impl Foo {
 下的功能。</p>
 <p>下一篇要來介紹怎麼讓 Rust 的程式與 C 的程式做結合，不管是從 Rust 呼叫 C
 的程式或是從 C 呼叫 Rust 的程式。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Crate 工具鏈關係
+
+workspace
++----------------------+
+| crate-a (lib)        |
+| crate-b (bin)        |
++----------+-----------+
+           |
+           v
+cargo fmt / clippy / test / bench / doc
+           |
+           v
+CI pipeline (品質門檻)
+</code></pre>
 
                     </main>
 

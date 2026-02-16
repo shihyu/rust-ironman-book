@@ -197,7 +197,7 @@
 </span>match browser {
     Firefox =&gt; let var = 777;, // 無效的表達式
     Chrome =&gt; let var = 777, // 無效的表達式
-    Ie =&gt;  fu funct() {}, // 無效的表達式
+    Ie =&gt;  fn funct() {}, // 無效的表達式
     Safari =&gt; println!("S"),
 }
 <span class="boring">}</span></code></pre></pre>
@@ -212,7 +212,7 @@
     Safari,
 }
 
-let browser = Browser::Ie;
+let mut browser = Browser::Ie;
 
 match browser {
     Browser::Firefox =&gt; {
@@ -247,7 +247,7 @@ match browser {
 // 編譯時會出
 patterns `Firefox` and `Chrome` not covered
 <span class="boring">}</span></code></pre></pre>
-<p>因為少了Firefox和Chrome條件分支，Rust要求mtch需要顯式的處理所有可能的情況</p>
+<p>因為少了Firefox和Chrome條件分支，Rust要求match需要顯式的處理所有可能的情況</p>
 <p>可以使用空處理</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -300,6 +300,37 @@ match 1 {
 <span class="boring">}</span></code></pre></pre>
 <p>因為型別不像枚舉有可窮舉出所有，所以一定需要"_"(Default)
 條件，不然編譯會出現錯誤</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">match 的全面覆蓋(exhaustive)模型
+
+match value {
+  PatternA =&gt; arm_a,
+  PatternB(x) if guard(x) =&gt; arm_b,
+  _ =&gt; default_arm,
+}
+
+流程
++-------------------+
+| input value       |
++---------+---------+
+          |
+          v
++-------------------+
+| arm 1 pattern?    |--yes--&gt; execute arm 1
++---------+---------+
+          | no
+          v
++-------------------+
+| arm 2 pattern?    |--yes--&gt; guard? -&gt; arm 2 / next
++---------+---------+
+          | no
+          v
++-------------------+
+| wildcard (_)      |-------&gt; execute default
++-------------------+
+
+編譯器保證：所有可能值都要被處理。
+</code></pre>
 
                     </main>
 

@@ -219,7 +219,7 @@ note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose bac
 <p>這時候可以看到簡略的錯誤，也可以設定RUST_BACKTRACE=full會列出整個過程</p>
 <p>Rust的panic不像Golang可以recover回來</p>
 <h3 id="可復原的的錯誤使用result"><a class="header" href="#可復原的的錯誤使用result">可復原的的錯誤使用Result</a></h3>
-<p>Resut是個枚舉型別</p>
+<p>Result是個枚舉型別</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>enum Result&lt;T, E&gt; {
@@ -227,7 +227,7 @@ note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose bac
     Err(E),
 }
 <span class="boring">}</span></code></pre></pre>
-<p>Reust是枚舉型別就可以透過match來判斷是回傳OK還是回傳Err，再依裡面的泛型參數取值</p>
+<p>Result是枚舉型別就可以透過match來判斷是回傳OK還是回傳Err，再依裡面的泛型參數取值</p>
 <pre><pre class="playground"><code class="language-rust">use std::fs::File;
 
 fn main() {
@@ -266,8 +266,34 @@ fn return_result_ok() -&gt; Result&lt;String, String&gt; {
 
 fn return_result_error() -&gt; Result&lt;String, String&gt; {
     let s = String::from("失敗");
-    return Ok(s);
+    return Err(s);
 }</code></pre></pre>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">錯誤處理雙軌模型: panic! vs Result
+
+不可復原錯誤
++------------------+
+| panic!           |
+| stack unwind/abort|
++------------------+
+
+可復原錯誤
++------------------------------+
+| fn read() -&gt; Result&lt;T, E&gt;    |
++---------------+--------------+
+                |
+        +-------+-------+
+        |               |
+        v               v
+      Ok(T)           Err(E)
+        |               |
+        +------?--------+
+               |
+               v
+        向上層傳播錯誤
+
+unwrap/expect: 開發期方便，正式路徑應優先明確處理 Err。
+</code></pre>
 
                     </main>
 

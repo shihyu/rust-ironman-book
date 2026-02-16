@@ -230,7 +230,7 @@ world， <code>Cargo.toml</code> 也已經幫你填好了基本的設定， 我�
 Hello, world!
 </code></pre>
 <p>這次要做的是個終極密碼的小遊戲，主要遊戲方式是由使用者輸入數字，電腦回答是比答案大還是小，若沒猜中則猜到中為止的遊戲，接下來我們會一邊介紹基本語法一邊完成這個遊戲，不過我們先幫我們的專案加上一個套件吧，打開
-<code>Cargo.toml</code> ，找到有一行為 <code>[depeendencies]</code> ，在它底下加上：</p>
+<code>Cargo.toml</code> ，找到有一行為 <code>[dependencies]</code> ，在它底下加上：</p>
 <pre><code class="language-toml">rand = "0.5.5"
 </code></pre>
 <p>這個套件的功能是產生隨機的數字，如果沒有它，我們的小遊戲每次的答案就要一樣了。</p>
@@ -242,6 +242,26 @@ Hello, world!
 </code></pre>
 <p>是不是方便多了？</p>
 <p>下一篇要來快速的講解 Rust 的基本語法</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">Cargo 與 crates.io 套件流程
+
+Cargo.toml
+   |
+   v
++--------------------------+
+| cargo resolve dependency |
++------------+-------------+
+             |
+             v
++--------------------------+
+| crates.io / index/cache  |
++------------+-------------+
+             |
+             v
++--------------------------+
+| cargo build -&gt; target/   |
++--------------------------+
+</code></pre>
 
                     </main>
 

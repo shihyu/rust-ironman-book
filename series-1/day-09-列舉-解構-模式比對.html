@@ -333,7 +333,7 @@ let Person { ref name } = person;
 <p>同樣的也有 <code>ref mut</code>：</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let Persion { ref mut name } = person;
+</span>let Person { ref mut name } = person;
 <span class="boring">}</span></code></pre></pre>
 <p>這邊的 <code>name</code> 就會以可寫的方式 borrow，當然這邊也同樣的要套上之前介紹的
 borrow 的規則，在 <code>name</code> 的 borrow 結束前你沒辦法使用 <code>person</code>。</p>
@@ -367,7 +367,7 @@ let Point { x, .. } = Point { x: 1, y: 2 };
 
 // 假設這邊是另一個模組，也就是無法取得私有成員的
 // 因為你並不知道私有成員的名稱，所以是無法用 _ 的
-let { ref name, .. } = person;
+let Person { ref name, .. } = person;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="模式比對-match"><a class="header" href="#模式比對-match">模式比對 (match)</a></h2>
 <p>模式比對是 FP (Functional Programming) 裡一個重要的操作，它的語法如下：</p>
@@ -439,7 +439,7 @@ let slice = &amp;array[0..=2];
 </span><span class="boring">fn main() {
 </span>match Some(3) {
   Some(x) if x &lt; 5 =&gt; println!("x &lt; 5: {}", x),
-  Some(x) =&gt; println!("x &gt; 5: {}", x),
+  Some(x) =&gt; println!("x &gt;= 5: {}", x),
   None =&gt; println!("None"),
 }
 <span class="boring">}</span></code></pre></pre>
@@ -476,6 +476,104 @@ if let Some(x) = Some(42) {
 <p>下一篇要來講 Rust
 的模組架構，這樣就可以好好的組織程式碼，不用在全部都寫在 <code>main.rs</code>
 裡了。</p>
+<h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
+<pre><code class="language-text">═══════════════════════════════════════════════════════════════
+                列舉、解構、模式比對
+═══════════════════════════════════════════════════════════════
+
+【Enum 的記憶體佈局 — Tag + Payload】
+
+  enum StringOrInt {
+      String(String),    // variant 0
+      Int(i32),          // variant 1
+  }
+
+  記憶體中：
+  ┌──────────┬────────────────────────────┐
+  │ tag (判別│     payload (資料)          │
+  │  哪個     │                            │
+  │ variant) │                            │
+  └──────────┴────────────────────────────┘
+
+  StringOrInt::String("hi")        StringOrInt::Int(42)
+  ┌────┬──────────────────┐        ┌────┬──────┐
+  │ 0  │ ptr, len, cap    │        │ 1  │  42  │
+  └────┴──────────────────┘        └────┴──────┘
+  大小 = tag + 最大 variant 的大小（對齊後）
+
+─────────────────────────────────────────────────────────────
+【Option&lt;T&gt; 與 Result&lt;T, E&gt; — 最重要的兩個 Enum】
+
+  enum Option&lt;T&gt; {              enum Result&lt;T, E&gt; {
+      Some(T),   // 有值            Ok(T),    // 成功
+      None,      // 沒有值          Err(E),   // 失敗
+  }                             }
+
+  用途：
+  Option → 取代其他語言的 null/nil
+  Result → 取代其他語言的 exception
+
+  常用方法：
+  ┌─────────────────┬─────────────────────────────┐
+  │ unwrap()        │ 取值，None/Err 時 panic      │
+  │ unwrap_or(val)  │ 取值，否則用預設值            │
+  │ unwrap_or_else  │ 取值，否則呼叫函式取得預設值  │
+  │ map(f)          │ 有值時做轉換                  │
+  │ and_then(f)     │ 有值時做轉換（回傳 Option）   │
+  └─────────────────┴─────────────────────────────┘
+
+─────────────────────────────────────────────────────────────
+【解構賦值 (Destructuring)】
+
+  陣列解構            元組解構               結構解構
+  let [a, b] = ..     let (x, y) = ..       let Point {x, y} = ..
+
+  忽略部分值：
+  let [_, b, _] = [1, 2, 3];     // b = 2
+  let (a, ..) = (1, 2, 3);       // a = 1, 其餘忽略
+  let Point { x, .. } = p;       // 只取 x
+
+  ref 關鍵字（借用而非移動）：
+  let Person { ref name } = person;
+  //  name: &amp;String（借用，person 仍可用）
+
+─────────────────────────────────────────────────────────────
+【match 模式比對 — 完整功能一覽】
+
+  match value {
+  ┌─────────────────────────────────────────────────────┐
+  │ 基本比對                                            │
+  │   1 =&gt; ...                 // 精確值                │
+  │   1 | 2 | 3 =&gt; ...        // 多個值 (OR)           │
+  │   1..=5 =&gt; ...             // 範圍（包含上下界）     │
+  ├─────────────────────────────────────────────────────┤
+  │ 解構比對                                            │
+  │   Ok(val) =&gt; ...           // 解構 enum             │
+  │   [1, _] =&gt; ...            // 解構陣列              │
+  │   Point {x: 10, ..} =&gt; .. // 解構 struct           │
+  ├─────────────────────────────────────────────────────┤
+  │ 條件守衛 (Guard)                                    │
+  │   Some(x) if x &lt; 5 =&gt; ... // 加上額外條件           │
+  ├─────────────────────────────────────────────────────┤
+  │ 綁定變數                                            │
+  │   x @ 1..=5 =&gt; ...        // 比對成功時綁定到 x     │
+  ├─────────────────────────────────────────────────────┤
+  │ 預設                                                │
+  │   _ =&gt; ...                 // 匹配所有其他情況       │
+  └─────────────────────────────────────────────────────┘
+  ⚠ match 要求窮舉所有可能，未涵蓋會編譯錯誤
+
+─────────────────────────────────────────────────────────────
+【if let — 只關心一種情況的簡寫】
+
+  // 完整 match                    // if let 簡寫
+  match opt {                      if let Some(x) = opt {
+    Some(x) =&gt; {                       println!("{}", x);
+      println!("{}", x);           }
+    }
+    _ =&gt; {}
+  }
+</code></pre>
 
                     </main>
 
