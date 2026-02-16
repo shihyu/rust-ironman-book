@@ -160,3 +160,19 @@ thread 'tests::demo' panicked at '是 false', src/lib.rs:27:9
 
 下一篇我們要來介紹 Rust 中的函數式程式設計，以及 Rust 中的閉包 (Closure)
 。
+
+## ASCII 詳細示意圖
+
+```text
+Rust 測試結構
+
+src/lib.rs
+  + #[cfg(test)] mod tests
+      + #[test] fn case_x()
+
+test 執行
+cargo test
+   |
+   v
+編譯 test binary -> 執行案例 -> 報告 pass/fail
+```

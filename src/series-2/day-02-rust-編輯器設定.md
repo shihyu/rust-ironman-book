@@ -35,7 +35,7 @@ rustfmt main.rs
 cargo fmt
 ```
 
-也可以單純檢查並列出沒排好的地放
+也可以單純檢查並列出沒排好的地方
 
 ``` rust
 rustfmt --check main.rs
@@ -74,3 +74,28 @@ let or = foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo ||
 
 File \> Preferences \> Settings. 裡面的 editor.formatOnSave 打勾
 就可以了
+
+## ASCII 詳細示意圖
+
+```text
+編輯器 + Rust 開發回饋循環
+
++------------------+      儲存檔案       +-----------------------+
+| VSCode / Vim     | ------------------> | rust-analyzer (LSP)   |
+| IntelliJ         |                     | 型別推導/語法檢查      |
++------------------+                     +-----------+-----------+
+                                                     |
+                    +--------------------------------+---------------------+
+                    |                                                      |
+                    v                                                      v
+         +-----------------------+                               +-------------------+
+         | rustfmt              |                               | cargo check       |
+         | 統一格式             |                               | 快速編譯檢查       |
+         +----------------------+                               +---------+---------+
+                                                                         |
+                                                                         v
+                                                              +-------------------+
+                                                              | clippy            |
+                                                              | lint 與最佳實務    |
+                                                              +-------------------+
+```

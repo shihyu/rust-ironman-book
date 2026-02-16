@@ -171,7 +171,7 @@ pub extern "C" fn create_vec(size: *mut usize) -> *mut i32 {
 }
 
 #[no_mangle]
-pub extern "C" fn free_vec(vec: *mut i32, size: i32) {
+pub extern "C" fn free_vec(vec: *mut i32, size: usize) {
   drop(unsafe { Vec::from_raw_parts(vec, size, size) });
 }
 ```
@@ -263,3 +263,22 @@ void say_hello(const char *message);
 的部份只要負責呼叫就好了，可喜可賀。
 
 下一篇我們來做個 python 的 native extension 吧。
+
+## ASCII 詳細示意圖
+
+```text
+C 呼叫 Rust 函式
+
+Rust
+#[no_mangle]
+pub extern "C" fn rust_api(...)
+
+C program ----link----> rust static/dynamic lib
+   |
+   v
+call rust_api()
+
+關鍵
+- no_mangle 固定符號名
+- extern "C" 使用 C ABI
+```

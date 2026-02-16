@@ -137,3 +137,20 @@ fn main() {
 ```
 
 下一篇要再來介紹更多跟執行緒與平行處理有關的東西。
+
+## ASCII 詳細示意圖
+
+```text
+程序(Process) 與執行緒(Thread)
+
+Process A
++-------------------------------+
+| 記憶體空間 (獨立)             |
+|  + Thread-1 (stack1)          |
+|  + Thread-2 (stack2)          |
+|  + Shared heap                |
++-------------------------------+
+
+不同 Process 間需 IPC
+同 Process Thread 可共享 heap
+```

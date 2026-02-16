@@ -48,7 +48,7 @@ s.borrow_mut().push_str("World");
 println!("{}", s.borrow());
 ```
 
-# 搭配 Rc
+## 搭配 Rc
 
 用 `RefCell` 搭配 `Rc`
 使用就能做出同時有多個參照，卻還能視情況修改值了，我們試著做一個 double
@@ -91,7 +91,7 @@ impl DoubleList {
             }
             None => {
               // 存前一點節點
-              prev = Rc::clone(&cursor);
+              prev = Rc::downgrade(&cursor);
               break;
             }
           }
@@ -124,3 +124,22 @@ fn main() {
 ```
 
 下一篇文章要來介紹如何呼叫外部的程式，以及使用執行緒。
+
+## ASCII 詳細示意圖
+
+```text
+Cell / RefCell 內部可變性
+
+外層: 不可變綁定
++------------------------+
+| RefCell<T>             |
+| borrow flag(runtime)   |
++-----------+------------+
+            |
+            v
+         inner T
+
+borrow()     -> 多個共享借用
+borrow_mut() -> 同時只能一個
+違反規則時在執行期 panic
+```

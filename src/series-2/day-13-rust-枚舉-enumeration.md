@@ -111,9 +111,38 @@ println!("{}", Browser::Firefox as i32)
 let browser = Browser::Ie;
 
 if browser == Browser::Ie {
-    println!("{}", "hello word")
+    println!("{}", "hello world")
 }
 
 // 編譯時會出錯
 // binary operation `==` cannot be applied to type `Browser`
+```
+
+## ASCII 詳細示意圖
+
+```text
+Enum 的判別值(discriminant) + 載荷(payload)
+
+enum Message {
+  Quit,
+  Move { x: i32, y: i32 },
+  Write(String),
+}
+
+記憶體概念
++----------------------------------------------+
+| discriminant | payload union                 |
++----------------------------------------------+
+| Quit         | (empty)                       |
+| Move         | x: i32, y: i32                |
+| Write        | String { ptr, len, cap }      |
++----------------------------------------------+
+
+Option<T> 常見模型
+Some(T) / None
++----------------------+ 
+| tag + optional value |
++----------------------+
+
+優點：用型別取代 magic number 與不安全狀態碼。
 ```

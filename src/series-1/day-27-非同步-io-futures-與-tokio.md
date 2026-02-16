@@ -187,3 +187,24 @@ tower-web ，它就讓你不需要去碰到 tokio 的細節部份。
 ](https://blog.techbridge.cc/2018/01/05/tokio-internal/)。
 
 下一篇我們就來介紹 WebAssembly 。
+
+## ASCII 詳細示意圖
+
+```text
+async/await + Tokio Runtime
+
+async fn task() { ... }
+        |
+        v
+Future state machine
+        |
+        v
+Tokio scheduler poll()
+        |
+   +----+----+
+   | ready   | pending (等待 I/O)
+   v         |
+complete <---+
+
+單執行緒也可高併發處理大量 I/O。
+```

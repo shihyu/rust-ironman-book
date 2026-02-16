@@ -39,3 +39,16 @@
 - 番外 1｜[番外 1： 設計模式](extra-01-番外-1-設計模式.md)｜原文：https://ithelp.ithome.com.tw/articles/10207423
 - 番外 2｜[番外 2： 不使用標準函式庫行不行？](extra-02-番外-2-不使用標準函式庫行不行.md)｜原文：https://ithelp.ithome.com.tw/articles/10207917
 - 番外 3｜[番外 3 ： Rust 2018, const fn & inline asm](extra-03-番外-3-rust-2018-const-fn-inline-asm.md)｜原文：https://ithelp.ithome.com.tw/articles/10210294
+
+## ASCII 詳細示意圖
+
+```text
+Series-1 知識地圖
+
+基礎語法
+  -> 所有權/借用/生命週期
+  -> 型別系統 (struct/trait/enum)
+  -> 錯誤處理/測試
+  -> 並發/非同步/unsafe/FFI
+  -> 實戰專案
+```

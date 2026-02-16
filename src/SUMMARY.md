@@ -66,3 +66,18 @@
   - [Rust-並行&並發(二)](series-2/day-28-rust-並行-並發-二.md)
   - [錯誤處理](series-2/day-29-錯誤處理.md)
   - [Rust-30天的心得](series-2/day-30-rust-30天的心得.md)
+
+## ASCII 詳細示意圖
+
+```text
+SUMMARY 章節樹
+
+Root
++-- series-1
+|   +-- day-01 ... day-30
+|   +-- extra-01 ... extra-03
++-- series-2
+    +-- day-01 ... day-30
+
+mdBook 依此樹狀順序產生側邊導覽。
+```

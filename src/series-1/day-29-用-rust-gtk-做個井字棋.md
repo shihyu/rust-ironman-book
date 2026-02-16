@@ -176,7 +176,7 @@ fn setup_ui(app: &gtk::Application) {
           show_message(&window, p.label());
         }
       });
-      // 把按鈕加建 box
+      // 把按鈕加進 box
       inner_box.pack_start(&button, true, true, 0);
     }
     outer_box.pack_start(&inner_box, true, true, 0);
@@ -388,3 +388,23 @@ macro_rules! clone {
 下一篇我想來講一些我覺得值得提的部份，當然包括 macro
 的寫法，另外還會談談我對於 Rust
 的心得，跟鐵人賽的心得，畢竟是達標的最後一篇了，至於如果之後又有什麼有趣的東西，說不定我還是會寫成文章的。
+
+## ASCII 詳細示意圖
+
+```text
+GTK 井字棋事件架構
+
+GTK Main Loop
+   |
+   +--> Button click(i,j)
+            |
+            v
+      game state update
+            |
+            +--> 檢查勝負/平手
+            |
+            v
+      redraw board + status label
+
+UI 事件驅動，狀態集中管理。
+```

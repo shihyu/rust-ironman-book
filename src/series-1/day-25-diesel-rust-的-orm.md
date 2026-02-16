@@ -358,3 +358,23 @@ fn main() {
 
 大概的使用就這樣，這些應該夠我們建一個留言板了，先把 `main`
 函式清空吧，明天我們再來繼續建立留言板的後端。
+
+## ASCII 詳細示意圖
+
+```text
+Diesel ORM 資料流
+
+schema.rs + model structs
+        |
+        v
+Diesel Query Builder
+        |
+        v
+SQL (compile-time checked)
+        |
+        v
+DB (Postgres/MySQL/SQLite)
+        |
+        v
+rows -> Rust struct
+```

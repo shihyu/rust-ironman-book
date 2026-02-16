@@ -22,7 +22,7 @@ bounds)來指定泛型型別為擁有特定行為的任意型別。
 
 ### 特徵的需求
 
-假設我們需要一個函式需計算四次平方根，可以用標準庫sqrtx來寫
+假設我們需要一個函式需計算四次平方根，可以用標準庫sqrt來寫
 
 ``` rust
 fn main() {
@@ -69,7 +69,7 @@ fn main() {
 no method named `sqrt` found for type parameter `T` in the current scope
 ```
 
-會出現這樣的錯誤是因為x變數是屬於泛型型別T，是剛剛在建立出來的並沒有sqrt的mehtod
+會出現這樣的錯誤是因為x變數是屬於泛型型別T，是剛剛在建立出來的並沒有sqrt的method
 
 這時候就可以特徵派上用場的時候了，可以這樣使用解決剛剛的問題
 
@@ -109,3 +109,33 @@ fn main() {
 ```
 
 一開先宣告HasSqrt trait然後使用impl關鍵字替f32和f64實現sq函式
+
+## ASCII 詳細示意圖
+
+```text
+Trait 作為行為契約
+
+trait Summary {
+  fn summarize(&self) -> String;
+}
+
++---------------------+
+| Trait: Summary      |
+| summarize(&self)    |
++----------+----------+
+           |
+   +-------+--------+
+   |                |
+   v                v
++--------+      +--------+
+| News   |      | Tweet  |
+| impl   |      | impl   |
++--------+      +--------+
+
+呼叫點
+fn notify(item: &impl Summary) {
+  item.summarize()
+}
+
+編譯期確認：傳入型別必須實作 Summary。
+```

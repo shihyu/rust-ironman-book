@@ -378,3 +378,24 @@ println!("{:?}", vec![1, 2, 3].into_iter().map(Some).collect::<Vec<_>>());
 上面那些大概知道就好了，主要是一些讓你可以少建立一個閉包的寫法。
 
 下一篇來介紹智慧指標，與一些集合型態。
+
+## ASCII 詳細示意圖
+
+```text
+Iterator 函數式鏈
+
+input vec
+  |
+  v
+iter()
+  |
+  +-> map(f)
+  |
+  +-> filter(p)
+  |
+  +-> fold(init, g)
+  v
+output value
+
+延遲求值，直到 collect/fold 才真正計算。
+```

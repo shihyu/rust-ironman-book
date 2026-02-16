@@ -36,3 +36,15 @@
 - DAY 28｜[Rust-並行&並發(二)](day-28-rust-並行-並發-二.md)｜原文：https://ithelp.ithome.com.tw/articles/10278240
 - DAY 29｜[錯誤處理](day-29-錯誤處理.md)｜原文：https://ithelp.ithome.com.tw/articles/10278316
 - DAY 30｜[Rust-30天的心得](day-30-rust-30天的心得.md)｜原文：https://ithelp.ithome.com.tw/articles/10278826
+
+## ASCII 詳細示意圖
+
+```text
+Series-2 30 天流程
+
+Day01-10  : 環境與語法基礎
+Day11-20  : 控制流 + 函式 + 所有權
+Day21-26  : 泛型 + trait + 抽象
+Day27-29  : 並發 + 錯誤處理
+Day30     : 總結
+```

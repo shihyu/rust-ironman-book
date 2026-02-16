@@ -43,7 +43,7 @@ macro_rules! clone {
 
 接下來則是分成兩個部份，模式定義的部份與產生的程式碼，兩邊都必須使用成對的括號包住，中間使用
 `=>` 分隔，最後則要用 `;` 結束
-(只有一個定義時可以不用)，左邊的模式幾乎可以隨便定義，只是還是有些規則在，主要是不能造成編譯器出現岐義的情況，也就是同一段程式碼能有兩種不同的解釋，像
+(只有一個定義時可以不用)，左邊的模式幾乎可以隨便定義，只是還是有些規則在，主要是不能造成編譯器出現歧義的情況，也就是同一段程式碼能有兩種不同的解釋，像
 macro 中能用 `expr` 去比對運算式，但是運算式後就規定不能出現運算子 (+
 、 - 、 \* 、 / 等等) 。
 
@@ -319,3 +319,24 @@ Rust By Examples
 
 對了，原本我還想在這篇示範怎麼發佈個 crate ，然後把之前寫的那個
 hastebin-client 發上去的，不過我還是先把程式碼整理一下吧。
+
+## ASCII 詳細示意圖
+
+```text
+Macro 與 Proc-macro 編譯階段
+
+source tokens
+   |
+   +--> declarative macro_rules!
+   |        |
+   |        v
+   |    token expansion
+   |
+   +--> procedural macro crate
+            |
+            v
+       AST transform
+            |
+            v
+expanded Rust code -> normal compile pipeline
+```

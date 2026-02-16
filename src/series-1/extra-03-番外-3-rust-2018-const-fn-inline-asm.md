@@ -217,3 +217,21 @@ fn main() {
 不過這功能目前還有些問題，比如不能傳參數，也不能使用堆疊變數 (比如
 `let foo = 42`)
 ，不然就會產生有問題的組語，基本上在裡面除了寫內嵌組語外並不建議做其它事。
+
+## ASCII 詳細示意圖
+
+```text
+const fn + inline asm 概念
+
+const fn
+compile-time evaluable
+   |
+   v
+常數上下文可直接計算
+
+inline asm
+Rust code -> asm! macro -> machine instructions
+
+用途: 低階最佳化/平台相關控制
+代價: 可攜性與安全風險上升
+```

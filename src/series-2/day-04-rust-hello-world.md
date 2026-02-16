@@ -34,9 +34,9 @@ Hello, World!
 
 ### 分析程式碼
 
-- **fu**是rust的關鍵字，function的簡寫
-- main是函式名稱，執行rust程式時將執行，如果沒有main哪可能是一個library
-- print! 是rust的巨集(macro) 如果沒有"!"表示是函示有的話則是巨集
+- **fn**是rust的關鍵字，function的簡寫
+- main是函式名稱，執行rust程式時將執行，如果沒有main那可能是一個library
+- print! 是rust的巨集(macro) 如果沒有"!"表示是函式有的話則是巨集
 - "Hello, world!" 表示字串內容
 - 最後用";"表示語法結束
 
@@ -44,7 +44,7 @@ rust對大小寫是敏感的
 
 ### Print! 用法
 
-利用"{}"站位符輸出字串，類似golang的fmt.Printf("%s, %s!", "Hello",
+利用"{}"佔位符輸出字串，類似golang的fmt.Printf("%s, %s!", "Hello",
 "World")
 
 ``` rust
@@ -54,7 +54,7 @@ print!("{}, {}!", "Hello", "World")
 Hello, World!
 ```
 
-利用"{}"站位符輸出數字，類似golang的fmt.Printf("%s: %d", "Num", 9527)
+利用"{}"佔位符輸出數字，類似golang的fmt.Printf("%s: %d", "Num", 9527)
 
 ``` rust
 print!("{}: {}", "Num", 9527)
@@ -72,4 +72,34 @@ print!("Hello, World!\nHello, World!\nHello, World!")
 Hello, World!
 Hello, World!
 Hello, World!
+```
+
+## ASCII 詳細示意圖
+
+```text
+Hello World 從原始碼到輸出的流程
+
+main.rs
+  |
+  v
++---------------------------+
+| rustc / cargo build       |
+| 1. 詞法/語法解析          |
+| 2. MIR/LLVM IR            |
+| 3. 產生執行檔             |
++-------------+-------------+
+              |
+              v
++---------------------------+
+| 可執行檔                  |
+| main() -> println!(...)   |
++-------------+-------------+
+              |
+              v
++---------------------------+
+| stdout                    |
+| Hello, world!             |
++---------------------------+
+
+println! 是 macro: 先展開，再編譯。
 ```

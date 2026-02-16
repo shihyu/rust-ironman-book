@@ -134,7 +134,7 @@ fn main() {
   let (tx, rx) = unbounded();
   let mut children = Vec::new();
   // 這次建立了 4 個執行緒來展示 crossbeam 能支援多個接收端
-  for i in  0..4 {
+  for i in 0..4 {
     let rx = rx.clone();
     children.push(thread::spawn(move || loop {
       match rx.recv() {
@@ -182,7 +182,7 @@ use crossbeam::{thread, channel::unbounded};
 fn main() {
   let (tx, rx) = unbounded();
   thread::scope(|scope| {
-    for i in  0..4 {
+    for i in 0..4 {
       let rx = rx.clone();
       // 改呼叫 scope 上的 spawn
       scope.spawn(move |_| loop {
@@ -218,3 +218,19 @@ data racing 是什麼呢？
 中為了安全總是犧牲掉了點彈性，而我們要來使用那些不安全的功能，當然，使用了這些功能
 Rust
 就沒辦法保證你的程式是安全不會有記憶體錯誤，就跟你拆開保固中的東西一樣，要自己負責。
+
+## ASCII 詳細示意圖
+
+```text
+Atomic + Channel + Crossbeam
+
+Atomic counter
+Thread A/B --fetch_add--> shared atomic value
+
+mpsc channel
+tx1 ----+
+        +--> queue --> rx
+tx2 ----+
+
+Crossbeam 提供更高效同步與 work-stealing 結構。
+```

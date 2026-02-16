@@ -96,7 +96,7 @@ fn main() {
 
 ``` rust
 // 如果用 new 的話 Vec 是不會分配空間的
-let vec = Vec::<i32>::with_capacity(1);
+let mut vec = Vec::<i32>::with_capacity(1);
 unsafe {
   vec.set_len(100);
 }
@@ -159,3 +159,24 @@ github 在 <https://github.com/rust-lang-nursery/lazy-static.rs> 。
 下一篇我們要來介紹 Rust 2018 有什麼新東西，然後 Rust
 的基礎大致上就介紹到這邊了，再接下就進入應用篇，我會開始介紹一些實用的
 crate 與實作幾個專案，如果有什麼想要我做的也歡迎提出來。
+
+## ASCII 詳細示意圖
+
+```text
+safe Rust 與 unsafe 區塊邊界
+
+safe code
+   |
+   v
++----------------------+
+| unsafe { ... }       |
+| - raw pointer deref  |
+| - 呼叫 unsafe fn     |
+| - 操作 static mut    |
++----------+-----------+
+           |
+           v
+回到 safe API 封裝
+
+原則: 把 unsafe 範圍縮到最小。
+```

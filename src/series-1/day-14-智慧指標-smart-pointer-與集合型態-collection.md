@@ -204,3 +204,19 @@ let b = Rc::clone(&a);
 
 下一篇要來介紹 `Cell` 與 `RefCell` ，它們可以讓 Rust 的變數沒有宣告
 `mut` 也能改變，同時讓 borrow check 的規則延遲到執行時才判斷。
+
+## ASCII 詳細示意圖
+
+```text
+智慧指標與集合
+
+Box<T> : 單一堆配置所有權
+Rc<T>  : 單執行緒引用計數共享
+Arc<T> : 多執行緒引用計數共享
+
+Vec<T>
+Stack: ptr/len/cap -> Heap contiguous buffer
+
+HashMap<K,V>
+bucket array -> key/value entries
+```

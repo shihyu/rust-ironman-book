@@ -25,7 +25,7 @@ Match取值後對每個條件進行比較依照順序比較，一但匹配成功
 match browser {
     Firefox => let var = 777;, // 無效的表達式
     Chrome => let var = 777, // 無效的表達式
-    Ie =>  fu funct() {}, // 無效的表達式
+    Ie =>  fn funct() {}, // 無效的表達式
     Safari => println!("S"),
 }
 ```
@@ -42,7 +42,7 @@ enum Browser {
     Safari,
 }
 
-let browser = Browser::Ie;
+let mut browser = Browser::Ie;
 
 match browser {
     Browser::Firefox => {
@@ -79,7 +79,7 @@ match browser {
 patterns `Firefox` and `Chrome` not covered
 ```
 
-因為少了Firefox和Chrome條件分支，Rust要求mtch需要顯式的處理所有可能的情況
+因為少了Firefox和Chrome條件分支，Rust要求match需要顯式的處理所有可能的情況
 
 可以使用空處理
 
@@ -138,3 +138,37 @@ match 1 {
 
 因為型別不像枚舉有可窮舉出所有，所以一定需要"\_"(Default)
 條件，不然編譯會出現錯誤
+
+## ASCII 詳細示意圖
+
+```text
+match 的全面覆蓋(exhaustive)模型
+
+match value {
+  PatternA => arm_a,
+  PatternB(x) if guard(x) => arm_b,
+  _ => default_arm,
+}
+
+流程
++-------------------+
+| input value       |
++---------+---------+
+          |
+          v
++-------------------+
+| arm 1 pattern?    |--yes--> execute arm 1
++---------+---------+
+          | no
+          v
++-------------------+
+| arm 2 pattern?    |--yes--> guard? -> arm 2 / next
++---------+---------+
+          | no
+          v
++-------------------+
+| wildcard (_)      |-------> execute default
++-------------------+
+
+編譯器保證：所有可能值都要被處理。
+```

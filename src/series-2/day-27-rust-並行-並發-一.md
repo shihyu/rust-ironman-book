@@ -77,3 +77,27 @@ fn main() {
     handle.join().unwrap();
 }
 ```
+
+## ASCII 詳細示意圖
+
+```text
+執行緒建立與同步(join)
+
+main thread
++--------------------------------+
+| spawn(move || worker())        |
+| handle.join()                  |
++----------------+---------------+
+                 |
+                 v
+       +-------------------------+
+       | worker thread           |
+       | 1..N work               |
+       +-------------------------+
+
+時間軸
+main   : spawn ----- wait(join) -------- done
+worker :       start ---- run ---- exit
+
+若沒有 join，main 可能先結束，worker 被提早中止。
+```

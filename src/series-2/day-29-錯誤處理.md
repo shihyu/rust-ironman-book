@@ -54,7 +54,7 @@ Rust的panic不像Golang可以recover回來
 
 ### 可復原的的錯誤使用Result
 
-Resut是個枚舉型別
+Result是個枚舉型別
 
 ``` rust
 enum Result<T, E> {
@@ -63,7 +63,7 @@ enum Result<T, E> {
 }
 ```
 
-Reust是枚舉型別就可以透過match來判斷是回傳OK還是回傳Err，再依裡面的泛型參數取值
+Result是枚舉型別就可以透過match來判斷是回傳OK還是回傳Err，再依裡面的泛型參數取值
 
 ``` rust
 use std::fs::File;
@@ -109,6 +109,35 @@ fn return_result_ok() -> Result<String, String> {
 
 fn return_result_error() -> Result<String, String> {
     let s = String::from("失敗");
-    return Ok(s);
+    return Err(s);
 }
+```
+
+## ASCII 詳細示意圖
+
+```text
+錯誤處理雙軌模型: panic! vs Result
+
+不可復原錯誤
++------------------+
+| panic!           |
+| stack unwind/abort|
++------------------+
+
+可復原錯誤
++------------------------------+
+| fn read() -> Result<T, E>    |
++---------------+--------------+
+                |
+        +-------+-------+
+        |               |
+        v               v
+      Ok(T)           Err(E)
+        |               |
+        +------?--------+
+               |
+               v
+        向上層傳播錯誤
+
+unwrap/expect: 開發期方便，正式路徑應優先明確處理 Err。
 ```

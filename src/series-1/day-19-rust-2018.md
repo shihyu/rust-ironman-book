@@ -89,7 +89,7 @@ fn main() {
 }
 ```
 
-要加上 `r#` 還有是點麻煩。
+要加上 `r#` 還是有點麻煩。
 
 ## 匿名 lifetime
 
@@ -126,3 +126,19 @@ Book](https://doc.rust-lang.org/unstable-book/the-unstable-book.html)
 
 接下來就要開始進入應用篇了，下一篇我要來介紹一些個人覺得常用或好用的
 crate 。
+
+## ASCII 詳細示意圖
+
+```text
+Rust 2018 生態更新圖
+
+語言版次(editions)
+2015 -> 2018 -> 2021 -> 2024
+   |
+   +-- 相容性保留 (同編譯器支援多版)
+
+2018 重點
+- module 路徑簡化
+- non-lexical lifetimes
+- async/await 生態鋪路
+```

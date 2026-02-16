@@ -320,3 +320,23 @@ console error 的那個 crate ，結果沒想到真的遇到了 panic
 HtmlInputElement，不過還是順利的把這篇文章生出來了。
 
 下一篇來做個小遊戲。
+
+## ASCII 詳細示意圖
+
+```text
+Rust -> WebAssembly 流程
+
+Rust source
+   |
+   v
+wasm32-unknown-unknown target
+   |
+   v
+cargo build / wasm-pack
+   |
+   +--> pkg/*.wasm
+   +--> JS glue code
+            |
+            v
+Browser runtime (JS <-> WASM)
+```

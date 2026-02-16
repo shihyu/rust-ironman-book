@@ -80,7 +80,7 @@ Hello world
 程式，從下一篇開始，我們將正式開始旅程，不過在這之前，讓我們安裝幾個好東西，這會讓我們接下來更佳順利。
 
 ``` shell
-$ rustup component add rls-preview rustfmt-preview
+$ rustup component add rust-analyzer rustfmt
 ```
 
 最後的最後，Rust 有個線上的測試環境：https://play.rust-lang.org
@@ -88,3 +88,24 @@ $ rustup component add rls-preview rustfmt-preview
 
 下一篇我們會介紹 Cargo 這個 Rust 的套件管理與建置工具，還有
 <https://crates.io> ，載個套件下來玩玩，並介紹基本的輸入與輸出。
+
+## ASCII 詳細示意圖
+
+```text
+Rust 環境安裝拓樸
+
++-------------------------+
+| rustup (toolchain 管理) |
++-----------+-------------+
+            |
+            v
++-------------------------+
+| rustc / cargo / rustfmt |
++-----------+-------------+
+            |
+            v
++-------------------------+
+| 專案流程                 |
+| cargo new/build/run/test|
++-------------------------+
+```

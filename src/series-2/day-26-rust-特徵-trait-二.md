@@ -77,7 +77,7 @@ fn main() {
     where
         T: HasSqrt,
     {
-        return x.abs.sq().sq();
+        return x.abs().sq().sq();
     }
 
     let qr32 = quartic(100f32);
@@ -127,7 +127,7 @@ fn main() {
     where
         T: HasSqrt + HasAbs , // 這裡界限宣告兩個trait
     {
-        return x.abs.sq().sq();
+        return x.abs().sq().sq();
     }
 
     let qr32 = quartic(100f32);
@@ -139,7 +139,7 @@ fn main() {
 
 ### "self"和"Self"傻傻分不清楚
 
-Rust式區分大小寫得
+Rust是區分大小寫的
 
 在前面的範例都使用到self和Self其中
 
@@ -167,7 +167,7 @@ fn main() {
     trait HasSqrt {
         fn sq(self) -> Self;
         fn helloWord(&self) -> String { // 預設實作
-            return String::from("hello word");
+            return String::from("hello world");
         }
     }
 
@@ -187,4 +187,35 @@ fn main() {
 
     let qr32 = quartic(100f32);
 }
+```
+
+## ASCII 詳細示意圖
+
+```text
+Trait bound、多 trait、預設實作
+
+fn process<T>(x: T)
+where
+  T: Display + Clone,
+{ ... }
+
+型別檢查
++---------------------------+
+| T 是否同時滿足兩個 trait? |
++-------------+-------------+
+              |
+        +-----+-----+
+        |           |
+        v           v
+      yes          no -> compile error
+
+self vs Self
+self  : 方法接收者實例
+Self  : 當前實作型別名稱
+
+預設實作
+trait A {
+  fn f(&self) { default }
+}
+impl A for MyType { /* 可覆寫 */ }
 ```

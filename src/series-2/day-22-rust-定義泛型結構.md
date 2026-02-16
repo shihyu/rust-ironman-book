@@ -19,7 +19,7 @@ struct S1<T1, T2> {
    n2: T2,
 }
 
-let s = S {n1:957, n2:996.1}
+let s = S1 {n1:957, n2:996.1};
 ```
 
 第一句語法宣告了兩個型別T1和T2參數化的泛型結構S1，第一個字段n1為T1第二字段n2為T2
@@ -65,7 +65,7 @@ fn swap_i16_u16(p1: i16, p2: u16) -> (u16, i16) {
     return (p2, p1);
 }
 
-fn swap_f32_bool(p1: f32, p2: bool) -> (f32, bool) {
+fn swap_f32_bool(p1: f32, p2: bool) -> (bool, f32) {
     return (p2, p1);
 }
 
@@ -85,3 +85,32 @@ println!("{:?} {:?}", x, y);
 Slow Compiler: c++/rust  
 Slow Performance: java/scala  
 Slow Programmer: go1
+
+## ASCII 詳細示意圖
+
+```text
+泛型結構的型別實例化
+
+struct Point<T> {
+  x: T,
+  y: T,
+}
+
+Point<i32> 與 Point<f64> 是不同具體型別
+
+Point<i32>
++-----------+
+| x: i32    |
+| y: i32    |
++-----------+
+
+Point<f64>
++-----------+
+| x: f64    |
+| y: f64    |
++-----------+
+
+方法可分層
+impl<T> Point<T> { ... }        // 全型別通用
+impl Point<f64> { ... }         // 僅 f64 可用
+```

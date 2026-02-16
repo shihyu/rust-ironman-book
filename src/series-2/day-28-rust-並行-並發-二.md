@@ -28,7 +28,7 @@ fn main() {
     let (tx, rx) = mpsc::channel(); // 建立新的channel，回傳一個元組，拆成兩個變數
 
     thread::spawn(move || {
-        let val = String::from("hello word");
+        let val = String::from("hello world");
         tx.send(val).unwrap();
     });
 
@@ -48,17 +48,17 @@ fn main() {
     let tx1 = tx.clone(); // 複製發送者
     let tx2 = tx.clone(); // 複製發送者
     thread::spawn(move || {
-        let val = String::from("hello word tx");
+        let val = String::from("hello world tx");
         tx.send(val).unwrap();
     });
 
     thread::spawn(move || {
-        let val = String::from("hello word tx1");
+        let val = String::from("hello world tx1");
         tx1.send(val).unwrap();
     });
 
     thread::spawn(move || {
-        let val = String::from("hello word tx2");
+        let val = String::from("hello world tx2");
         tx2.send(val).unwrap();
     });
 
@@ -68,9 +68,29 @@ fn main() {
 }
 
 輸出
-hello word tx
-hello word tx2
-hello word tx1
+hello world tx
+hello world tx2
+hello world tx1
 ```
 
-雖然channel本身不支援多個接收者(receiver)，但是可以利用上鎖讓多個執行序同時使用接收者
+雖然channel本身不支援多個接收者(receiver)，但是可以利用上鎖讓多個執行緒同時使用接收者
+
+## ASCII 詳細示意圖
+
+```text
+mpsc channel 傳遞所有權
+
+Producer threads                    Consumer thread
++---------------+                   +-------------------+
+| tx1.send(v1)  |----+          +-->| rx.recv() -> v1   |
++---------------+    |          |   +-------------------+
+                     +-- queue --+
++---------------+    |          |
+| tx2.send(v2)  |----+          +-->| rx.recv() -> v2   |
++---------------+                   +-------------------+
+
+特性
+- send(v) 會移動所有權到 channel
+- receiver 取得後成為新 owner
+- 所有 sender drop 後，recv() 最終回傳 Err (通道關閉)
+```

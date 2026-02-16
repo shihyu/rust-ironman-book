@@ -102,7 +102,7 @@ impl DerefMut for BetterFile {
 use std::io::{self, Write};
 
 impl Write for BetterFile {
-  // 提示編譯器可以把這個函式做 inline 來最佳作，委派的方法通常會加
+  // 提示編譯器可以把這個函式做 inline 來最佳化，委派的方法通常會加
   #[inline]
   fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
     self.file.write(buf)
@@ -130,7 +130,7 @@ trait 了。
 
 RAII 是 Rust
 裡大量應用的一個功能，這可以確保使用者不會忘記釋放資源，這最主要是實作
-\[`std::ops::Drop`\])(<https://doc.rust-lang.org/std/ops/trait.Drop.html>)
+[`std::ops::Drop`](https://doc.rust-lang.org/std/ops/trait.Drop.html)
 來達成，不過因為這個 trait 太常用了，所以預設都有載入：
 
 ``` rust
@@ -233,3 +233,20 @@ impl PublicTrait for PublicStruct {
 
 再加上之前在第 7 篇介紹的 Builder pattern 就是 Rust
 中常用的一些設計模式了。
+
+## ASCII 詳細示意圖
+
+```text
+設計模式在 Rust 的實踐
+
+需求
+  |
+  v
+trait 定義抽象
+  |
+  +--> 組合(Composition)
+  +--> enum 狀態建模
+  +--> 泛型/零成本抽象
+  v
+可測試、低耦合實作
+```

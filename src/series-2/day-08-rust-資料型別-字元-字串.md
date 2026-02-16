@@ -24,7 +24,7 @@ Rust的字串分兩種
 - str
 - String
 
-嚴格來講Rust在核心語言中只有一個字串型別，哪就是切片字串(&str)是不可變的(stack)
+嚴格來講Rust在核心語言中只有一個字串型別，那就是切片字串(&str)是不可變的(stack)
 
 String則是Rust標準函式庫提供的型別，String是可變(Heap)
 
@@ -54,7 +54,7 @@ println!("{}", &str_var[0..1]);
 thread 'main' panicked at 'byte index 1 is not a char boundary; it is inside '安' (bytes 0..3) of `安安`'
 ```
 
-比較好得做法透過as_bytes或是chars方法來取直
+比較好得做法透過as_bytes或是chars方法來取值
 
 ``` rust
 let str_var = "安安你好啊";
@@ -102,4 +102,32 @@ str_var.not_found;
 
 出現錯誤
 no field `not_found` on type `&str`
+```
+
+## ASCII 詳細示意圖
+
+```text
+char 與 String 的記憶體模型
+
+char ('中')
++----------------------+
+| 4 bytes Unicode scalar|
+| U+4E2D               |
++----------------------+
+
+String
+Stack: String header
++-------------------------------+
+| ptr -> Heap buffer            |
+| len = 已使用位元組數          |
+| cap = 配置容量(位元組)        |
++-------------------------------+
+
+Heap buffer (UTF-8 bytes)
++----+----+----+----+----+
+| e4 | b8 | ad | 21 | ..  |
++----+----+----+----+----+
+   '中'         '!'
+
+重點：字串索引不是 O(1) 字元位移，因 UTF-8 為可變長編碼。
 ```

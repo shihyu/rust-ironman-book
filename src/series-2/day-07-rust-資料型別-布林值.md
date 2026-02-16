@@ -47,11 +47,11 @@ true false true
 
 - \<：小於
 
-- ：大於
+- \>：大於
 
 - \<=：小於或是等於
 
-- =：大於或是等於
+- \>=：大於或是等於
 
 跟常見語言都一樣
 
@@ -92,4 +92,31 @@ true false false false
 print!("{} {} {} {}", true_var || true_var, false_var || false_var, true_var || false_var, false_var || true_var);
 輸出
 true false true true
+```
+
+## ASCII 詳細示意圖
+
+```text
+布林值與條件分支
+
+bool 只有兩種值: true / false
+
+if 條件判斷流程
++-----------------------+
+| condition: bool       |
++-----------+-----------+
+            |
+      +-----+-----+
+      |           |
+      v           v
++-----------+  +-----------+
+| true path |  | false path|
++-----------+  +-----------+
+
+邏輯運算
+A && B  : A=false 時短路，不評估 B
+A || B  : A=true  時短路，不評估 B
+!A      : 反轉布林值
+
+Rust 不允許以非 bool 當條件，避免隱式轉型錯誤。
 ```

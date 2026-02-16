@@ -72,3 +72,31 @@ for var in (1..101).rev() {
 輸出
 100 99 98 97 96 ... 1
 ```
+
+## ASCII 詳細示意圖
+
+```text
+for 迴圈與 Iterator desugaring
+
+for x in collection {
+    body(x)
+}
+
+等價概念（簡化）
+let mut iter = IntoIterator::into_iter(collection);
+loop {
+    match iter.next() {
+        Some(x) => body(x),
+        None => break,
+    }
+}
+
+資料流
++------------+     next()     +----------------+
+| collection | ------------->  | Iterator state |
++------------+                 +--------+-------+
+                                        |
+                              Some(item)|None
+                                        v
+                                  body / break
+```

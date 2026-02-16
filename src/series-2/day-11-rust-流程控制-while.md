@@ -68,7 +68,7 @@ while i <= 100 {
 如果要執行無限循環的迴圈直到程式被強制中斷或是通過退出循環語法break，可以透過loop語法
 
 ``` rust
-// 透過whilce 會出現警告
+// 透過while 會出現警告
 let mut i = 1;
 
 while true {
@@ -87,4 +87,34 @@ loop {
     }
     i += 1;
 }
+```
+
+## ASCII 詳細示意圖
+
+```text
+while / loop 控制流程
+
+while condition {
+    body
+}
+
++-------------------+
+| evaluate condition|
++---------+---------+
+          |
+      +---+---+
+      |       |
+      v       v
++-----------+ +------------+
+| true      | | false      |
+| run body  | | exit loop  |
++-----+-----+ +------------+
+      |
+      +---------- back ---------->
+
+loop {
+  ...
+  if stop { break value; }
+}
+可透過 break 回傳值給外層綁定。
 ```

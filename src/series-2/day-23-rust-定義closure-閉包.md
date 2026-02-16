@@ -106,7 +106,7 @@ printOutVal();
 static STATICVAL: i32 = 0;
 
 fn printOutVal() {
-    println!("{}", CONSTVAL); // 合法使用
+    println!("{}", STATICVAL); // 合法使用
 }
 
 printOutVal();
@@ -115,3 +115,28 @@ printOutVal();
 Rust這樣限制應該基於所有權的設計關係，這樣有個好處就是避免亂引用變數造成BUG也比較好閱讀
 
 當然Closure有更多複雜的使用這邊只簡單介紹最基本的使用方法
+
+## ASCII 詳細示意圖
+
+```text
+Closure 捕獲(capture)模式
+
+let x = 10;
+let s = String::from("hi");
+
+Closure 環境物件
++----------------------------------+
+| captured x: by & / by mut & / move|
+| captured s: 依使用情況推導         |
++----------------+-----------------+
+                 |
+                 v
+         call closure(...) 
+
+三種 trait
+Fn      : 只讀捕獲，可重複呼叫
+FnMut   : 可變捕獲，可重複呼叫
+FnOnce  : 取得所有權，最多一次
+
+thread::spawn(move || ...) 常見為 FnOnce。
+```

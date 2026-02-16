@@ -88,3 +88,28 @@ fn dangle() -> &String { // 回傳String的迷途引用
 編譯時會產生錯誤 missing lifetime specifier
 
 這個有關於生命週期的會在下一篇講
+
+## ASCII 詳細示意圖
+
+```text
+所有權在函式邊界的移轉
+
+fn take(s: String) { ... }      // 取得所有權
+fn give() -> String { ... }     // 回傳所有權
+fn borrow(s: &String) { ... }   // 借用
+
+caller
+  |
+  +--> take(name)      : name moved, caller 不可再用
+  |
+  +--> borrow(&name2)  : 只讀借用, caller 仍擁有
+  |
+  +<-- give()          : 新所有權回到 caller
+
+生命週期概念圖
++-----------+ borrow +-----------+
+| owner     |------->| borrower  |
++-----------+<-------+-----------+
+     |          end borrow   |
+     +----- owner 才能 move/drop--+
+```

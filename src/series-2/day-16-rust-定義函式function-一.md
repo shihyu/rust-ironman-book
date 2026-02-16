@@ -23,7 +23,7 @@
 
 ``` rust
 fn hello_word() {
-    println!("hello word!")
+    println!("hello world!")
 }
 
 hello_word();
@@ -31,9 +31,9 @@ hello_word();
 hello_word();
 
 輸出
-hello word!
-hello word!
-hello word!
+hello world!
+hello world!
+hello world!
 ```
 
 後定義函式
@@ -44,7 +44,7 @@ let a = 5; // 非法使用變數
 
 hello_word(); // 合法使用後定義的函式
 fn hello_word() {
-    println!("hello word!")
+    println!("hello world!")
 }
 ```
 
@@ -63,22 +63,22 @@ the name `hello_word` is defined multiple times
 ``` rust
 {
     fn hello_word() {
-        println!("hello word 1")
+        println!("hello world 1")
     }
 
     hello_word();
 }
 {
     fn hello_word() {
-        println!("hello word 2")
+        println!("hello world 2")
     }
 
     hello_word();
 }
 
 輸出
-hello word 1
-hello word 2
+hello world 1
+hello world 2
 ```
 
 每個定義函式只能在塊裡面有效，下面是不合法的
@@ -86,7 +86,7 @@ hello word 2
 ``` rust
 {
     fn hello_word() {
-        println!("hello word 2")
+        println!("hello world 2")
     }
 }
 
@@ -104,7 +104,7 @@ cannot find function `hello_word` in this scope
 
 ``` rust
 fn hello_word() {
-    println!("hello word 1")
+    println!("hello world 1")
 }
 
 fn main() {
@@ -113,18 +113,47 @@ fn main() {
     {
         hello_word();
         fn hello_word() {
-            println!("hello word 2")
+            println!("hello world 2")
         }
     }
 
     hello_word();
     fn hello_word() {
-        println!("hello word 3")
+        println!("hello world 3")
     }
 }
 
 這邊輸出
-hello word 3
-hello word 2
-hello word 3
+hello world 3
+hello world 2
+hello world 3
+```
+
+## ASCII 詳細示意圖
+
+```text
+函式定義與呼叫堆疊
+
+main()
+  |
+  +--> add(2, 3)
+          |
+          v
+   +----------------------+
+   | Stack Frame: add     |
+   | a = 2                |
+   | b = 3                |
+   | return slot          |
+   +----------+-----------+
+              |
+              v
+         return 5
+              |
+              v
+   +----------------------+
+   | Stack Frame: main    |
+   | result = 5           |
+   +----------------------+
+
+參數與回傳型別皆需明確，提升可讀性與型別安全。
 ```

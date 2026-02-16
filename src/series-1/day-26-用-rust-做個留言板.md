@@ -233,3 +233,23 @@ impl_web! {
 不知不覺得這個系列已經到第 26 篇了，如果有什麼覺得有趣的東西想知道怎麼用
 Rust
 做的歡迎提出來喔，或是有哪個東西希望我介紹的，因為老實說，我快沒點子了。
+
+## ASCII 詳細示意圖
+
+```text
+留言板系統架構
+
+Browser
+  |
+  v
+HTTP Server (Rust)
+  |
+  +--> Router -> Handler -> Template
+  |
+  +--> Storage (DB/File)
+  |
+  v
+Render HTML / JSON response
+
+資料路徑: POST message -> validate -> save -> list page
+```

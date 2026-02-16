@@ -256,3 +256,23 @@ C 就能透過 Rust 實作，有著接近 C 的速度，卻有如此大量的社
 Rust 來實作這些原生套件真的不失一個選擇。
 
 下一篇來寫點應用程式吧，我們試著用 clap 來建一個指令列的程式。
+
+## ASCII 詳細示意圖
+
+```text
+Python 擴充模組與條件編譯
+
+Rust crate (cdylib)
+  + pyo3 / cpython bindings
+  + #[cfg(target_os = "...")]
+
+cargo build --release
+        |
+        v
+生成 .so/.pyd
+        |
+        v
+Python import module
+
+同一份程式可依 target 啟用不同實作。
+```

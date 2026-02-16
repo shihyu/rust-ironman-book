@@ -202,3 +202,24 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 再建置一次，應該會成功，不過時間會花的比較久，因為 bindgen 有點大。
 
 下一篇再來介紹如何從 C 呼叫 Rust 的程式碼。
+
+## ASCII 詳細示意圖
+
+```text
+Rust 呼叫 C (FFI)
+
+Rust code
+  |
+  v
+extern "C" {
+  fn c_func(...);
+}
+  |
+  v
+C library (.a/.so)
+
+ABI 邊界
+- 型別需 C 相容
+- #[repr(C)] 保證布局
+- unsafe 呼叫
+```
