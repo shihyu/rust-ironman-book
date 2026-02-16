@@ -301,23 +301,31 @@ println!("{:?}", arr);
 [10, -1, 4, -2, 16]
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">提前返回、回傳多值、借用修改
+<pre><code class="language-text">══════════════════════════════════════════════════
+       提前返回、回傳多值、借用修改
+══════════════════════════════════════════════════
 
 1) 提前退出
 fn parse(x) -&gt; Result&lt;T, E&gt; {
-  if invalid { return Err(E); }
+  if invalid { return Err(E); }              ← 提前返回錯誤
   Ok(v)
 }
 
+─────────────────────────────────────────────────
+
 2) 回傳多個值 (tuple)
 fn stats() -&gt; (i32, i32, i32)
-caller: let (min, max, sum) = stats();
+caller: let (min, max, sum) = stats();       ← 解構綁定
+
+─────────────────────────────────────────────────
 
 3) 修改呼叫端變數 (&amp;mut)
-caller value ------borrow mut------&gt; callee
-+------------------+                +------------------+
-| String in caller | &lt;---write----- | fn fill(&amp;mut s)  |
-+------------------+                +------------------+
+
+caller value ──────borrow mut──────&gt; callee
+┌──────────────────┐                ┌──────────────────┐
+│ String in caller │ &lt;───write───── │ fn fill(&amp;mut s)  │
+└──────────────────┘                └──────────────────┘
+                                     ← 透過可變引用直接修改
 
 規則：同一時間只能有一個可變借用。
 </code></pre>

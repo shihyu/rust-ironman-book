@@ -242,21 +242,26 @@ hello world tx2
 hello world tx1</code></pre></pre>
 <p>雖然channel本身不支援多個接收者(receiver)，但是可以利用上鎖讓多個執行緒同時使用接收者</p>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">mpsc channel 傳遞所有權
+<pre><code class="language-text">═══════════════════════════════════════════════
+         mpsc Channel 傳遞所有權
+═══════════════════════════════════════════════
 
-Producer threads                    Consumer thread
-+---------------+                   +-------------------+
-| tx1.send(v1)  |----+          +--&gt;| rx.recv() -&gt; v1   |
-+---------------+    |          |   +-------------------+
-                     +-- queue --+
-+---------------+    |          |
-| tx2.send(v2)  |----+          +--&gt;| rx.recv() -&gt; v2   |
-+---------------+                   +-------------------+
+─────────────── 資料流向 ───────────────────────
 
-特性
-- send(v) 會移動所有權到 channel
-- receiver 取得後成為新 owner
-- 所有 sender drop 後，recv() 最終回傳 Err (通道關閉)
+  Producer threads                 Consumer thread
+  ┌─────────────────┐              ┌─────────────────────┐
+  │ tx1.send(v1)    │──────┐  ┌──&gt;│ rx.recv() -&gt; v1     │
+  └─────────────────┘      │  │   └─────────────────────┘
+                           ├──┤    ← 內部 queue 緩衝
+  ┌─────────────────┐      │  │   ┌─────────────────────┐
+  │ tx2.send(v2)    │──────┘  └──&gt;│ rx.recv() -&gt; v2     │
+  └─────────────────┘              └─────────────────────┘
+
+─────────────── 特性 ───────────────────────────
+
+  - send(v) 會移動所有權到 channel  ← 原 owner 不可再使用
+  - receiver 取得後成為新 owner
+  - 所有 sender drop 後，recv() 最終回傳 Err（通道關閉）
 </code></pre>
 
                     </main>

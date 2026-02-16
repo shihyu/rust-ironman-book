@@ -353,19 +353,21 @@ impl Foo {
 <p>下一篇要來介紹怎麼讓 Rust 的程式與 C 的程式做結合，不管是從 Rust 呼叫 C
 的程式或是從 C 呼叫 Rust 的程式。</p>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Crate 工具鏈關係
+<pre><code class="language-text">══════════════════════════════════════════════
+  Crate 工具鏈關係
+══════════════════════════════════════════════
 
 workspace
-+----------------------+
-| crate-a (lib)        |
-| crate-b (bin)        |
-+----------+-----------+
-           |
-           v
+┌────────────────────────┐
+│  crate-a (lib)         │  ← 函式庫 crate
+│  crate-b (bin)         │  ← 可執行 crate
+└───────────┬────────────┘
+            │
+            v
 cargo fmt / clippy / test / bench / doc
-           |
-           v
-CI pipeline (品質門檻)
+            │                             ← 格式化、檢查、測試、效能、文件
+            v
+   CI pipeline (品質門檻)                 ← 持續整合自動化檢查
 </code></pre>
 
                     </main>

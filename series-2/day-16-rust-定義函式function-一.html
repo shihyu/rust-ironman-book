@@ -291,28 +291,30 @@ hello world 3
 hello world 2
 hello world 3</code></pre></pre>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">函式定義與呼叫堆疊
+<pre><code class="language-text">═══════════════════════════════════════════
+         函式定義與呼叫堆疊
+═══════════════════════════════════════════
 
 main()
-  |
-  +--&gt; add(2, 3)
-          |
-          v
-   +----------------------+
-   | Stack Frame: add     |
-   | a = 2                |
-   | b = 3                |
-   | return slot          |
-   +----------+-----------+
-              |
-              v
-         return 5
-              |
-              v
-   +----------------------+
-   | Stack Frame: main    |
-   | result = 5           |
-   +----------------------+
+  │
+  ├──&gt; add(2, 3)                           ← 呼叫函式
+  │       │
+  │       v
+  │  ┌──────────────────────┐
+  │  │ Stack Frame: add     │              ← 建立新棧幀
+  │  │ a = 2                │
+  │  │ b = 3                │
+  │  │ return slot          │
+  │  └──────────┬───────────┘
+  │             │
+  │             v
+  │        return 5                        ← 回傳值
+  │             │
+  │             v
+  │  ┌──────────────────────┐
+  │  │ Stack Frame: main    │              ← 回到呼叫端
+  │  │ result = 5           │
+  │  └──────────────────────┘
 
 參數與回傳型別皆需明確，提升可讀性與型別安全。
 </code></pre>

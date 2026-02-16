@@ -238,25 +238,30 @@ fn main() {
     handle.join().unwrap();
 }</code></pre></pre>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">執行緒建立與同步(join)
+<pre><code class="language-text">═══════════════════════════════════════════════
+          執行緒建立與同步 (join)
+═══════════════════════════════════════════════
 
-main thread
-+--------------------------------+
-| spawn(move || worker())        |
-| handle.join()                  |
-+----------------+---------------+
-                 |
-                 v
-       +-------------------------+
-       | worker thread           |
-       | 1..N work               |
-       +-------------------------+
+─────────────── 執行緒關係 ──────────────────────
 
-時間軸
-main   : spawn ----- wait(join) -------- done
-worker :       start ---- run ---- exit
+  main thread
+  ┌──────────────────────────────────┐
+  │ spawn(move || worker())          │    ← 建立子執行緒
+  │ handle.join()                    │    ← 等待子執行緒結束
+  └────────────────┬─────────────────┘
+                   │
+                   v
+  ┌──────────────────────────────────┐
+  │ worker thread                    │    ← 子執行緒
+  │ 1..N work                        │
+  └──────────────────────────────────┘
 
-若沒有 join，main 可能先結束，worker 被提早中止。
+─────────────── 時間軸 ─────────────────────────
+
+  main   : spawn ────── wait(join) ──────── done
+  worker :       start ──── run ──── exit
+
+  若沒有 join，main 可能先結束，worker 被提早中止。
 </code></pre>
 
                     </main>

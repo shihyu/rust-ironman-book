@@ -249,7 +249,9 @@ println!("{} {} {}", user.0, user.1, user.2)
 let subject = AlwaysEqual;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Struct 欄位佈局與方法呼叫
+<pre><code class="language-text">═══════════════════════════════════════════════
+        Struct 欄位佈局與方法呼叫
+═══════════════════════════════════════════════
 
 struct User {
   id: u64,
@@ -257,23 +259,29 @@ struct User {
   name: String,
 }
 
-Stack (User)
-+------------------------------------------+
-| id (8) | active (1) | padding | name(...)|
-+------------------------------------------+
-                           |
-                           v
-                     String header
-                     +-------------------------+
-                     | ptr | len | cap        |
-                     +-------------------------+
-                               |
-                               v
-                            Heap bytes
+─────────────────────────────────────────────
+              Stack (User)
+─────────────────────────────────────────────
 
-方法呼叫
+┌──────────┬────────────┬─────────┬──────────┐
+│ id (8)   │ active (1) │ padding │ name(…)  │  ← 結構體連續佈局
+└──────────┴────────────┴─────────┴────┬─────┘
+                                       │
+                                       v
+                                 String header
+                              ┌─────┬─────┬─────┐
+                              │ ptr │ len │ cap │  ← 棧上胖指標
+                              └──┬──┴─────┴─────┘
+                                 │
+                                 v
+                              Heap bytes           ← 實際字串資料
+
+─────────────────────────────────────────────
+                方法呼叫
+─────────────────────────────────────────────
+
 user.activate()
-== User::activate(&amp;mut user)
+== User::activate(&amp;mut user)               ← 自動借用語法糖
 </code></pre>
 
                     </main>

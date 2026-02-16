@@ -267,31 +267,36 @@ no method named `sqrt` found for type parameter `T` in the current scope</code><
 3.1622777 3.1622776601683795</code></pre></pre>
 <p>一開先宣告HasSqrt trait然後使用impl關鍵字替f32和f64實現sq函式</p>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Trait 作為行為契約
+<pre><code class="language-text">═══════════════════════════════════════════════
+            Trait 作為行為契約
+═══════════════════════════════════════════════
 
-trait Summary {
-  fn summarize(&amp;self) -&gt; String;
-}
+  trait Summary {
+    fn summarize(&amp;self) -&gt; String;
+  }
 
-+---------------------+
-| Trait: Summary      |
-| summarize(&amp;self)    |
-+----------+----------+
-           |
-   +-------+--------+
-   |                |
-   v                v
-+--------+      +--------+
-| News   |      | Tweet  |
-| impl   |      | impl   |
-+--------+      +--------+
+─────────────── Trait 繼承關係 ──────────────────
 
-呼叫點
-fn notify(item: &amp;impl Summary) {
-  item.summarize()
-}
+  ┌─────────────────────┐
+  │  Trait: Summary      │                ← 定義行為契約
+  │  summarize(&amp;self)    │
+  └──────────┬──────────┘
+             │
+     ┌───────┴────────┐
+     │                │
+     v                v
+  ┌────────┐      ┌────────┐
+  │ News   │      │ Tweet  │              ← 各型別實作
+  │ impl   │      │ impl   │
+  └────────┘      └────────┘
 
-編譯期確認：傳入型別必須實作 Summary。
+─────────────── 呼叫點 ─────────────────────────
+
+  fn notify(item: &amp;impl Summary) {
+    item.summarize()
+  }
+
+  編譯期確認：傳入型別必須實作 Summary。
 </code></pre>
 
                     </main>

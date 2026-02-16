@@ -291,26 +291,28 @@ Dropbox, npm
 </ul>
 <p>或是有任何建議，或者你覺得改做什麼樣的專案會更有趣的也歡迎提出。</p>
 <h2 id="ascii-詳細示意圖-2"><a class="header" href="#ascii-詳細示意圖-2">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Rust 學習主軸總覽
+<pre><code class="language-text">═══════════════════════════
+  Rust 學習主軸總覽
+═══════════════════════════
 
-+------------------+
-| 語法與型別基礎    |
-+--------+---------+
-         |
+┌───────────────────┐
+│  語法與型別基礎    │  ← 基本語法、變數、函式、型別系統
+└────────┬──────────┘
+         │
          v
-+------------------+
-| 所有權/借用/生命週期|
-+--------+---------+
-         |
+┌───────────────────┐
+│所有權/借用/生命週期│  ← Rust 核心概念，記憶體安全保證
+└────────┬──────────┘
+         │
          v
-+------------------+
-| 並發/非同步/FFI   |
-+--------+---------+
-         |
+┌───────────────────┐
+│ 並發/非同步/FFI   │  ← 多執行緒、async/await、C 互通
+└────────┬──────────┘
+         │
          v
-+------------------+
-| 系統級實務與生態   |
-+------------------+
+┌───────────────────┐
+│ 系統級實務與生態   │  ← 實戰專案、crates 生態系
+└───────────────────┘
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="安裝環境"><a class="header" href="#安裝環境">安裝環境</a></h1>
 <ul>
@@ -378,22 +380,24 @@ hello.exe）， 在終端機下執行：</p>
 <p>下一篇我們會介紹 Cargo 這個 Rust 的套件管理與建置工具，還有
 <a href="https://crates.io">https://crates.io</a> ，載個套件下來玩玩，並介紹基本的輸入與輸出。</p>
 <h2 id="ascii-詳細示意圖-3"><a class="header" href="#ascii-詳細示意圖-3">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Rust 環境安裝拓樸
+<pre><code class="language-text">══════════════════════════════
+  Rust 環境安裝拓樸
+══════════════════════════════
 
-+-------------------------+
-| rustup (toolchain 管理) |
-+-----------+-------------+
-            |
-            v
-+-------------------------+
-| rustc / cargo / rustfmt |
-+-----------+-------------+
-            |
-            v
-+-------------------------+
-| 專案流程                 |
-| cargo new/build/run/test|
-+-------------------------+
+┌───────────────────────────┐
+│  rustup (toolchain 管理)  │  ← 版本管理、元件安裝、更新
+└─────────────┬─────────────┘
+              │
+              v
+┌───────────────────────────┐
+│ rustc / cargo / rustfmt   │  ← 編譯器、套件管理、格式化工具
+└─────────────┬─────────────┘
+              │
+              v
+┌───────────────────────────┐
+│ 專案流程                  │
+│ cargo new/build/run/test  │  ← 建立、編譯、執行、測試
+└───────────────────────────┘
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-的套件管理工具-cargo-與套件倉庫"><a class="header" href="#rust-的套件管理工具-cargo-與套件倉庫">Rust 的套件管理工具 Cargo 與套件倉庫</a></h1>
 <ul>
@@ -463,24 +467,28 @@ Hello, world!
 <p>是不是方便多了？</p>
 <p>下一篇要來快速的講解 Rust 的基本語法</p>
 <h2 id="ascii-詳細示意圖-4"><a class="header" href="#ascii-詳細示意圖-4">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Cargo 與 crates.io 套件流程
+<pre><code class="language-text">═══════════════════════════════════════════════════════════════
+              Cargo 與 crates.io 套件流程
+═══════════════════════════════════════════════════════════════
 
-Cargo.toml
-   |
-   v
-+--------------------------+
-| cargo resolve dependency |
-+------------+-------------+
-             |
-             v
-+--------------------------+
-| crates.io / index/cache  |
-+------------+-------------+
-             |
-             v
-+--------------------------+
-| cargo build -&gt; target/   |
-+--------------------------+
+  ┌──────────────────────────┐
+  │       Cargo.toml         │  ← 定義專案依賴
+  └────────────┬─────────────┘
+               │
+               v
+  ┌──────────────────────────┐
+  │ cargo resolve dependency │  ← 解析依賴版本
+  └────────────┬─────────────┘
+               │
+               v
+  ┌──────────────────────────┐
+  │ crates.io / index/cache  │  ← 下載套件
+  └────────────┬─────────────┘
+               │
+               v
+  ┌──────────────────────────┐
+  │ cargo build ──&gt; target/  │  ← 編譯產出
+  └──────────────────────────┘
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-基礎"><a class="header" href="#rust-基礎">Rust 基礎</a></h1>
 <ul>
@@ -1171,7 +1179,7 @@ let part_of_string: &amp;str = &amp;string[1..3];
 
   s1 (已失效 ✗)                    Heap
   ┌───────────────────┐          ┌───┬───┬───┬───┬───┐
-  │ ptr  ─ ─ ─ ✗      │    ┌──&gt; │ H │ e │ l │ l │ o │
+  │ ptr  ══════╳      │    ┌──&gt; │ H │ e │ l │ l │ o │
   │ len  = 5          │    │    └───┴───┴───┴───┴───┘
   │ cap  = 5          │    │
   └───────────────────┘    │
@@ -4133,19 +4141,25 @@ fn main() {
 }</code></pre></pre>
 <p>下一篇文章要來介紹如何呼叫外部的程式，以及使用執行緒。</p>
 <h2 id="ascii-詳細示意圖-16"><a class="header" href="#ascii-詳細示意圖-16">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Cell / RefCell 內部可變性
+<pre><code class="language-text">══════════════════════════════════
+  Cell / RefCell 內部可變性
+══════════════════════════════════
 
 外層: 不可變綁定
-+------------------------+
-| RefCell&lt;T&gt;             |
-| borrow flag(runtime)   |
-+-----------+------------+
-            |
-            v
-         inner T
+┌──────────────────────────┐
+│  RefCell&lt;T&gt;              │  ← 包裝任意型態 T
+│  borrow flag (runtime)   │  ← 執行期追蹤借用狀態
+└────────────┬─────────────┘
+             │
+             v
+          inner T               ← 實際儲存的資料
 
-borrow()     -&gt; 多個共享借用
-borrow_mut() -&gt; 同時只能一個
+─────────────────────────────────
+  借用規則（執行期檢查）
+─────────────────────────────────
+
+borrow()     ──&gt; 多個共享借用     ← 類似 &amp;T
+borrow_mut() ──&gt; 同時只能一個     ← 類似 &amp;mut T
 違反規則時在執行期 panic
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="程序與執行緒"><a class="header" href="#程序與執行緒">程序與執行緒</a></h1>
@@ -4269,15 +4283,22 @@ fn main() {
 }</code></pre></pre>
 <p>下一篇要再來介紹更多跟執行緒與平行處理有關的東西。</p>
 <h2 id="ascii-詳細示意圖-17"><a class="header" href="#ascii-詳細示意圖-17">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">程序(Process) 與執行緒(Thread)
+<pre><code class="language-text">═══════════════════════════════════════
+  程序(Process) 與執行緒(Thread)
+═══════════════════════════════════════
 
 Process A
-+-------------------------------+
-| 記憶體空間 (獨立)             |
-|  + Thread-1 (stack1)          |
-|  + Thread-2 (stack2)          |
-|  + Shared heap                |
-+-------------------------------+
+┌─────────────────────────────────┐
+│  記憶體空間 (獨立)              │
+│                                 │
+│  ├── Thread-1 (stack1)          │  ← 各自獨立的堆疊
+│  ├── Thread-2 (stack2)          │  ← 各自獨立的堆疊
+│  └── Shared heap                │  ← 所有執行緒共享
+└─────────────────────────────────┘
+
+───────────────────────────────────────
+  通訊方式
+───────────────────────────────────────
 
 不同 Process 間需 IPC
 同 Process Thread 可共享 heap
@@ -4626,21 +4647,24 @@ github 在 <a href="https://github.com/rust-lang-nursery/lazy-static.rs">https:/
 的基礎大致上就介紹到這邊了，再接下就進入應用篇，我會開始介紹一些實用的
 crate 與實作幾個專案，如果有什麼想要我做的也歡迎提出來。</p>
 <h2 id="ascii-詳細示意圖-19"><a class="header" href="#ascii-詳細示意圖-19">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">safe Rust 與 unsafe 區塊邊界
+<pre><code class="language-text">══════════════════════════════════
+  safe Rust 與 unsafe 區塊邊界
+══════════════════════════════════
 
-safe code
-   |
-   v
-+----------------------+
-| unsafe { ... }       |
-| - raw pointer deref  |
-| - 呼叫 unsafe fn     |
-| - 操作 static mut    |
-+----------+-----------+
-           |
-           v
-回到 safe API 封裝
+       safe code                  ← 編譯器保證安全
+          │
+          v
+┌────────────────────────┐
+│  unsafe { ... }        │
+│  - raw pointer deref   │        ← 解參考裸指標
+│  - 呼叫 unsafe fn      │        ← 呼叫不安全函式
+│  - 操作 static mut     │        ← 修改全域變數
+└───────────┬────────────┘
+            │
+            v
+    回到 safe API 封裝            ← 對外提供安全介面
 
+──────────────────────────────────
 原則: 把 unsafe 範圍縮到最小。
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-2018"><a class="header" href="#rust-2018">Rust 2018</a></h1>
@@ -4935,19 +4959,21 @@ impl Foo {
 <p>下一篇要來介紹怎麼讓 Rust 的程式與 C 的程式做結合，不管是從 Rust 呼叫 C
 的程式或是從 C 呼叫 Rust 的程式。</p>
 <h2 id="ascii-詳細示意圖-21"><a class="header" href="#ascii-詳細示意圖-21">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Crate 工具鏈關係
+<pre><code class="language-text">══════════════════════════════════════════════
+  Crate 工具鏈關係
+══════════════════════════════════════════════
 
 workspace
-+----------------------+
-| crate-a (lib)        |
-| crate-b (bin)        |
-+----------+-----------+
-           |
-           v
+┌────────────────────────┐
+│  crate-a (lib)         │  ← 函式庫 crate
+│  crate-b (bin)         │  ← 可執行 crate
+└───────────┬────────────┘
+            │
+            v
 cargo fmt / clippy / test / bench / doc
-           |
-           v
-CI pipeline (品質門檻)
+            │                             ← 格式化、檢查、測試、效能、文件
+            v
+   CI pipeline (品質門檻)                 ← 持續整合自動化檢查
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="用-rust-呼叫-c-的程式"><a class="header" href="#用-rust-呼叫-c-的程式">用 Rust 呼叫 C 的程式</a></h1>
 <ul>
@@ -6539,21 +6565,27 @@ tower-web ，它就讓你不需要去碰到 tokio 的細節部份。</p>
 </a>。</p>
 <p>下一篇我們就來介紹 WebAssembly 。</p>
 <h2 id="ascii-詳細示意圖-28"><a class="header" href="#ascii-詳細示意圖-28">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">async/await + Tokio Runtime
+<pre><code class="language-text">════════════════════════════════════════
+  async/await + Tokio Runtime
+════════════════════════════════════════
 
-async fn task() { ... }
-        |
-        v
-Future state machine
-        |
-        v
-Tokio scheduler poll()
-        |
-   +----+----+
-   | ready   | pending (等待 I/O)
-   v         |
-complete &lt;---+
+  async fn task() { ... }          ← 定義非同步任務
+           │
+           v
+  Future state machine             ← 編譯器產生狀態機
+           │
+           v
+  Tokio scheduler poll()           ← 排程器輪詢 Future
+           │
+     ┌─────┴──────┐
+     │            │
+     v            v
+  ready       pending              ← 等待 I/O 完成
+     │            │
+     v            │
+  complete &lt;──────┘                ← I/O 就緒後再次輪詢
 
+────────────────────────────────────────
 單執行緒也可高併發處理大量 I/O。
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="webassembly-用-rust-寫出高效能的網頁程式"><a class="header" href="#webassembly-用-rust-寫出高效能的網頁程式">WebAssembly： 用 Rust 寫出高效能的網頁程式</a></h1>
@@ -7912,21 +7944,23 @@ fn panic(_: &amp;PanicInfo) -&gt; ! {
 crate ，不然還是用 std 來的方便，不需要為了想幫 Rust 的程式瘦身就不用
 std 。</p>
 <h2 id="ascii-詳細示意圖-33"><a class="header" href="#ascii-詳細示意圖-33">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">no_std 生態輪廓
+<pre><code class="language-text">═══════════════════════════
+  no_std 生態輪廓
+═══════════════════════════
 
-+-------------------+
-| core              |
-| alloc (可選)      |
-+---------+---------+
-          |
-          v
-+-------------------+
-| 自訂 panic handler |
-| 自訂 runtime 啟動   |
-+---------+---------+
-          |
-          v
-嵌入式/裸機目標
+┌─────────────────────┐
+│  core               │  ← 最基礎型態、trait，無 OS 依賴
+│  alloc (可選)        │  ← 記憶體分配：Box、Vec 等
+└──────────┬──────────┘
+           │
+           v
+┌─────────────────────┐
+│ 自訂 panic handler  │  ← panic 時的處理邏輯
+│ 自訂 runtime 啟動   │  ← 取代標準 main 進入點
+└──────────┬──────────┘
+           │
+           v
+    嵌入式/裸機目標            ← ARM Cortex-M、RISC-V 等
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="番外-3--rust-2018-const-fn--inline-asm"><a class="header" href="#番外-3--rust-2018-const-fn--inline-asm">番外 3 ： Rust 2018, const fn &amp; inline asm</a></h1>
 <ul>
@@ -8246,30 +8280,34 @@ info: override toolchain for '/Users/ken_jan/rust/hello' set to 'beta-x86_64-app
 <p>相對於golang的安裝，rust官方就內建版本控制方便許多</p>
 <p>這部分rust大勝</p>
 <h2 id="ascii-詳細示意圖-36"><a class="header" href="#ascii-詳細示意圖-36">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Rust 安裝與工具鏈關係圖
+<pre><code class="language-text">═══════════════════════════════════════════════════
+          Rust 安裝與工具鏈關係圖
+═══════════════════════════════════════════════════
 
-+------------------+       +------------------------------+
-| 使用者 Shell     | ----&gt; | rustup-init / rustup update |
-+------------------+       +------------------------------+
-                                      |
-                                      v
-                         +-------------------------------+
-                         | ~/.cargo/bin                  |
-                         | - rustup                      |
-                         | - rustc                       |
-                         | - cargo                       |
-                         +-------------------------------+
-                                      |
-                                      v
-                  +--------------------------------------------+
-                  | rustup toolchain                           |
-                  | stable (預設) / beta / nightly             |
-                  +--------------------------------------------+
-                                      |
-                                      v
-                +----------------------------------------------+
-                | cargo new -&gt; cargo build -&gt; cargo run/test   |
-                +----------------------------------------------+
+┌──────────────────┐       ┌──────────────────────────────┐
+│ 使用者 Shell     │──────&gt;│ rustup-init / rustup update  │  ← 安裝/更新入口
+└──────────────────┘       └──────────────┬───────────────┘
+                                          │
+                                          v
+                           ┌──────────────────────────────┐
+                           │ ~/.cargo/bin                  │  ← 工具安裝目錄
+                           │  ├─ rustup                    │
+                           │  ├─ rustc                     │
+                           │  └─ cargo                     │
+                           └──────────────┬───────────────┘
+                                          │
+─────────────────────────────────────────────────────────────
+                                          │
+                                          v
+                    ┌─────────────────────────────────────────┐
+                    │ rustup toolchain                        │  ← 版本管理
+                    │ stable (預設) / beta / nightly          │
+                    └────────────────────┬────────────────────┘
+                                         │
+                                         v
+                  ┌───────────────────────────────────────────────┐
+                  │ cargo new ──&gt; cargo build ──&gt; cargo run/test  │  ← 開發流程
+                  └───────────────────────────────────────────────┘
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-編輯器設定"><a class="header" href="#rust-編輯器設定">Rust-編輯器設定</a></h1>
 <ul>
@@ -8332,26 +8370,29 @@ let or = foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo ||
 <p>File &gt; Preferences &gt; Settings. 裡面的 editor.formatOnSave 打勾
 就可以了</p>
 <h2 id="ascii-詳細示意圖-37"><a class="header" href="#ascii-詳細示意圖-37">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">編輯器 + Rust 開發回饋循環
+<pre><code class="language-text">═══════════════════════════════════════════════════════════════════
+              編輯器 + Rust 開發回饋循環
+═══════════════════════════════════════════════════════════════════
 
-+------------------+      儲存檔案       +-----------------------+
-| VSCode / Vim     | ------------------&gt; | rust-analyzer (LSP)   |
-| IntelliJ         |                     | 型別推導/語法檢查      |
-+------------------+                     +-----------+-----------+
-                                                     |
-                    +--------------------------------+---------------------+
-                    |                                                      |
+┌──────────────────┐      儲存檔案       ┌───────────────────────┐
+│ VSCode / Vim     │────────────────────&gt;│ rust-analyzer (LSP)   │  ← 語言伺服器
+│ IntelliJ         │                     │ 型別推導/語法檢查     │
+└──────────────────┘                     └───────────┬───────────┘
+                                                     │
+                    ┌────────────────────────────────┼─────────────────────┐
+                    │                                                      │
                     v                                                      v
-         +-----------------------+                               +-------------------+
-         | rustfmt              |                               | cargo check       |
-         | 統一格式             |                               | 快速編譯檢查       |
-         +----------------------+                               +---------+---------+
-                                                                         |
-                                                                         v
-                                                              +-------------------+
-                                                              | clippy            |
-                                                              | lint 與最佳實務    |
-                                                              +-------------------+
+─────────────────────────────────────────────────────────────────────────────────
+         ┌───────────────────────┐                            ┌───────────────────┐
+         │ rustfmt               │                            │ cargo check       │
+         │ 統一格式              │  ← 自動排版                │ 快速編譯檢查      │
+         └───────────────────────┘                            └─────────┬─────────┘
+                                                                        │
+                                                                        v
+                                                              ┌───────────────────┐
+                                                              │ clippy            │
+                                                              │ lint 與最佳實務   │  ← 程式碼品質
+                                                              └───────────────────┘
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-資料型別-整數浮點數"><a class="header" href="#rust-資料型別-整數浮點數">Rust-資料型別-整數、浮點數</a></h1>
 <ul>
@@ -8406,27 +8447,37 @@ cargo build --release
 <p>浮點數是依照 IEEE-754</p>
 <p>Rust預設浮點數型別是f64</p>
 <h2 id="ascii-詳細示意圖-38"><a class="header" href="#ascii-詳細示意圖-38">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">整數/浮點數在記憶體中的位元模型
+<pre><code class="language-text">═══════════════════════════════════════════════════════════
+        整數/浮點數在記憶體中的位元模型
+═══════════════════════════════════════════════════════════
 
 i32 = 4 bytes = 32 bits
-+--------+--------+--------+--------+
-| byte3  | byte2  | byte1  | byte0  |
-+--------+--------+--------+--------+
-  ^ 符號位元(最高位) + 數值位元
+┌────────┬────────┬────────┬────────┐
+│ byte3  │ byte2  │ byte1  │ byte0  │
+└────────┴────────┴────────┴────────┘
+  ^ 符號位元(最高位) + 數值位元        ← 帶號整數
+
+─────────────────────────────────────────────────────────
 
 u32 = 4 bytes, 無符號
-+--------+--------+--------+--------+
-| 0..255 | 0..255 | 0..255 | 0..255 |
-+--------+--------+--------+--------+
+┌────────┬────────┬────────┬────────┐
+│ 0..255 │ 0..255 │ 0..255 │ 0..255 │
+└────────┴────────┴────────┴────────┘
+                                       ← 非帶號整數
+
+─────────────────────────────────────────────────────────
 
 f64 (IEEE-754, 64 bits)
-+----------+----------------+--------------------------------+
-| sign 1b  | exponent 11b   | fraction(mantissa) 52b         |
-+----------+----------------+--------------------------------+
+┌──────────┬────────────────┬────────────────────────────────┐
+│ sign 1b  │ exponent 11b   │ fraction(mantissa) 52b         │
+└──────────┴────────────────┴────────────────────────────────┘
+                                       ← 雙精度浮點數
+
+─────────────────────────────────────────────────────────
 
 Overflow 行為
-debug build: panic on overflow
-release build: 2's complement wrap (預設最佳化行為)
+  debug build:   panic on overflow    ← 開發時捕捉錯誤
+  release build: 2's complement wrap  ← 預設最佳化行為
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-hello-world"><a class="header" href="#rust-hello-world">Rust-Hello, World!</a></h1>
 <ul>
@@ -8491,29 +8542,34 @@ Hello, World!
 Hello, World!
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-39"><a class="header" href="#ascii-詳細示意圖-39">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Hello World 從原始碼到輸出的流程
+<pre><code class="language-text">═══════════════════════════════════════════
+   Hello World 從原始碼到輸出的流程
+═══════════════════════════════════════════
 
-main.rs
-  |
-  v
-+---------------------------+
-| rustc / cargo build       |
-| 1. 詞法/語法解析          |
-| 2. MIR/LLVM IR            |
-| 3. 產生執行檔             |
-+-------------+-------------+
-              |
+  main.rs                                  ← 原始碼
+    │
+    v
+┌───────────────────────────┐
+│ rustc / cargo build       │              ← 編譯階段
+│  1. 詞法/語法解析         │
+│  2. MIR/LLVM IR           │
+│  3. 產生執行檔            │
+└─────────────┬─────────────┘
+              │
               v
-+---------------------------+
-| 可執行檔                  |
-| main() -&gt; println!(...)   |
-+-------------+-------------+
-              |
+─────────────────────────────────────────
+              │
               v
-+---------------------------+
-| stdout                    |
-| Hello, world!             |
-+---------------------------+
+┌───────────────────────────┐
+│ 可執行檔                  │              ← 執行階段
+│ main() ──&gt; println!(...)  │
+└─────────────┬─────────────┘
+              │
+              v
+┌───────────────────────────┐
+│ stdout                    │              ← 輸出結果
+│ Hello, world!             │
+└───────────────────────────┘
 
 println! 是 macro: 先展開，再編譯。
 </code></pre>
@@ -8627,28 +8683,34 @@ underscore:
 </span>let _ = 123;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-40"><a class="header" href="#ascii-詳細示意圖-40">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">變數綁定、不可變/可變、遮蔽(shadowing)
+<pre><code class="language-text">═══════════════════════════════════════════════════
+     變數綁定、不可變/可變、遮蔽(shadowing)
+═══════════════════════════════════════════════════
 
 let x = 10
 Stack Frame
-+------------------+
-| x: i32 = 10      |  immutable
-+------------------+
+┌──────────────────┐
+│ x: i32 = 10      │  immutable               ← 不可變綁定
+└──────────────────┘
+
+─────────────────────────────────────────────────
 
 let mut y = 20
-+------------------+
-| y: i32 = 20      |  mutable
-+------------------+
-         |
-         +--&gt; y = 30 (同一格被改寫)
+┌──────────────────┐
+│ y: i32 = 20      │  mutable                 ← 可變綁定
+└──────────────────┘
+         │
+         └──&gt; y = 30 (同一格被改寫)            ← 原地修改
+
+─────────────────────────────────────────────────
 
 let z = 1
 let z = z + 1      (shadowing)
-+------------------+
-| z(v1): i32 = 1   |  舊綁定
-+------------------+
-| z(v2): i32 = 2   |  新綁定
-+------------------+
+┌──────────────────┐
+│ z(v1): i32 = 1   │  舊綁定                  ← 被遮蔽
+├──────────────────┤
+│ z(v2): i32 = 2   │  新綁定                  ← 新的綁定
+└──────────────────┘
 
 重點：shadowing 是「新綁定」，不是原地改值。
 </code></pre>
@@ -8708,29 +8770,35 @@ print!("{}", num);
 <p>跟golang顛倒，沒有好壞只要統一風格就好</p>
 <p>Rust會對不符合其撰碼風格的變數或函式名稱發出警告訊息，但不會引發錯誤</p>
 <h2 id="ascii-詳細示意圖-41"><a class="header" href="#ascii-詳細示意圖-41">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">值(Value) / 變數(Identifier) / 物件(Object) 的關係
+<pre><code class="language-text">═══════════════════════════════════════════════════════════════
+     值(Value) / 變數(Identifier) / 物件(Object) 的關係
+═══════════════════════════════════════════════════════════════
 
 Source Code: let user_age = 18;
 
-+-------------------+      綁定(bind)      +-------------------+
-| Identifier        | -------------------&gt; | Value(Object)     |
-| user_age          |                      | i32(18)           |
-+-------------------+                      +-------------------+
+┌───────────────────┐      綁定(bind)      ┌───────────────────┐
+│ Identifier        │─────────────────────&gt;│ Value(Object)     │
+│ user_age          │                      │ i32(18)           │
+└───────────────────┘                      └───────────────────┘
+
+─────────────────────────────────────────────────────────────
 
 語義層次
-1) Identifier: 名稱，給人與編譯器引用
-2) Value: 型別 + 位元內容
-3) Object: 具備儲存位置與生命週期的值
+  1) Identifier: 名稱，給人與編譯器引用    ← 程式碼中的名稱
+  2) Value: 型別 + 位元內容                ← 抽象概念
+  3) Object: 具備儲存位置與生命週期的值    ← 記憶體中的實體
+
+─────────────────────────────────────────────────────────────
 
 作用域離開時
-+-------------------+
-| Identifier 失效   |
-+-------------------+
-          |
+┌───────────────────┐
+│ Identifier 失效   │                      ← 名稱不再有效
+└─────────┬─────────┘
+          │
           v
-+-------------------+
-| Object drop/free  |
-+-------------------+
+┌───────────────────┐
+│ Object drop/free  │                      ← 釋放記憶體
+└───────────────────┘
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-資料型別-布林值"><a class="header" href="#rust-資料型別-布林值">Rust-資料型別-布林值</a></h1>
 <ul>
@@ -9269,25 +9337,29 @@ loop {
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-46"><a class="header" href="#ascii-詳細示意圖-46">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">while / loop 控制流程
+<pre><code class="language-text">═══════════════════════════════════════════
+          while / loop 控制流程
+═══════════════════════════════════════════
 
 while condition {
     body
 }
 
-+-------------------+
-| evaluate condition|
-+---------+---------+
-          |
-      +---+---+
-      |       |
+┌───────────────────┐
+│ evaluate condition│                ← 每次迭代重新求值
+└─────────┬─────────┘
+          │
+      ┌───┴───┐
+      │       │
       v       v
-+-----------+ +------------+
-| true      | | false      |
-| run body  | | exit loop  |
-+-----+-----+ +------------+
-      |
-      +---------- back ----------&gt;
+┌───────────┐ ┌────────────┐
+│ true      │ │ false      │
+│ run body  │ │ exit loop  │       ← 條件為 false 時跳出
+└─────┬─────┘ └────────────┘
+      │
+      └────────── back ──────────&gt;  ← 回到條件判斷
+
+─────────────────────────────────────────
 
 loop {
   ...
@@ -9360,7 +9432,9 @@ for var in set {
 100 99 98 97 96 ... 1
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-47"><a class="header" href="#ascii-詳細示意圖-47">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">for 迴圈與 Iterator desugaring
+<pre><code class="language-text">═══════════════════════════════════════════════
+       for 迴圈與 Iterator desugaring
+═══════════════════════════════════════════════
 
 for x in collection {
     body(x)
@@ -9375,14 +9449,17 @@ loop {
     }
 }
 
-資料流
-+------------+     next()     +----------------+
-| collection | -------------&gt;  | Iterator state |
-+------------+                 +--------+-------+
-                                        |
-                              Some(item)|None
-                                        v
-                                  body / break
+─────────────────────────────────────────────
+                   資料流
+─────────────────────────────────────────────
+
+┌────────────┐     next()     ┌────────────────┐
+│ collection │ ─────────────&gt; │ Iterator state │  ← 持有迭代位置
+└────────────┘                └────────┬───────┘
+                                       │
+                             Some(item)│None      ← match 分支
+                                       v
+                                 body / break
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-枚舉enumeration"><a class="header" href="#rust-枚舉enumeration">Rust-枚舉(enumeration)</a></h1>
 <ul>
@@ -9493,7 +9570,9 @@ if browser == Browser::Ie {
 // binary operation `==` cannot be applied to type `Browser`
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-48"><a class="header" href="#ascii-詳細示意圖-48">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Enum 的判別值(discriminant) + 載荷(payload)
+<pre><code class="language-text">══════════════════════════════════════════════════
+   Enum 的判別值(discriminant) + 載荷(payload)
+══════════════════════════════════════════════════
 
 enum Message {
   Quit,
@@ -9501,20 +9580,26 @@ enum Message {
   Write(String),
 }
 
-記憶體概念
-+----------------------------------------------+
-| discriminant | payload union                 |
-+----------------------------------------------+
-| Quit         | (empty)                       |
-| Move         | x: i32, y: i32                |
-| Write        | String { ptr, len, cap }      |
-+----------------------------------------------+
+─────────────────────────────────────────────────
+                  記憶體概念
+─────────────────────────────────────────────────
 
-Option&lt;T&gt; 常見模型
+┌──────────────┬───────────────────────────────┐
+│ discriminant │ payload union                 │  ← 共用記憶體區域
+├──────────────┼───────────────────────────────┤
+│ Quit         │ (empty)                       │  ← 無載荷
+│ Move         │ x: i32, y: i32               │  ← 具名欄位
+│ Write        │ String { ptr, len, cap }      │  ← 堆積資料
+└──────────────┴───────────────────────────────┘
+
+─────────────────────────────────────────────────
+              Option&lt;T&gt; 常見模型
+─────────────────────────────────────────────────
+
 Some(T) / None
-+----------------------+ 
-| tag + optional value |
-+----------------------+
+┌──────────────────────┐
+│ tag + optional value │                          ← 編譯器可優化 niche
+└──────────────────────┘
 
 優點：用型別取代 magic number 與不安全狀態碼。
 </code></pre>
@@ -9644,7 +9729,9 @@ match 1 {
 <p>因為型別不像枚舉有可窮舉出所有，所以一定需要"_"(Default)
 條件，不然編譯會出現錯誤</p>
 <h2 id="ascii-詳細示意圖-49"><a class="header" href="#ascii-詳細示意圖-49">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">match 的全面覆蓋(exhaustive)模型
+<pre><code class="language-text">═══════════════════════════════════════════════════
+      match 的全面覆蓋(exhaustive)模型
+═══════════════════════════════════════════════════
 
 match value {
   PatternA =&gt; arm_a,
@@ -9652,25 +9739,28 @@ match value {
   _ =&gt; default_arm,
 }
 
-流程
-+-------------------+
-| input value       |
-+---------+---------+
-          |
+─────────────────────────────────────────────────
+                     流程
+─────────────────────────────────────────────────
+
+┌───────────────────┐
+│ input value       │                              ← 取得匹配值
+└─────────┬─────────┘
+          │
           v
-+-------------------+
-| arm 1 pattern?    |--yes--&gt; execute arm 1
-+---------+---------+
-          | no
+┌───────────────────┐
+│ arm 1 pattern?    │──yes──&gt; execute arm 1        ← 依序比對
+└─────────┬─────────┘
+          │ no
           v
-+-------------------+
-| arm 2 pattern?    |--yes--&gt; guard? -&gt; arm 2 / next
-+---------+---------+
-          | no
+┌───────────────────┐
+│ arm 2 pattern?    │──yes──&gt; guard? ──&gt; arm 2 / next
+└─────────┬─────────┘                              ← 可附加守衛條件
+          │ no
           v
-+-------------------+
-| wildcard (_)      |-------&gt; execute default
-+-------------------+
+┌───────────────────┐
+│ wildcard (_)      │──────&gt; execute default        ← 兜底分支
+└───────────────────┘
 
 編譯器保證：所有可能值都要被處理。
 </code></pre>
@@ -9748,7 +9838,9 @@ println!("{} {} {}", user.0, user.1, user.2)
 let subject = AlwaysEqual;
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-50"><a class="header" href="#ascii-詳細示意圖-50">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Struct 欄位佈局與方法呼叫
+<pre><code class="language-text">═══════════════════════════════════════════════
+        Struct 欄位佈局與方法呼叫
+═══════════════════════════════════════════════
 
 struct User {
   id: u64,
@@ -9756,23 +9848,29 @@ struct User {
   name: String,
 }
 
-Stack (User)
-+------------------------------------------+
-| id (8) | active (1) | padding | name(...)|
-+------------------------------------------+
-                           |
-                           v
-                     String header
-                     +-------------------------+
-                     | ptr | len | cap        |
-                     +-------------------------+
-                               |
-                               v
-                            Heap bytes
+─────────────────────────────────────────────
+              Stack (User)
+─────────────────────────────────────────────
 
-方法呼叫
+┌──────────┬────────────┬─────────┬──────────┐
+│ id (8)   │ active (1) │ padding │ name(…)  │  ← 結構體連續佈局
+└──────────┴────────────┴─────────┴────┬─────┘
+                                       │
+                                       v
+                                 String header
+                              ┌─────┬─────┬─────┐
+                              │ ptr │ len │ cap │  ← 棧上胖指標
+                              └──┬──┴─────┴─────┘
+                                 │
+                                 v
+                              Heap bytes           ← 實際字串資料
+
+─────────────────────────────────────────────
+                方法呼叫
+─────────────────────────────────────────────
+
 user.activate()
-== User::activate(&amp;mut user)
+== User::activate(&amp;mut user)               ← 自動借用語法糖
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-定義函式function一"><a class="header" href="#rust-定義函式function一">Rust-定義函式Function(一)</a></h1>
 <ul>
@@ -9890,28 +9988,30 @@ hello world 3
 hello world 2
 hello world 3</code></pre></pre>
 <h2 id="ascii-詳細示意圖-51"><a class="header" href="#ascii-詳細示意圖-51">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">函式定義與呼叫堆疊
+<pre><code class="language-text">═══════════════════════════════════════════
+         函式定義與呼叫堆疊
+═══════════════════════════════════════════
 
 main()
-  |
-  +--&gt; add(2, 3)
-          |
-          v
-   +----------------------+
-   | Stack Frame: add     |
-   | a = 2                |
-   | b = 3                |
-   | return slot          |
-   +----------+-----------+
-              |
-              v
-         return 5
-              |
-              v
-   +----------------------+
-   | Stack Frame: main    |
-   | result = 5           |
-   +----------------------+
+  │
+  ├──&gt; add(2, 3)                           ← 呼叫函式
+  │       │
+  │       v
+  │  ┌──────────────────────┐
+  │  │ Stack Frame: add     │              ← 建立新棧幀
+  │  │ a = 2                │
+  │  │ b = 3                │
+  │  │ return slot          │
+  │  └──────────┬───────────┘
+  │             │
+  │             v
+  │        return 5                        ← 回傳值
+  │             │
+  │             v
+  │  ┌──────────────────────┐
+  │  │ Stack Frame: main    │              ← 回到呼叫端
+  │  │ result = 5           │
+  │  └──────────────────────┘
 
 參數與回傳型別皆需明確，提升可讀性與型別安全。
 </code></pre>
@@ -9994,29 +10094,36 @@ println!("{}", test(5.));
 <span class="boring">}</span></code></pre></pre>
 <p>返回值需要在函式簽名之後用"→"並指定型別</p>
 <h2 id="ascii-詳細示意圖-52"><a class="header" href="#ascii-詳細示意圖-52">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">函式傳參: Copy vs Move
+<pre><code class="language-text">═══════════════════════════════════════════════
+          函式傳參: Copy vs Move
+═══════════════════════════════════════════════
 
 case 1: i32 (Copy)
 main frame: x=10
 call foo(x)
-foo frame : n=10  (複製)
+foo frame : n=10  (複製)                    ← 位元複製，兩邊皆有效
 main 仍可使用 x
 
+─────────────────────────────────────────────
+
 case 2: String (Move)
-main frame: s -&gt; "hello"(heap)
+main frame: s ──&gt; "hello"(heap)
 call bar(s)
-bar frame : s -&gt; "hello"(heap)
+bar frame : s ──&gt; "hello"(heap)             ← 所有權轉移
 main 的 s 失效
 
-回傳值流程
+─────────────────────────────────────────────
+                回傳值流程
+─────────────────────────────────────────────
+
 bar() -&gt; String
 callee 將所有權移交給 caller 綁定變數
 
-+---------+      move       +---------+
-| caller  | -------------&gt;  | callee  |
-+---------+                 +---------+
-     ^                           |
-     +-------- return move ------+
+┌─────────┐      move       ┌─────────┐
+│ caller  │ ─────────────&gt;  │ callee  │    ← 傳入時移動
+└─────────┘                 └─────────┘
+     ^                           │
+     └──────── return move ──────┘          ← 回傳時移回
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-定義函式function三"><a class="header" href="#rust-定義函式function三">Rust-定義函式Function(三)</a></h1>
 <ul>
@@ -10144,23 +10251,31 @@ println!("{:?}", arr);
 [10, -1, 4, -2, 16]
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-53"><a class="header" href="#ascii-詳細示意圖-53">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">提前返回、回傳多值、借用修改
+<pre><code class="language-text">══════════════════════════════════════════════════
+       提前返回、回傳多值、借用修改
+══════════════════════════════════════════════════
 
 1) 提前退出
 fn parse(x) -&gt; Result&lt;T, E&gt; {
-  if invalid { return Err(E); }
+  if invalid { return Err(E); }              ← 提前返回錯誤
   Ok(v)
 }
 
+─────────────────────────────────────────────────
+
 2) 回傳多個值 (tuple)
 fn stats() -&gt; (i32, i32, i32)
-caller: let (min, max, sum) = stats();
+caller: let (min, max, sum) = stats();       ← 解構綁定
+
+─────────────────────────────────────────────────
 
 3) 修改呼叫端變數 (&amp;mut)
-caller value ------borrow mut------&gt; callee
-+------------------+                +------------------+
-| String in caller | &lt;---write----- | fn fill(&amp;mut s)  |
-+------------------+                +------------------+
+
+caller value ──────borrow mut──────&gt; callee
+┌──────────────────┐                ┌──────────────────┐
+│ String in caller │ &lt;───write───── │ fn fill(&amp;mut s)  │
+└──────────────────┘                └──────────────────┘
+                                     ← 透過可變引用直接修改
 
 規則：同一時間只能有一個可變借用。
 </code></pre>
@@ -10261,25 +10376,31 @@ println!("{} {}", s1, s2);
 hello hello
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-54"><a class="header" href="#ascii-詳細示意圖-54">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">所有權核心模型: Stack/Heap + Move/Clone
+<pre><code class="language-text">══════════════════════════════════════════════════
+    所有權核心模型: Stack/Heap + Move/Clone
+══════════════════════════════════════════════════
 
 let s1 = String::from("hello");
 
 Stack(s1)                    Heap
-+-------------------+        +-------------------+
-| ptr --------------+------&gt; | h e l l o         |
-| len = 5           |        +-------------------+
-| cap = 5           |
-+-------------------+
+┌───────────────────┐        ┌───────────────────┐
+│ ptr ──────────────┼──────&gt; │ h e l l o         │
+│ len = 5           │        └───────────────────┘
+│ cap = 5           │         ← 堆積上的實際資料
+└───────────────────┘
+
+─────────────────────────────────────────────────
 
 let s2 = s1;   // move
-s1 失效, s2 成為唯一 owner
+s1 失效, s2 成為唯一 owner               ← 淺拷貝 + 舊變數失效
 
 let s3 = s2.clone(); // deep copy
-s2 與 s3 各自擁有不同 heap buffer
+s2 與 s3 各自擁有不同 heap buffer         ← 完整複製堆積資料
+
+─────────────────────────────────────────────────
 
 scope 結束時
-owner -&gt; drop() -&gt; 釋放 heap
+owner ──&gt; drop() ──&gt; 釋放 heap            ← 離開作用域自動釋放
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-所有權二"><a class="header" href="#rust-所有權二">Rust-所有權(二)</a></h1>
 <ul>
@@ -10354,26 +10475,31 @@ fn takes_and_gives_back(a_string: String) -&gt; String {
 <p>編譯時會產生錯誤 missing lifetime specifier</p>
 <p>這個有關於生命週期的會在下一篇講</p>
 <h2 id="ascii-詳細示意圖-55"><a class="header" href="#ascii-詳細示意圖-55">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">所有權在函式邊界的移轉
+<pre><code class="language-text">══════════════════════════════════════════════════
+        所有權在函式邊界的移轉
+══════════════════════════════════════════════════
 
 fn take(s: String) { ... }      // 取得所有權
 fn give() -&gt; String { ... }     // 回傳所有權
 fn borrow(s: &amp;String) { ... }   // 借用
 
 caller
-  |
-  +--&gt; take(name)      : name moved, caller 不可再用
-  |
-  +--&gt; borrow(&amp;name2)  : 只讀借用, caller 仍擁有
-  |
-  +&lt;-- give()          : 新所有權回到 caller
+  │
+  ├──&gt; take(name)      : name moved, caller 不可再用    ← 所有權移入
+  │
+  ├──&gt; borrow(&amp;name2)  : 只讀借用, caller 仍擁有        ← 僅借用
+  │
+  └&lt;── give()          : 新所有權回到 caller             ← 所有權移出
 
-生命週期概念圖
-+-----------+ borrow +-----------+
-| owner     |-------&gt;| borrower  |
-+-----------+&lt;-------+-----------+
-     |          end borrow   |
-     +----- owner 才能 move/drop--+
+─────────────────────────────────────────────────
+              生命週期概念圖
+─────────────────────────────────────────────────
+
+┌───────────┐ borrow ┌───────────┐
+│ owner     │───────&gt;│ borrower  │               ← 出借引用
+└───────────┘&lt;───────└───────────┘
+     │          end borrow   │
+     └───── owner 才能 move/drop ─┘              ← 借用結束後才可操作
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-定義泛型函式"><a class="header" href="#rust-定義泛型函式">Rust-定義泛型函式</a></h1>
 <ul>
@@ -10458,24 +10584,30 @@ fn f&lt;T&gt;(s: char, n1: T, n2: T) -&gt; T {
     return n2;
 }</code></pre></pre>
 <h2 id="ascii-詳細示意圖-56"><a class="header" href="#ascii-詳細示意圖-56">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">泛型函式與單型化(monomorphization)
+<pre><code class="language-text">═══════════════════════════════════════════════
+       泛型函式與單型化 (Monomorphization)
+═══════════════════════════════════════════════
 
-fn max&lt;T: PartialOrd&gt;(a: T, b: T) -&gt; T
+  fn max&lt;T: PartialOrd&gt;(a: T, b: T) -&gt; T
 
-編譯前 (泛型模板)
-+-------------------------------+
-| max&lt;T&gt;(T, T) -&gt; T             |
-+-------------------------------+
+─────────────── 編譯前（泛型模板） ───────────────
 
-編譯後 (具體型別實體)
-+-------------------------------+
-| max_i32(i32, i32) -&gt; i32      |
-| max_f64(f64, f64) -&gt; f64      |
-| max_char(char, char) -&gt; char  |
-+-------------------------------+
+  ┌───────────────────────────────────┐
+  │ max&lt;T&gt;(T, T) -&gt; T                │ ← 泛型定義，T 為型別參數
+  └─────────────────┬─────────────────┘
+                    │
+                    v  單型化展開
+─────────────── 編譯後（具體型別實體） ───────────
 
-呼叫流程
-call site 型別推導 -&gt; 選擇對應實體 -&gt; 靜態分派
+  ┌───────────────────────────────────┐
+  │ max_i32(i32, i32) -&gt; i32         │ ← 整數版本
+  │ max_f64(f64, f64) -&gt; f64         │ ← 浮點數版本
+  │ max_char(char, char) -&gt; char     │ ← 字元版本
+  └───────────────────────────────────┘
+
+─────────────── 呼叫流程 ────────────────────────
+
+  call site ──&gt; 型別推導 ──&gt; 選擇對應實體 ──&gt; 靜態分派
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-定義泛型結構"><a class="header" href="#rust-定義泛型結構">Rust-定義泛型結構</a></h1>
 <ul>
@@ -10554,30 +10686,30 @@ Slow Compiler: c++/rust<br />
 Slow Performance: java/scala<br />
 Slow Programmer: go1</p>
 <h2 id="ascii-詳細示意圖-57"><a class="header" href="#ascii-詳細示意圖-57">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">泛型結構的型別實例化
+<pre><code class="language-text">═══════════════════════════════════════════════
+         泛型結構的型別實例化
+═══════════════════════════════════════════════
 
-struct Point&lt;T&gt; {
-  x: T,
-  y: T,
-}
+  struct Point&lt;T&gt; {
+    x: T,
+    y: T,
+  }
 
-Point&lt;i32&gt; 與 Point&lt;f64&gt; 是不同具體型別
+  Point&lt;i32&gt; 與 Point&lt;f64&gt; 是不同具體型別
 
-Point&lt;i32&gt;
-+-----------+
-| x: i32    |
-| y: i32    |
-+-----------+
+─────────────── 記憶體佈局 ──────────────────────
 
-Point&lt;f64&gt;
-+-----------+
-| x: f64    |
-| y: f64    |
-+-----------+
+  Point&lt;i32&gt;                Point&lt;f64&gt;
+  ┌───────────────┐         ┌───────────────┐
+  │ x: i32        │         │ x: f64        │
+  │ y: i32        │         │ y: f64        │
+  └───────────────┘         └───────────────┘
+        4 + 4 bytes               8 + 8 bytes
 
-方法可分層
-impl&lt;T&gt; Point&lt;T&gt; { ... }        // 全型別通用
-impl Point&lt;f64&gt; { ... }         // 僅 f64 可用
+─────────────── 方法可分層 ──────────────────────
+
+  impl&lt;T&gt; Point&lt;T&gt; { ... }    ← 全型別通用
+  impl Point&lt;f64&gt; { ... }     ← 僅 f64 可用
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-定義closure閉包"><a class="header" href="#rust-定義closure閉包">Rust-定義Closure(閉包)</a></h1>
 <ul>
@@ -10688,26 +10820,34 @@ printOutVal();
 <p>Rust這樣限制應該基於所有權的設計關係，這樣有個好處就是避免亂引用變數造成BUG也比較好閱讀</p>
 <p>當然Closure有更多複雜的使用這邊只簡單介紹最基本的使用方法</p>
 <h2 id="ascii-詳細示意圖-58"><a class="header" href="#ascii-詳細示意圖-58">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Closure 捕獲(capture)模式
+<pre><code class="language-text">═══════════════════════════════════════════════
+          Closure 捕獲 (Capture) 模式
+═══════════════════════════════════════════════
 
-let x = 10;
-let s = String::from("hi");
+  let x = 10;
+  let s = String::from("hi");
 
-Closure 環境物件
-+----------------------------------+
-| captured x: by &amp; / by mut &amp; / move|
-| captured s: 依使用情況推導         |
-+----------------+-----------------+
-                 |
-                 v
-         call closure(...) 
+─────────────── Closure 環境物件 ────────────────
 
-三種 trait
-Fn      : 只讀捕獲，可重複呼叫
-FnMut   : 可變捕獲，可重複呼叫
-FnOnce  : 取得所有權，最多一次
+  ┌────────────────────────────────────────┐
+  │ captured x: by &amp; / by mut &amp; / move     │ ← 依使用情況推導
+  │ captured s: 依使用情況推導              │ ← 編譯器自動決定
+  └───────────────────┬────────────────────┘
+                      │
+                      v
+               call closure(...)
 
-thread::spawn(move || ...) 常見為 FnOnce。
+─────────────── 三種 Trait ──────────────────────
+
+  ┌──────────┬──────────────────────────────┐
+  │ Fn       │ 只讀捕獲，可重複呼叫         │
+  ├──────────┼──────────────────────────────┤
+  │ FnMut    │ 可變捕獲，可重複呼叫         │
+  ├──────────┼──────────────────────────────┤
+  │ FnOnce   │ 取得所有權，最多一次         │
+  └──────────┴──────────────────────────────┘
+
+  thread::spawn(move || ...) 常見為 FnOnce。
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-命令行的輸入輸出"><a class="header" href="#rust-命令行的輸入輸出">Rust-命令行的輸入輸出</a></h1>
 <ul>
@@ -10787,35 +10927,37 @@ std::io::stdin().read_line(&amp;mut line);
 println!("{}", line);
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖-59"><a class="header" href="#ascii-詳細示意圖-59">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">CLI 輸入來源與資料流
+<pre><code class="language-text">═══════════════════════════════════════════════
+           CLI 輸入來源與資料流
+═══════════════════════════════════════════════
 
-+------------------------+
-| OS Process 啟動         |
-+-----------+------------+
-            |
-   +--------+--------+
-   |                 |
-   v                 v
-std::env::args()   std::env::var()
-(命令列參數)         (環境變數)
-   |                 |
-   +--------+--------+
-            |
-            v
-+------------------------+
-| 參數解析/驗證           |
-+-----------+------------+
-            |
-            v
-+------------------------+
-| stdin.read_line()       |
-| 互動式輸入               |
-+-----------+------------+
-            |
-            v
-+------------------------+
-| stdout/stderr 輸出       |
-+------------------------+
+  ┌──────────────────────────┐
+  │    OS Process 啟動        │
+  └────────────┬─────────────┘
+               │
+       ┌───────┴────────┐
+       │                │
+       v                v
+  std::env::args()  std::env::var()
+  (命令列參數)       (環境變數)        ← 程式啟動時取得
+       │                │
+       └───────┬────────┘
+               │
+               v
+  ┌──────────────────────────┐
+  │    參數解析 / 驗證        │         ← 檢查輸入合法性
+  └────────────┬─────────────┘
+               │
+               v
+  ┌──────────────────────────┐
+  │  stdin.read_line()       │         ← 互動式輸入
+  │  互動式輸入               │
+  └────────────┬─────────────┘
+               │
+               v
+  ┌──────────────────────────┐
+  │  stdout / stderr 輸出     │         ← 結果輸出
+  └──────────────────────────┘
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-特徵trait一"><a class="header" href="#rust-特徵trait一">Rust-特徵(Trait)(一)</a></h1>
 <ul>
@@ -10909,31 +11051,36 @@ no method named `sqrt` found for type parameter `T` in the current scope</code><
 3.1622777 3.1622776601683795</code></pre></pre>
 <p>一開先宣告HasSqrt trait然後使用impl關鍵字替f32和f64實現sq函式</p>
 <h2 id="ascii-詳細示意圖-60"><a class="header" href="#ascii-詳細示意圖-60">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Trait 作為行為契約
+<pre><code class="language-text">═══════════════════════════════════════════════
+            Trait 作為行為契約
+═══════════════════════════════════════════════
 
-trait Summary {
-  fn summarize(&amp;self) -&gt; String;
-}
+  trait Summary {
+    fn summarize(&amp;self) -&gt; String;
+  }
 
-+---------------------+
-| Trait: Summary      |
-| summarize(&amp;self)    |
-+----------+----------+
-           |
-   +-------+--------+
-   |                |
-   v                v
-+--------+      +--------+
-| News   |      | Tweet  |
-| impl   |      | impl   |
-+--------+      +--------+
+─────────────── Trait 繼承關係 ──────────────────
 
-呼叫點
-fn notify(item: &amp;impl Summary) {
-  item.summarize()
-}
+  ┌─────────────────────┐
+  │  Trait: Summary      │                ← 定義行為契約
+  │  summarize(&amp;self)    │
+  └──────────┬──────────┘
+             │
+     ┌───────┴────────┐
+     │                │
+     v                v
+  ┌────────┐      ┌────────┐
+  │ News   │      │ Tweet  │              ← 各型別實作
+  │ impl   │      │ impl   │
+  └────────┘      └────────┘
 
-編譯期確認：傳入型別必須實作 Summary。
+─────────────── 呼叫點 ─────────────────────────
+
+  fn notify(item: &amp;impl Summary) {
+    item.summarize()
+  }
+
+  編譯期確認：傳入型別必須實作 Summary。
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-特徵trait二"><a class="header" href="#rust-特徵trait二">Rust-特徵(Trait)(二)</a></h1>
 <ul>
@@ -11104,32 +11251,40 @@ fn f(self: i32) -&gt; i32
     let qr32 = quartic(100f32);
 }</code></pre></pre>
 <h2 id="ascii-詳細示意圖-61"><a class="header" href="#ascii-詳細示意圖-61">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Trait bound、多 trait、預設實作
+<pre><code class="language-text">═══════════════════════════════════════════════
+       Trait Bound、多 Trait、預設實作
+═══════════════════════════════════════════════
 
-fn process&lt;T&gt;(x: T)
-where
-  T: Display + Clone,
-{ ... }
+  fn process&lt;T&gt;(x: T)
+  where
+    T: Display + Clone,
+  { ... }
 
-型別檢查
-+---------------------------+
-| T 是否同時滿足兩個 trait? |
-+-------------+-------------+
-              |
-        +-----+-----+
-        |           |
-        v           v
-      yes          no -&gt; compile error
+─────────────── 型別檢查 ───────────────────────
 
-self vs Self
-self  : 方法接收者實例
-Self  : 當前實作型別名稱
+  ┌─────────────────────────────┐
+  │ T 是否同時滿足兩個 trait?    │        ← 編譯期檢查
+  └──────────────┬──────────────┘
+                 │
+          ┌──────┴──────┐
+          │             │
+          v             v
+        yes           no ──&gt; compile error
 
-預設實作
-trait A {
-  fn f(&amp;self) { default }
-}
-impl A for MyType { /* 可覆寫 */ }
+─────────────── self vs Self ───────────────────
+
+  ┌──────────┬──────────────────────────────┐
+  │ self     │ 方法接收者實例               │
+  ├──────────┼──────────────────────────────┤
+  │ Self     │ 當前實作型別名稱             │
+  └──────────┴──────────────────────────────┘
+
+─────────────── 預設實作 ───────────────────────
+
+  trait A {
+    fn f(&amp;self) { default }       ← Trait 提供預設行為
+  }
+  impl A for MyType { /* 可覆寫 */ }
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-並行並發一"><a class="header" href="#rust-並行並發一">Rust-並行&amp;並發(一)</a></h1>
 <ul>
@@ -11194,25 +11349,30 @@ fn main() {
     handle.join().unwrap();
 }</code></pre></pre>
 <h2 id="ascii-詳細示意圖-62"><a class="header" href="#ascii-詳細示意圖-62">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">執行緒建立與同步(join)
+<pre><code class="language-text">═══════════════════════════════════════════════
+          執行緒建立與同步 (join)
+═══════════════════════════════════════════════
 
-main thread
-+--------------------------------+
-| spawn(move || worker())        |
-| handle.join()                  |
-+----------------+---------------+
-                 |
-                 v
-       +-------------------------+
-       | worker thread           |
-       | 1..N work               |
-       +-------------------------+
+─────────────── 執行緒關係 ──────────────────────
 
-時間軸
-main   : spawn ----- wait(join) -------- done
-worker :       start ---- run ---- exit
+  main thread
+  ┌──────────────────────────────────┐
+  │ spawn(move || worker())          │    ← 建立子執行緒
+  │ handle.join()                    │    ← 等待子執行緒結束
+  └────────────────┬─────────────────┘
+                   │
+                   v
+  ┌──────────────────────────────────┐
+  │ worker thread                    │    ← 子執行緒
+  │ 1..N work                        │
+  └──────────────────────────────────┘
 
-若沒有 join，main 可能先結束，worker 被提早中止。
+─────────────── 時間軸 ─────────────────────────
+
+  main   : spawn ────── wait(join) ──────── done
+  worker :       start ──── run ──── exit
+
+  若沒有 join，main 可能先結束，worker 被提早中止。
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-並行並發二"><a class="header" href="#rust-並行並發二">Rust-並行&amp;並發(二)</a></h1>
 <ul>
@@ -11281,21 +11441,26 @@ hello world tx2
 hello world tx1</code></pre></pre>
 <p>雖然channel本身不支援多個接收者(receiver)，但是可以利用上鎖讓多個執行緒同時使用接收者</p>
 <h2 id="ascii-詳細示意圖-63"><a class="header" href="#ascii-詳細示意圖-63">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">mpsc channel 傳遞所有權
+<pre><code class="language-text">═══════════════════════════════════════════════
+         mpsc Channel 傳遞所有權
+═══════════════════════════════════════════════
 
-Producer threads                    Consumer thread
-+---------------+                   +-------------------+
-| tx1.send(v1)  |----+          +--&gt;| rx.recv() -&gt; v1   |
-+---------------+    |          |   +-------------------+
-                     +-- queue --+
-+---------------+    |          |
-| tx2.send(v2)  |----+          +--&gt;| rx.recv() -&gt; v2   |
-+---------------+                   +-------------------+
+─────────────── 資料流向 ───────────────────────
 
-特性
-- send(v) 會移動所有權到 channel
-- receiver 取得後成為新 owner
-- 所有 sender drop 後，recv() 最終回傳 Err (通道關閉)
+  Producer threads                 Consumer thread
+  ┌─────────────────┐              ┌─────────────────────┐
+  │ tx1.send(v1)    │──────┐  ┌──&gt;│ rx.recv() -&gt; v1     │
+  └─────────────────┘      │  │   └─────────────────────┘
+                           ├──┤    ← 內部 queue 緩衝
+  ┌─────────────────┐      │  │   ┌─────────────────────┐
+  │ tx2.send(v2)    │──────┘  └──&gt;│ rx.recv() -&gt; v2     │
+  └─────────────────┘              └─────────────────────┘
+
+─────────────── 特性 ───────────────────────────
+
+  - send(v) 會移動所有權到 channel  ← 原 owner 不可再使用
+  - receiver 取得後成為新 owner
+  - 所有 sender drop 後，recv() 最終回傳 Err（通道關閉）
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="錯誤處理-1"><a class="header" href="#錯誤處理-1">錯誤處理</a></h1>
 <ul>
@@ -11391,30 +11556,34 @@ fn return_result_error() -&gt; Result&lt;String, String&gt; {
     return Err(s);
 }</code></pre></pre>
 <h2 id="ascii-詳細示意圖-64"><a class="header" href="#ascii-詳細示意圖-64">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">錯誤處理雙軌模型: panic! vs Result
+<pre><code class="language-text">═══════════════════════════════════════════════
+      錯誤處理雙軌模型: panic! vs Result
+═══════════════════════════════════════════════
 
-不可復原錯誤
-+------------------+
-| panic!           |
-| stack unwind/abort|
-+------------------+
+─────────────── 不可復原錯誤 ───────────────────
 
-可復原錯誤
-+------------------------------+
-| fn read() -&gt; Result&lt;T, E&gt;    |
-+---------------+--------------+
-                |
-        +-------+-------+
-        |               |
-        v               v
-      Ok(T)           Err(E)
-        |               |
-        +------?--------+
-               |
-               v
-        向上層傳播錯誤
+  ┌────────────────────┐
+  │ panic!              │                 ← 程式立即中止
+  │ stack unwind/abort  │
+  └────────────────────┘
 
-unwrap/expect: 開發期方便，正式路徑應優先明確處理 Err。
+─────────────── 可復原錯誤 ─────────────────────
+
+  ┌────────────────────────────────┐
+  │ fn read() -&gt; Result&lt;T, E&gt;      │     ← 回傳 Result 型別
+  └───────────────┬────────────────┘
+                  │
+          ┌───────┴───────┐
+          │               │
+          v               v
+        Ok(T)           Err(E)
+          │               │
+          └───────?───────┘               ← ? 運算子
+                  │
+                  v
+           向上層傳播錯誤
+
+  unwrap/expect: 開發期方便，正式路徑應優先明確處理 Err。
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="rust-30天的心得"><a class="header" href="#rust-30天的心得">Rust-30天的心得</a></h1>
 <ul>
@@ -11447,29 +11616,32 @@ Rust用了複雜的方式解決複雜的問題，有時候解決的方式比問�
 但是只聽說從Golang跳到Rust沒聽過從Rust跳到Golang<br />
 語言沒有好壞(<del>不是南北拳的問題，是你的問題</del>)</p>
 <h2 id="ascii-詳細示意圖-65"><a class="header" href="#ascii-詳細示意圖-65">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">30 天 Rust 學習地圖（核心能力堆疊）
+<pre><code class="language-text">═══════════════════════════════════════════════
+     30 天 Rust 學習地圖（核心能力堆疊）
+═══════════════════════════════════════════════
 
-Phase 1: 語法基礎
-- 變數 / 型別 / 控制流 / 函式
+  Phase 1: 語法基礎
+  - 變數 / 型別 / 控制流 / 函式
 
-Phase 2: 資料模型
-- struct / enum / match / 泛型 / trait
+  Phase 2: 資料模型
+  - struct / enum / match / 泛型 / trait
 
-Phase 3: 記憶體與安全
-- ownership / borrow / move / 生命周期概念
+  Phase 3: 記憶體與安全
+  - ownership / borrow / move / 生命周期概念
 
-Phase 4: 系統能力
-- CLI I/O / 錯誤處理 / 並發
+  Phase 4: 系統能力
+  - CLI I/O / 錯誤處理 / 並發
 
-能力整合圖
-+----------+    +----------+    +-------------+
-| 語法熟悉 | -&gt; | 型別建模 | -&gt; | 記憶體安全  |
-+----------+    +----------+    +------+------+ 
-                                      |
-                                      v
-                               +-------------+
-                               | 可維護系統程式|
-                               +-------------+
+─────────────── 能力整合圖 ──────────────────────
+
+  ┌──────────┐    ┌──────────┐    ┌──────────────┐
+  │ 語法熟悉  │──&gt;│ 型別建模  │──&gt;│  記憶體安全   │
+  └──────────┘    └──────────┘    └──────┬───────┘
+                                        │
+                                        v
+                                 ┌──────────────┐
+                                 │可維護系統程式  │  ← 最終目標
+                                 └──────────────┘
 </code></pre>
 
                     </main>

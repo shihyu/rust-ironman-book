@@ -374,21 +374,23 @@ fn panic(_: &amp;PanicInfo) -&gt; ! {
 crate ，不然還是用 std 來的方便，不需要為了想幫 Rust 的程式瘦身就不用
 std 。</p>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">no_std 生態輪廓
+<pre><code class="language-text">═══════════════════════════
+  no_std 生態輪廓
+═══════════════════════════
 
-+-------------------+
-| core              |
-| alloc (可選)      |
-+---------+---------+
-          |
-          v
-+-------------------+
-| 自訂 panic handler |
-| 自訂 runtime 啟動   |
-+---------+---------+
-          |
-          v
-嵌入式/裸機目標
+┌─────────────────────┐
+│  core               │  ← 最基礎型態、trait，無 OS 依賴
+│  alloc (可選)        │  ← 記憶體分配：Box、Vec 等
+└──────────┬──────────┘
+           │
+           v
+┌─────────────────────┐
+│ 自訂 panic handler  │  ← panic 時的處理邏輯
+│ 自訂 runtime 啟動   │  ← 取代標準 main 進入點
+└──────────┬──────────┘
+           │
+           v
+    嵌入式/裸機目標            ← ARM Cortex-M、RISC-V 等
 </code></pre>
 
                     </main>

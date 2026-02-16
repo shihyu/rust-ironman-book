@@ -284,7 +284,9 @@ if browser == Browser::Ie {
 // binary operation `==` cannot be applied to type `Browser`
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Enum 的判別值(discriminant) + 載荷(payload)
+<pre><code class="language-text">══════════════════════════════════════════════════
+   Enum 的判別值(discriminant) + 載荷(payload)
+══════════════════════════════════════════════════
 
 enum Message {
   Quit,
@@ -292,20 +294,26 @@ enum Message {
   Write(String),
 }
 
-記憶體概念
-+----------------------------------------------+
-| discriminant | payload union                 |
-+----------------------------------------------+
-| Quit         | (empty)                       |
-| Move         | x: i32, y: i32                |
-| Write        | String { ptr, len, cap }      |
-+----------------------------------------------+
+─────────────────────────────────────────────────
+                  記憶體概念
+─────────────────────────────────────────────────
 
-Option&lt;T&gt; 常見模型
+┌──────────────┬───────────────────────────────┐
+│ discriminant │ payload union                 │  ← 共用記憶體區域
+├──────────────┼───────────────────────────────┤
+│ Quit         │ (empty)                       │  ← 無載荷
+│ Move         │ x: i32, y: i32               │  ← 具名欄位
+│ Write        │ String { ptr, len, cap }      │  ← 堆積資料
+└──────────────┴───────────────────────────────┘
+
+─────────────────────────────────────────────────
+              Option&lt;T&gt; 常見模型
+─────────────────────────────────────────────────
+
 Some(T) / None
-+----------------------+ 
-| tag + optional value |
-+----------------------+
+┌──────────────────────┐
+│ tag + optional value │                          ← 編譯器可優化 niche
+└──────────────────────┘
 
 優點：用型別取代 magic number 與不安全狀態碼。
 </code></pre>

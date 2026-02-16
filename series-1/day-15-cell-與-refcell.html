@@ -291,19 +291,25 @@ fn main() {
 }</code></pre></pre>
 <p>下一篇文章要來介紹如何呼叫外部的程式，以及使用執行緒。</p>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Cell / RefCell 內部可變性
+<pre><code class="language-text">══════════════════════════════════
+  Cell / RefCell 內部可變性
+══════════════════════════════════
 
 外層: 不可變綁定
-+------------------------+
-| RefCell&lt;T&gt;             |
-| borrow flag(runtime)   |
-+-----------+------------+
-            |
-            v
-         inner T
+┌──────────────────────────┐
+│  RefCell&lt;T&gt;              │  ← 包裝任意型態 T
+│  borrow flag (runtime)   │  ← 執行期追蹤借用狀態
+└────────────┬─────────────┘
+             │
+             v
+          inner T               ← 實際儲存的資料
 
-borrow()     -&gt; 多個共享借用
-borrow_mut() -&gt; 同時只能一個
+─────────────────────────────────
+  借用規則（執行期檢查）
+─────────────────────────────────
+
+borrow()     ──&gt; 多個共享借用     ← 類似 &amp;T
+borrow_mut() ──&gt; 同時只能一個     ← 類似 &amp;mut T
 違反規則時在執行期 panic
 </code></pre>
 

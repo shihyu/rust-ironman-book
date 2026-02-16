@@ -254,29 +254,36 @@ println!("{}", test(5.));
 <span class="boring">}</span></code></pre></pre>
 <p>返回值需要在函式簽名之後用"→"並指定型別</p>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">函式傳參: Copy vs Move
+<pre><code class="language-text">═══════════════════════════════════════════════
+          函式傳參: Copy vs Move
+═══════════════════════════════════════════════
 
 case 1: i32 (Copy)
 main frame: x=10
 call foo(x)
-foo frame : n=10  (複製)
+foo frame : n=10  (複製)                    ← 位元複製，兩邊皆有效
 main 仍可使用 x
 
+─────────────────────────────────────────────
+
 case 2: String (Move)
-main frame: s -&gt; "hello"(heap)
+main frame: s ──&gt; "hello"(heap)
 call bar(s)
-bar frame : s -&gt; "hello"(heap)
+bar frame : s ──&gt; "hello"(heap)             ← 所有權轉移
 main 的 s 失效
 
-回傳值流程
+─────────────────────────────────────────────
+                回傳值流程
+─────────────────────────────────────────────
+
 bar() -&gt; String
 callee 將所有權移交給 caller 綁定變數
 
-+---------+      move       +---------+
-| caller  | -------------&gt;  | callee  |
-+---------+                 +---------+
-     ^                           |
-     +-------- return move ------+
+┌─────────┐      move       ┌─────────┐
+│ caller  │ ─────────────&gt;  │ callee  │    ← 傳入時移動
+└─────────┘                 └─────────┘
+     ^                           │
+     └──────── return move ──────┘          ← 回傳時移回
 </code></pre>
 
                     </main>

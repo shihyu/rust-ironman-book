@@ -259,25 +259,29 @@ loop {
 }
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">while / loop 控制流程
+<pre><code class="language-text">═══════════════════════════════════════════
+          while / loop 控制流程
+═══════════════════════════════════════════
 
 while condition {
     body
 }
 
-+-------------------+
-| evaluate condition|
-+---------+---------+
-          |
-      +---+---+
-      |       |
+┌───────────────────┐
+│ evaluate condition│                ← 每次迭代重新求值
+└─────────┬─────────┘
+          │
+      ┌───┴───┐
+      │       │
       v       v
-+-----------+ +------------+
-| true      | | false      |
-| run body  | | exit loop  |
-+-----+-----+ +------------+
-      |
-      +---------- back ----------&gt;
+┌───────────┐ ┌────────────┐
+│ true      │ │ false      │
+│ run body  │ │ exit loop  │       ← 條件為 false 時跳出
+└─────┬─────┘ └────────────┘
+      │
+      └────────── back ──────────&gt;  ← 回到條件判斷
+
+─────────────────────────────────────────
 
 loop {
   ...

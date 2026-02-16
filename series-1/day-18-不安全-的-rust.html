@@ -309,21 +309,24 @@ github 在 <a href="https://github.com/rust-lang-nursery/lazy-static.rs">https:/
 的基礎大致上就介紹到這邊了，再接下就進入應用篇，我會開始介紹一些實用的
 crate 與實作幾個專案，如果有什麼想要我做的也歡迎提出來。</p>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">safe Rust 與 unsafe 區塊邊界
+<pre><code class="language-text">══════════════════════════════════
+  safe Rust 與 unsafe 區塊邊界
+══════════════════════════════════
 
-safe code
-   |
-   v
-+----------------------+
-| unsafe { ... }       |
-| - raw pointer deref  |
-| - 呼叫 unsafe fn     |
-| - 操作 static mut    |
-+----------+-----------+
-           |
-           v
-回到 safe API 封裝
+       safe code                  ← 編譯器保證安全
+          │
+          v
+┌────────────────────────┐
+│  unsafe { ... }        │
+│  - raw pointer deref   │        ← 解參考裸指標
+│  - 呼叫 unsafe fn      │        ← 呼叫不安全函式
+│  - 操作 static mut     │        ← 修改全域變數
+└───────────┬────────────┘
+            │
+            v
+    回到 safe API 封裝            ← 對外提供安全介面
 
+──────────────────────────────────
 原則: 把 unsafe 範圍縮到最小。
 </code></pre>
 

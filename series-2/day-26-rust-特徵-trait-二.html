@@ -344,32 +344,40 @@ fn f(self: i32) -&gt; i32
     let qr32 = quartic(100f32);
 }</code></pre></pre>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">Trait bound、多 trait、預設實作
+<pre><code class="language-text">═══════════════════════════════════════════════
+       Trait Bound、多 Trait、預設實作
+═══════════════════════════════════════════════
 
-fn process&lt;T&gt;(x: T)
-where
-  T: Display + Clone,
-{ ... }
+  fn process&lt;T&gt;(x: T)
+  where
+    T: Display + Clone,
+  { ... }
 
-型別檢查
-+---------------------------+
-| T 是否同時滿足兩個 trait? |
-+-------------+-------------+
-              |
-        +-----+-----+
-        |           |
-        v           v
-      yes          no -&gt; compile error
+─────────────── 型別檢查 ───────────────────────
 
-self vs Self
-self  : 方法接收者實例
-Self  : 當前實作型別名稱
+  ┌─────────────────────────────┐
+  │ T 是否同時滿足兩個 trait?    │        ← 編譯期檢查
+  └──────────────┬──────────────┘
+                 │
+          ┌──────┴──────┐
+          │             │
+          v             v
+        yes           no ──&gt; compile error
 
-預設實作
-trait A {
-  fn f(&amp;self) { default }
-}
-impl A for MyType { /* 可覆寫 */ }
+─────────────── self vs Self ───────────────────
+
+  ┌──────────┬──────────────────────────────┐
+  │ self     │ 方法接收者實例               │
+  ├──────────┼──────────────────────────────┤
+  │ Self     │ 當前實作型別名稱             │
+  └──────────┴──────────────────────────────┘
+
+─────────────── 預設實作 ───────────────────────
+
+  trait A {
+    fn f(&amp;self) { default }       ← Trait 提供預設行為
+  }
+  impl A for MyType { /* 可覆寫 */ }
 </code></pre>
 
                     </main>

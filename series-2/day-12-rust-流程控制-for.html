@@ -240,7 +240,9 @@ for var in set {
 100 99 98 97 96 ... 1
 <span class="boring">}</span></code></pre></pre>
 <h2 id="ascii-詳細示意圖"><a class="header" href="#ascii-詳細示意圖">ASCII 詳細示意圖</a></h2>
-<pre><code class="language-text">for 迴圈與 Iterator desugaring
+<pre><code class="language-text">═══════════════════════════════════════════════
+       for 迴圈與 Iterator desugaring
+═══════════════════════════════════════════════
 
 for x in collection {
     body(x)
@@ -255,14 +257,17 @@ loop {
     }
 }
 
-資料流
-+------------+     next()     +----------------+
-| collection | -------------&gt;  | Iterator state |
-+------------+                 +--------+-------+
-                                        |
-                              Some(item)|None
-                                        v
-                                  body / break
+─────────────────────────────────────────────
+                   資料流
+─────────────────────────────────────────────
+
+┌────────────┐     next()     ┌────────────────┐
+│ collection │ ─────────────&gt; │ Iterator state │  ← 持有迭代位置
+└────────────┘                └────────┬───────┘
+                                       │
+                             Some(item)│None      ← match 分支
+                                       v
+                                 body / break
 </code></pre>
 
                     </main>
