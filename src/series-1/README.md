@@ -1,0 +1,41 @@
+# 30 天深入淺出 Rust 逐篇彙整
+
+- 系列網址：https://ithelp.ithome.com.tw/users/20111802/ironman/1742
+- 抓取工具：agent-browser（系列清單） + requests/pandoc（內文整理）
+- 產生時間：2026-02-16 13:05:25
+- 檔案數：33
+
+## 檔案列表
+- DAY 01｜[Overview](day-01-overview.md)｜原文：https://ithelp.ithome.com.tw/articles/10199503
+- DAY 02｜[安裝環境](day-02-安裝環境.md)｜原文：https://ithelp.ithome.com.tw/articles/10199697
+- DAY 03｜[Rust 的套件管理工具 Cargo 與套件倉庫](day-03-rust-的套件管理工具-cargo-與套件倉庫.md)｜原文：https://ithelp.ithome.com.tw/articles/10199807
+- DAY 04｜[Rust 基礎](day-04-rust-基礎.md)｜原文：https://ithelp.ithome.com.tw/articles/10199987
+- DAY 05｜[變數的所有權與借出變數](day-05-變數的所有權與借出變數.md)｜原文：https://ithelp.ithome.com.tw/articles/10199990
+- DAY 06｜[Lifetime： Borrow 的存活時間](day-06-lifetime-borrow-的存活時間.md)｜原文：https://ithelp.ithome.com.tw/articles/10200106
+- DAY 07｜[Struct 與 OOP](day-07-struct-與-oop.md)｜原文：https://ithelp.ithome.com.tw/articles/10200336
+- DAY 08｜[Trait 與泛型 (Generic)](day-08-trait-與泛型-generic.md)｜原文：https://ithelp.ithome.com.tw/articles/10200508
+- DAY 09｜[列舉、解構、模式比對](day-09-列舉-解構-模式比對.md)｜原文：https://ithelp.ithome.com.tw/articles/10200611
+- DAY 10｜[Module](day-10-module.md)｜原文：https://ithelp.ithome.com.tw/articles/10200792
+- DAY 11｜[錯誤處理](day-11-錯誤處理.md)｜原文：https://ithelp.ithome.com.tw/articles/10200793
+- DAY 12｜[單元測試](day-12-單元測試.md)｜原文：https://ithelp.ithome.com.tw/articles/10201066
+- DAY 13｜[函數式程式設計](day-13-函數式程式設計.md)｜原文：https://ithelp.ithome.com.tw/articles/10201241
+- DAY 14｜[智慧指標 (Smart Pointer) 與集合型態 (Collection)](day-14-智慧指標-smart-pointer-與集合型態-collection.md)｜原文：https://ithelp.ithome.com.tw/articles/10201404
+- DAY 15｜[Cell 與 RefCell](day-15-cell-與-refcell.md)｜原文：https://ithelp.ithome.com.tw/articles/10201653
+- DAY 16｜[程序與執行緒](day-16-程序與執行緒.md)｜原文：https://ithelp.ithome.com.tw/articles/10202133
+- DAY 17｜[更多的執行緒： Atomic 、 Channel 與 Crossbeam](day-17-更多的執行緒-atomic-channel-與-crossbeam.md)｜原文：https://ithelp.ithome.com.tw/articles/10202523
+- DAY 18｜[「不安全」的 Rust](day-18-不安全-的-rust.md)｜原文：https://ithelp.ithome.com.tw/articles/10202889
+- DAY 19｜[Rust 2018](day-19-rust-2018.md)｜原文：https://ithelp.ithome.com.tw/articles/10203213
+- DAY 20｜[Crates 與工具](day-20-crates-與工具.md)｜原文：https://ithelp.ithome.com.tw/articles/10203539
+- DAY 21｜[用 Rust 呼叫 C 的程式](day-21-用-rust-呼叫-c-的程式.md)｜原文：https://ithelp.ithome.com.tw/articles/10203831
+- DAY 22｜[從 C 呼叫 Rust](day-22-從-c-呼叫-rust.md)｜原文：https://ithelp.ithome.com.tw/articles/10204232
+- DAY 23｜[實作 Python 的原生擴充與條件編譯](day-23-實作-python-的原生擴充與條件編譯.md)｜原文：https://ithelp.ithome.com.tw/articles/10204487
+- DAY 24｜[指令列工具與 HTTP Client](day-24-指令列工具與-http-client.md)｜原文：https://ithelp.ithome.com.tw/articles/10204861
+- DAY 25｜[Diesel： Rust 的 ORM](day-25-diesel-rust-的-orm.md)｜原文：https://ithelp.ithome.com.tw/articles/10205151
+- DAY 26｜[用 Rust 做個留言板](day-26-用-rust-做個留言板.md)｜原文：https://ithelp.ithome.com.tw/articles/10205465
+- DAY 27｜[非同步 IO ： Futures 與 Tokio](day-27-非同步-io-futures-與-tokio.md)｜原文：https://ithelp.ithome.com.tw/articles/10205778
+- DAY 28｜[WebAssembly： 用 Rust 寫出高效能的網頁程式](day-28-webassembly-用-rust-寫出高效能的網頁程式.md)｜原文：https://ithelp.ithome.com.tw/articles/10206128
+- DAY 29｜[用 Rust + GTK 做個井字棋](day-29-用-rust-gtk-做個井字棋.md)｜原文：https://ithelp.ithome.com.tw/articles/10206443
+- DAY 30｜[macro 、 proc macro 與尾聲](day-30-macro-proc-macro-與尾聲.md)｜原文：https://ithelp.ithome.com.tw/articles/10206778
+- 番外 1｜[番外 1： 設計模式](extra-01-番外-1-設計模式.md)｜原文：https://ithelp.ithome.com.tw/articles/10207423
+- 番外 2｜[番外 2： 不使用標準函式庫行不行？](extra-02-番外-2-不使用標準函式庫行不行.md)｜原文：https://ithelp.ithome.com.tw/articles/10207917
+- 番外 3｜[番外 3 ： Rust 2018, const fn & inline asm](extra-03-番外-3-rust-2018-const-fn-inline-asm.md)｜原文：https://ithelp.ithome.com.tw/articles/10210294

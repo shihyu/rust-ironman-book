@@ -1,0 +1,10 @@
+[book]
+title = "Rust Ironman 合併彙整"
+authors = ["Auto Generated"]
+language = "zh-TW"
+multilingual = false
+src = "src"
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
