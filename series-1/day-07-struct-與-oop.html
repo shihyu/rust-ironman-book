@@ -1,0 +1,424 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Struct 與 OOP - Rust Ironman 合併彙整</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust Ironman 合併彙整</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="struct-與-oop"><a class="header" href="#struct-與-oop">Struct 與 OOP</a></h1>
+<ul>
+<li>系列：30 天深入淺出 Rust</li>
+<li>來源系列：https://ithelp.ithome.com.tw/users/20111802/ironman/1742</li>
+<li>原文連結：https://ithelp.ithome.com.tw/articles/10200336</li>
+<li>章節：DAY 07</li>
+<li>發佈時間：2018-10-07 21:08:46</li>
+<li>作者：DanSnow</li>
+<li>清單瀏覽數：8894</li>
+<li>清單摘要：各位有在 C 裡實作過物件導向程式設計 (OOP) 嗎？ 這篇要來介紹 Rust 中的 struct 以及 OOP。 Struct 首先來介紹一下結構 (str...</li>
+</ul>
+<h2 id="內文"><a class="header" href="#內文">內文</a></h2>
+<p>各位有在 C 裡實作過物件導向程式設計 (OOP) 嗎？<br />
+這篇要來介紹 Rust 中的 struct 以及 OOP。</p>
+<h2 id="struct"><a class="header" href="#struct">Struct</a></h2>
+<p>首先來介紹一下結構 (structure) ， Rust 中宣告結構是用 <code>struct</code>
+關鍵字，這跟 C/C++ 很像，不過不太一樣的是， Rust 中預設所有的成員
+(member) 都是私有的 (private)。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Foo {
+  pub public_member: i32,
+  private_member: i32, // 這個結尾的逗號可加可不加，但是加上去是官方推薦的
+}
+<span class="boring">}</span></code></pre></pre>
+<p>結構讓你可以組合不同的型態，給每個欄位名字，最後組合出一個新的型態，在上面我們宣告了一個有公開的
+<code>public_member</code> 與私有的 <code>private_member</code> 的 struct ，事不遲疑，我們寫個
+<code>main</code> 來試用一下：</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+  let foo = Foo {
+    public_member: 123,
+    private_member: 456
+  };
+}</code></pre></pre>
+<p>Rust
+裡建立一個結構就像這樣，在前面放上結構名稱，後面則是各個欄位以及它們的初始值，如果你有接觸過其它的
+OOP
+程式語言，你應該有注意到哪裡不太對勁了，為什麼我們可以直接使用應該是私有的
+<code>private_member</code>？這不是違反封裝了嗎？在 Rust
+中私有的成員代表的是只能在這個 <code>package</code> 中存取
+(你可以先理解為這個檔案，之後會詳細解釋 Rust 的模組架構) ，這就像 Java
+的 <code>package</code> 修飾或 Kotlin 的 <code>internal</code> 或 C 中使用 <code>static</code>
+的全域變數。</p>
+<blockquote>
+<p>封裝是把資料對外部隱藏起來，只允許使用方法存取，避免外部直接存取資料而導致程式的邏輯錯誤</p>
+</blockquote>
+<h2 id="more-struct"><a class="header" href="#more-struct">More Struct</a></h2>
+<p>如果欄位的名稱不重要，或是只是想建一個型態把其它的型態包裝起來的話<br />
+我們可以建一個 <strong>"tuple struct"</strong>：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Foo(i32, i32);
+<span class="boring">}</span></code></pre></pre>
+<p>這像 tuple 與 struct 的融合體，如果要存取資料的話也跟 tuple 一樣：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let foo = Foo(1, 2);
+foo.0;
+foo.1;
+<span class="boring">}</span></code></pre></pre>
+<p>另外還有完全沒有資料的 "unit-like struct"：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Bar;
+<span class="boring">}</span></code></pre></pre>
+<p>這個比較少用到，通常是配合 trait 來使用的。</p>
+<h2 id="impl"><a class="header" href="#impl">Impl</a></h2>
+<p>OOP
+是把資料與操作資料的方法結合，借此模擬現實的東西，於是少不了的，有了資料自然要有操作資料的方法。</p>
+<pre><pre class="playground"><code class="language-rust">struct Person {
+  name: String
+}
+
+impl Person {
+  pub fn new(name: String) -&gt; Self {
+    Person { name }
+  }
+
+  pub fn say_hello(&amp;self) {
+    println!("Hello, my name is {}", self.name);
+  }
+}
+
+fn main() {
+  let john = Person::new("John".to_string());
+  john.say_hello();
+}</code></pre></pre>
+<p>Rust 使用一個分開的 <code>impl</code> 區塊來幫 struct 實作方法，這邊建立了一個
+<code>Person</code> 的 struct ，與建構子 <code>new</code> 還有一個方法
+<code>say_hello</code>，方法可以設定可見度，在前面加上 <code>pub</code> 就會變公開的方法了，在
+Rust 中並沒有指定建構子的名字，所以稱為 <code>new</code> 只是一個慣例，因為 Rust
+不允許多型 (Polymorphism)，也不允許函式的參數有預設值，所以在 Rust
+中一個 struct 有多個不同的建構子也是常有的事，建構子所回傳的 <code>Self</code>
+是一個特殊的型態，代表的是自己所實作的 struct ，在這邊你也可以寫
+<code>Person</code>，不過如果要回傳自身都建議寫 <code>Self</code>
+，因為它有一些好用的特性，在下一章會提到。</p>
+<p>其中使用的 <code>Person { name }</code>
+是個語法糖，當變數名稱與欄位名稱一致時，就可以把 <code>Person { name: name }</code>
+簡寫。</p>
+<p>若實作的 method 沒有 <code>self</code> 變數則代表這個方法是個 associated method
+，它只是個跟 struct 搭配的方法而已，就像其它語言的 static method
+，使用時要用 <code>Person::new</code> 來呼叫。</p>
+<blockquote>
+<p>多型是指函式可以有同一個名稱，但使用不同的參數，這在 OOP
+也是很常見的一個特性，比如在 C++ 可以建立 <code>Persion()</code> 與
+<code>Persion(string)</code> 兩個建構子，但接受不同的參數</p>
+</blockquote>
+<p><code>say_hello</code> 則是 <code>Persion</code> 的方法，而 <code>self</code>
+是個特殊的變數，只會在實作時出現<br />
+它代表的是自己，如果要變成 struct 的方法則第一個參數必須是
+<code>self</code>，同時宣告 <code>self</code> 時要決定使用什麼方式宣告，一般最常用的是唯讀的
+borrow <code>&amp;self</code> 這代表你會用唯讀的方式存取自己，另外還有 <code>&amp;mut self</code>
+這時候你就可以修改自己了，最後 <code>self</code> 這個比較少用， 若使用 <code>self</code>
+代表你將會取得自身的所有權，呼叫這個方法將不再能存取這個 struct
+，一般用在要將自身轉換成另一個型態，或是呼叫這個方法後自己就不再有效的情況。</p>
+<p>大部份情況下還是使用 <code>&amp;self</code> 居多，呼叫方法則是用 <code>john.say_hello()</code>
+，Rust 在這邊會自動的把 struct 轉成 borrow 的型態。</p>
+<blockquote>
+<p>Rust 中的所有的 function, method
+都可以直接的存取與當成參數傳遞，比如在上面的例子，你可以使用
+<code>Person::say_hello(&amp;john)</code> 來呼叫方法，這其實有一種像在 C 中實作 OOP
+的感覺，而上面的呼叫方式反而像是語法糖一樣。</p>
+</blockquote>
+<h2 id="建造模式-builder-pattern"><a class="header" href="#建造模式-builder-pattern">建造模式 Builder Pattern</a></h2>
+<p>Rust
+不支援多型，也不支援預設參數，所以當建構子的參數多時就顯的很麻煩，把所有成員都設成公開的又破壞封裝，所以在
+Rust 中常會看到建造模式，建造模式是個設計模式，其將會使用另一個 struct
+以一系列的方法來建造我們要的目標，以 Rust 的標準函式庫中的
+<a href="https://doc.rust-lang.org/stable/std/process/struct.Command.html"><code>std::process::Command</code></a>
+為例：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let output = Command::new("echo")
+  .arg("Hello world")
+  .output();
+println!("{}", String::from_utf8_lossy(&amp;output.stdout));
+<span class="boring">}</span></code></pre></pre>
+<p>像這樣的方式就是建造模式，最後我們要拿到的目標是那個 <code>output</code>
+變數，底下我們自己實做一個：</p>
+<pre><pre class="playground"><code class="language-rust">#[derive(Debug)]
+struct Point {
+    x: i32,
+    y: i32,
+    z: i32,
+}
+
+impl Point {
+    fn new(x: i32, y: i32, z: i32) -&gt; Self {
+        Point { x, y, z }
+    }
+}
+
+struct Builder {
+  x: i32,
+  y: i32,
+  z: i32,
+}
+
+impl Builder {
+  fn new(x: i32) -&gt; Self {
+    Builder {
+      x,
+      y: 0,
+      z: 0,
+    }
+  }
+
+  fn y(&amp;mut self, y: i32) -&gt; &amp;mut Self {
+    self.y = y;
+    self
+  }
+
+  fn z(&amp;mut self, z: i32) -&gt; &amp;mut Self {
+    self.z = z;
+    self
+  }
+  
+  fn build(&amp;self) -&gt; Point {
+      Point::new(self.x, self.y, self.z)
+  }
+}
+
+fn main() {
+    let point = Builder::new(1)
+        .y(2)
+        .z(3)
+        .build();
+    println!("{:?}", point);
+}</code></pre></pre>
+<p><a href="https://play.rust-lang.org/?gist=5e7b08e230a379f9c05571f8bcb66d1b&amp;version=stable&amp;mode=debug&amp;edition=2015"><img src="images/day-07-struct-%E8%88%87-oop/img-001.png" alt="Playground" /></a></p>
+<p>這邊假設了 <code>x</code> 的值是必要的，另外兩個都可以用 0
+當預設值，這樣就可以只指定想要的東西了。</p>
+<p>另外這邊還出現了 <code>#[derive(Debug)]</code> ，這是什麼呢？<br />
+下一篇我們要來介紹 trait ，與泛型 (generic) 。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../series-1/day-06-lifetime-borrow-的存活時間.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../series-1/day-08-trait-與泛型-generic.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../series-1/day-06-lifetime-borrow-的存活時間.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../series-1/day-08-trait-與泛型-generic.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

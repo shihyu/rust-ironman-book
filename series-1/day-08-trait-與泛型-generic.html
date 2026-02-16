@@ -1,0 +1,570 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Trait 與泛型 (Generic) - Rust Ironman 合併彙整</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust Ironman 合併彙整</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="trait-與泛型-generic"><a class="header" href="#trait-與泛型-generic">Trait 與泛型 (Generic)</a></h1>
+<ul>
+<li>系列：30 天深入淺出 Rust</li>
+<li>來源系列：https://ithelp.ithome.com.tw/users/20111802/ironman/1742</li>
+<li>原文連結：https://ithelp.ithome.com.tw/articles/10200508</li>
+<li>章節：DAY 08</li>
+<li>發佈時間：2018-10-08 22:39:32</li>
+<li>作者：DanSnow</li>
+<li>清單瀏覽數：4855</li>
+<li>清單摘要：Trait Trait 本身同時提供兩個功能，一是讓不同的型態去實作同樣的功能，再來就是提供實作來共用程式碼了，這同時也是 Rust 泛型的基礎。 trait...</li>
+</ul>
+<h2 id="內文"><a class="header" href="#內文">內文</a></h2>
+<h2 id="trait"><a class="header" href="#trait">Trait</a></h2>
+<p>Trait
+本身同時提供兩個功能，一是讓不同的型態去實作同樣的功能，再來就是提供實作來共用程式碼了，這同時也是
+Rust 泛型的基礎。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Movable {
+  fn move(&amp;self);
+}
+
+struct Human;
+
+impl Movable for Human {
+  fn move(&amp;self) {
+    println!("Human walk");
+  }
+}
+
+struct Rabbit;
+
+impl Movable for Rabbit {
+  fn move(&amp;self) {
+    println!("Rabbit jump");
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>於是不同的型別就能各自實作 trait 並提供自己專屬的實作，另外要注意的是：
+trait 的方法一定都是公開的。</p>
+<p>trait 也可以提供預設的實作，與在使用者實作了特定的方法後提供像 mixin
+的功能：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Greeter {
+  fn greet(&amp;self) {
+    println!("{}", self.message());
+  }
+
+  fn greet_to(&amp;self, name: &amp;str) {
+    println!("{} {}", self.message(), name);
+  }
+
+  fn message(&amp;self) -&gt; &amp;'static str;
+}
+
+struct Someone;
+
+impl Greeter for Someone {
+  // 提供必要的方法
+  fn message(&amp;self) -&gt; &amp;'static str {
+    "Hello"
+  }
+
+  // 覆寫 (override) 預設實作
+  fn greet_to(&amp;self, name: &amp;str) {
+    println!("Yo {}", name);
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>也可以指定要實作這個 trait 的同時要實作另一個 trait：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait HasName: Greeter {
+    fn name(&amp;self) -&gt; &amp;'static str;
+
+    fn greet_with_name(&amp;self) {
+        println!("{} my name is {}", self.message(), self.name());
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>trait 中也可以宣告型態別名 (type
+alias)，這樣就能讓方法能輸入或回傳不同型態：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Foo {
+  type Item;
+  fn foo(&amp;self) -&gt; Self::Item;
+}
+
+struct Bar;
+
+impl Foo for Bar {
+  type Item = i32;
+
+  fn foo(&amp;self) -&gt; Self::Item { 42 }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>另外這邊我們都使用 <code>Self</code> ，因為你無法知道是誰會實作這個 trait。</p>
+<h2 id="內建的-trait"><a class="header" href="#內建的-trait">內建的 Trait</a></h2>
+<p>Rust 內建了很多的 trait ，只要實作了這些 trait 就能讓 Rust
+知道你的型態能提供哪些功能，也能被標準函式庫或第三方的函式庫使用了，以下會介紹幾個比較重要的。</p>
+<h3 id="display"><a class="header" href="#display">Display</a></h3>
+<p><a href="https://doc.rust-lang.org/stable/std/fmt/trait.Display.html"><code>std::fmt::Display</code></a>
+是讓你的型態能被 <code>println!</code> 印出來</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Point(i32, i32);
+
+// 當然這邊你可以先用 use std::fmt::Display; 這樣這邊就只需要使用 Display
+impl std::fmt::Display for Point {
+  fn fmt(&amp;self, f: &amp;mut std::fmt::Formatter) -&gt; std::fmt::Result {
+    write!(f, "({}, {})", self.0, self.1)
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>實作了這個 trait 還會自動實作
+<a href="https://doc.rust-lang.org/stable/std/string/trait.ToString.html"><code>std::string::ToString</code></a>
+，這是讓你的型態能轉換成字串。</p>
+<h3 id="from"><a class="header" href="#from">From</a></h3>
+<p><a href="https://doc.rust-lang.org/stable/std/convert/trait.From.html"><code>std::convert::From</code></a>
+代表你的型態能從另一個型態轉換，之前所使用的 <code>String::from</code>
+就是從這裡來的，同時若你實作了 <code>From</code> ，編譯器就會自動幫你實作
+<code>Into</code>，<code>Into</code> 則是這個型態可以被轉換成某個固定的型態。</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Foo;
+struct Bar;
+
+// Foo 是來源的型態，這是等下要講的泛型
+impl From&lt;Foo&gt; for Bar {
+  fn from(_: Foo) -&gt; Self {
+    Bar
+  }
+}
+
+// 相對的你可以使用 let bar: Bar = Foo.into();
+// 這裡也是少數要標記型態的，因為編譯器沒辦法自動推導
+<span class="boring">}</span></code></pre></pre>
+<h3 id="add"><a class="header" href="#add">Add</a></h3>
+<p><a href="https://doc.rust-lang.org/stable/std/ops/trait.Add.html"><code>std::ops::Add</code></a>
+可以讓你的型態與別的東西做加法運算，同時這也是 Rust 的運算子重載， Rust
+的所有運算子都有個 trait 在
+<a href="https://doc.rust-lang.org/stable/std/ops/index.html"><code>std::ops</code></a>，只要實作了你就能使用那個運算子做運算了。</p>
+<p>(這邊不提供範例，請去看文件裡的範例)</p>
+<h3 id="deref"><a class="header" href="#deref">Deref</a></h3>
+<p><a href="https://doc.rust-lang.org/stable/std/ops/trait.Deref.html"><code>std::ops::Deref</code></a>
+這是 Rust
+裡一個很重要的運算子，就是取值的操作，只是這個取值也可以取得其它的型態，這代表著你可以用自己定義的型態去包裝不是由你建立的型態，並擴充它的功能，同時還能自動的「繼承」原先的型態所擁有的方法。</p>
+<blockquote>
+<p>這邊的繼承並不像其它語言的繼承，它只是在呼叫方法時透過 <code>Deref</code>
+轉換成需要的型態而已。</p>
+</blockquote>
+<pre><pre class="playground"><code class="language-rust">use std::{ops::Deref, fmt};
+
+#[derive(Copy, Clone)]
+struct Num(i32);
+
+impl fmt::Display for Num {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        // 直接呼叫被包裝的 i32 所實作的 fmt::Display
+        fmt::Display::fmt(&amp;self.0, f)
+    }
+}
+
+impl Num {
+  fn inc_one(self) -&gt; Self {
+    Num(self.0 + 1)
+  }
+}
+
+impl Deref for Num {
+  type Target = i32;
+
+  fn deref(&amp;self) -&gt; &amp;Self::Target {
+    &amp;self.0
+  }
+}
+
+fn main() {
+  let n = Num(42);
+  println!("{}", n.inc_one()); // n 可以有新定義的方法
+  println!("{}", n.abs()); // n 也可以有原本定義的方法
+}</code></pre></pre>
+<h2 id="derivable-trait"><a class="header" href="#derivable-trait">Derivable Trait</a></h2>
+<p>Derivable trait 是一些能自動 <strong>產生</strong> 實作的 trait
+，如果要讓編譯器產生實作的話，就只要在你的型態上加上 <code>derive</code> 的標記：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Default, Clone, Copy)]
+struct Foo;
+<span class="boring">}</span></code></pre></pre>
+<blockquote>
+<p>請注意，它們是 <strong>產生</strong>
+實作，這代表它們還是要有程式碼來實作，只是能自動產生而已，通常而言
+derivable trait 會要求你的 struct 中每個欄位也都要實作同樣的 trait
+，這樣才能遞迴下去</p>
+</blockquote>
+<p>也有不少內建的這樣的 trait ，以下也是介紹重要的</p>
+<h3 id="default"><a class="header" href="#default">Default</a></h3>
+<p><a href="https://doc.rust-lang.org/stable/std/default/trait.Default.html"><code>std::default::Default</code></a>
+代表你的型態有預設值，Rust
+裡的慣例也有如果實作了無參數的建構子，則也要實作 <code>Default</code>
+，你也可以在建構子使用實作的 <code>Default</code> ，另外 <code>Default</code> 也還有個用途：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Default)]
+struct Point { x: i32, y: i32, z: i32 };
+
+Point {
+  x: 1,
+  ..Default::default() // 剩下的值直接使用預設值
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="debug"><a class="header" href="#debug">Debug</a></h3>
+<p><a href="https://doc.rust-lang.org/stable/std/fmt/trait.Debug.html"><code>std::fmt::Debug</code></a>
+是用來印出 debug 資訊的，也就是 <code>println!</code> 使用 <code>{:?}</code> 印出來的結果。</p>
+<h3 id="copy"><a class="header" href="#copy">Copy</a></h3>
+<blockquote>
+<p><code>Copy</code> 是個 marker trait ，這類的 trait
+其實並沒有任何實作，它們的用途是讓編譯器知道這個型態的一些特性，以及在什麼情況下該怎麼處理。</p>
+</blockquote>
+<p><code>Copy</code>
+是代表這個型態可以被簡單的複製，這通常代表你的型態裡只有包含像數字或是布林等型態的資料，如果包含了
+<code>String</code> 或 <code>Vec</code> 就沒辦法實作這個 trait，另外如果有實作 <code>Copy</code>
+則一定要實作 <code>Clone</code>。</p>
+<h3 id="clone"><a class="header" href="#clone">Clone</a></h3>
+<p><a href="https://doc.rust-lang.org/stable/std/clone/trait.Clone.html"><code>std::clone::Clone</code></a>
+是可被複製的型態，如果一個型態只有 <code>Clone</code> 而沒有 <code>Copy</code>
+則通常代表這個型態的複製是需要成本的，比如
+<code>String</code>，大部份的型態也都有實作 <code>Clone</code>
+，如果你的型態允許複製也請務必實作 <code>Clone</code>，至於沒有實作 <code>Clone</code>
+的型態基本上就是像 <code>File</code> 之類的因為它是對應到了一個實際存在的檔案。</p>
+<h2 id="泛型"><a class="header" href="#泛型">泛型</a></h2>
+<p>如果沒有泛型實際上 trait
+也沒什麼作用，泛型可以讓一個函式接受不同型態的參數，同時透過指定要實作的
+trait
+來確保傳進來的參數一定滿足某些必要的條件，比如我想要傳進來的數字可以跟數字相加，而且回傳數字：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::ops::Add;
+
+fn print_add_one&lt;T: Add&lt;i32, Output = i32&gt;&gt;(n: T) {
+  println!("{}", n + 1);
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>Add</code> 本身也是一個泛型的 trait
+它的參數是用泛型，並且還帶有一個型態別名，我們可以在 <code>&lt;&gt;</code>
+中指定泛型的參數，以及型態的別名，第一個 <code>i32</code> 指定的是泛型，而
+<code>Output = i32</code> 指定的則是別名，於是這邊我們就能傳進去任何與 <code>i32</code>
+相加後會回傳 <code>i32</code> 的東西了，你可以傳入數字，也可以試著把上面的 <code>Num</code>
+加上 <code>Add</code> 的定義後傳進去試試， Rust
+的編譯器在碰到泛型時會各別的幫出現的每個型態產生程式碼，所以是沒有任何額外的執行消耗的，這也是
+Rust 所推的 zero-cost abstract。</p>
+<p>泛型還有其它不同的寫法，比如你的型態太長了，那你可以先宣告，再補上 trait
+的限制：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn print_add_one&lt;T&gt;(n: T)
+  where T: Add&lt;i32, Output = i32&gt; {
+  println!("{}", n + 1);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>也可以直接寫在參數的宣告那邊，我比較喜歡這樣寫，這是在 Rust 1.27
+後新增的語法：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn print_add_one(n: impl Add&lt;i32, Output = i32&gt;) {
+  println!("{}", n + 1);
+}
+<span class="boring">}</span></code></pre></pre>
+<p>另外你可以回傳實作了某種 trait 的回傳值，同樣是 1.27 的語法：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn return_addable() -&gt; impl Add&lt;i32, Output = i32&gt;) {
+  42
+}
+<span class="boring">}</span></code></pre></pre>
+<p>收到這個回傳值的使用者只會知道這個型態支援什麼東西，不會知道實際的型態</p>
+<p>struct 或 trait 也可以使用泛型：</p>
+<pre><pre class="playground"><code class="language-rust">struct Wrapper&lt;T&gt;{
+  inner: T
+}
+
+impl&lt;T&gt; Deref for Wrapper&lt;T&gt; {
+  type Target = T;
+  fn deref(&amp;self) -&gt; &amp;T {
+    &amp;self.inner
+  }
+}
+
+fn main() {
+  let n = Wrapper { inner: 42 };
+  println!("{}", *n);
+}</code></pre></pre>
+<h2 id="泛型--型態別名"><a class="header" href="#泛型--型態別名">泛型 &amp; 型態別名</a></h2>
+<p>之前一直沒介紹 type alias 的語法，這語法其實並不是只有在 trait
+裡可以使用的，若你覺得某個型態你很常用到但太長了打起來很麻煩時你可以用這個語法來建立一個別名，也可以加上
+pub 讓你的別名可以被外部使用：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub type MyInt = i32;
+<span class="boring">}</span></code></pre></pre>
+<p>像標準函式庫中的
+<a href="https://doc.rust-lang.org/stable/std/io/type.Result.html"><code>std::io::Result</code></a>
+就是一個很好的例子，它的定義如下：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type Result&lt;T&gt; = Result&lt;T, Error&gt;;
+<span class="boring">}</span></code></pre></pre>
+<p>這邊定義了有一個泛型的參數的 <code>Result</code> 做為原本的 <code>Result</code>
+的別名，之後錯誤的型態則是使用 <code>Error</code> ，於是程式碼裡就不需要到處都是
+<code>Result&lt;T, Error&gt;</code> 而只要寫 <code>Result&lt;T&gt;</code> 就可以了。</p>
+<p>至於在 trait 中何時該用泛型，何時又該用型態別名呢？</p>
+<p>大部份的情況下你應該使用型態別名，不過如果你的 trait
+要可以針對不同的型態有不同的處理方式：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Handler;
+
+trait Handle&lt;T&gt; {
+  fn handle(input: T);
+}
+
+impl Handle&lt;i32&gt; for Handler {
+  fn handle(input: i32) {
+    println!("This is i32: {}", input);
+  }
+}
+
+impl Handle&lt;f64&gt; for Handler {
+  fn handle(input: f64) {
+    println!("This is f64: {}", input);
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>這時你該使用的是泛型。</p>
+<p>下一篇要介紹的是 enum 與模式比對，我個人覺得 Rust 的 enum
+很有趣，畢竟和其它語言的不太一樣啊，模式比對也是 Functional Programming
+一個重要的特性。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../series-1/day-07-struct-與-oop.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../series-1/day-09-列舉-解構-模式比對.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../series-1/day-07-struct-與-oop.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../series-1/day-09-列舉-解構-模式比對.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

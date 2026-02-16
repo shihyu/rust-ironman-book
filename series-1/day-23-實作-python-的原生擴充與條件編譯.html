@@ -1,0 +1,446 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>實作 Python 的原生擴充與條件編譯 - Rust Ironman 合併彙整</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust Ironman 合併彙整</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="實作-python-的原生擴充與條件編譯"><a class="header" href="#實作-python-的原生擴充與條件編譯">實作 Python 的原生擴充與條件編譯</a></h1>
+<ul>
+<li>系列：30 天深入淺出 Rust</li>
+<li>來源系列：https://ithelp.ithome.com.tw/users/20111802/ironman/1742</li>
+<li>原文連結：https://ithelp.ithome.com.tw/articles/10204487</li>
+<li>章節：DAY 23</li>
+<li>發佈時間：2018-10-23 21:16:50</li>
+<li>作者：DanSnow</li>
+<li>清單瀏覽數：4204</li>
+<li>清單摘要：Python 是個廣泛使用的腳本語言，想必或多或少都有聽過這個名字吧，人工智慧、科學計算、統計、應用程式、爬蟲等等的領域無不存在，非常的實用，如果想學個腳本語言...</li>
+</ul>
+<h2 id="內文"><a class="header" href="#內文">內文</a></h2>
+<p>Python
+是個廣泛使用的腳本語言，想必或多或少都有聽過這個名字吧，人工智慧、科學計算、統計、應用程式、爬蟲等等的領域無不存在，非常的實用，如果想學個腳本語言的話非常推薦，雖然我個人是
+Ruby 派的。</p>
+<p>在這方便的程式語言中若偶爾碰到了需要對底層的東西做操作又找不到相關的函式庫時，就只好自己來寫綁定啦，或是有某部份需要加速等等的，
+Rust 的社群提供了一個很棒的 Python 綁定：
+<a href="https://github.com/PyO3/pyo3">PyO3</a></p>
+<p>本次的程式碼在
+<a href="https://github.com/DanSnow/rust-intro/tree/master/python-binding">https://github.com/DanSnow/rust-intro/tree/master/python-binding</a></p>
+<p>PyO3 需要使用到 nightly 版本的 Rust
+，因為它目前使用到了一個還未穩定的功能 <code>specialization</code>
+，中文翻譯叫「特化」，它可以讓你為特定的型態提供不同的 trait
+的實作，實際上標準函式庫中也有因為效能原因而為 <code>&amp;str</code> 提供特化的
+<code>to_string</code> 實作。</p>
+<blockquote>
+<p>Rust 只有 nightly
+的編譯器支援開啟這些不穩定的功能，但是為了要編譯標準函式庫， Rust
+的編譯器使用了個特殊的環境變數允許在穩定版開啟這些功能。</p>
+</blockquote>
+<p>我們先來設定我們的專案與安裝 PyO3 吧，這次比較特別點，我們必須手動修改
+<code>Cargo.toml</code> ，在 <code>[dependencies]</code> 後加上：</p>
+<pre><code class="language-toml">pyo3 = { version = "0.4.1", features = ["extension-module"] }
+</code></pre>
+<p><code>features</code> 是代表我們需要的功能， Rust
+支援使用者在程式裡設定一些只在某些功能開啟或關閉的情況下才編譯的程式碼，而我們這邊需要開啟
+<code>extension-module</code> 這個功能才有辦法把 Rust 的程式編譯成 Python
+的擴充模組。</p>
+<blockquote>
+<p>這有點像在 C 裡使用 <code>define</code> 定義常數加上 <code>ifdef</code> 等等來開關功能。</p>
+</blockquote>
+<p>接著我們再加入一段設定：</p>
+<pre><code class="language-toml">[lib]
+name = "binding"
+crate-type = ["cdylib"]
+</code></pre>
+<p>這邊是設定編譯完的輸出檔名與我們要編譯成動態函式庫，這樣才能讓 Python
+載入。</p>
+<p>總之先像往常一樣寫個 Hello world ：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 開啟 specialization 這個功能，這只能在 nightly 版才能使用
+#![feature(specialization)]
+
+#[macro_use]
+extern crate pyo3;
+
+// 直接引入 prelude
+use pyo3::prelude::*;
+
+// 標記這是個給 python 的函式，這是 PyO3 提供的功能
+// 這些函式必須回傳 PyResult
+#[pyfunction]
+fn hello() -&gt; PyResult&lt;()&gt; {
+  println!("Hello from Rust");
+  Ok(())
+}
+
+// 標記這是 python 模組初始化用的函式
+#[pymodinit]
+fn binding(_py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
+  // 將我們的函式匯出給 python 使用
+  m.add_function(wrap_function!(hello))?;
+
+  Ok(())
+}
+<span class="boring">}</span></code></pre></pre>
+<p>然後我們編譯我們的函式庫：</p>
+<pre><code class="language-shell">$ cargo build
+</code></pre>
+<blockquote>
+<p>如果你編譯失敗的話你會需要安裝 <code>python3-dev</code></p>
+</blockquote>
+<p>編譯完後你應該看到我們編譯好的檔案在 <code>target/debug/libbinding.so</code>
+(如果你是用 Windows 的話會是 <code>binding.dll</code> ， Mac 會是
+<code>libbinding.dylib</code>) ，我們把它複製出來，然後改名成 <code>binding.so</code> (Mac
+也一樣， Windows 要改成 <code>binding.pyd</code>) ，接著你可以在終端機下輸入
+<code>python3</code> (或 <code>python</code>) 來打開 Python 的 repl ，或你也可以選擇使用
+<code>ipython</code>：</p>
+<pre><code class="language-python">&gt;&gt;&gt; import binding
+&gt;&gt;&gt; binding.hello()
+Hello from Rust
+</code></pre>
+<blockquote>
+<p><code>&gt;&gt;&gt;</code> 是 Python 的提示字元，後面的內容是你要輸入的。</p>
+</blockquote>
+<p>這次我們來計算 π (PI)
+吧，也就是圓周率，我們用的是蒙地卡羅的計算方法，總之大概就是正方型與其內切圓的面積為
+4:PI ，所以我們隨機的打點，然後計算落在圓中的次數來反算 PI ，用 Python
+是這樣的：</p>
+<pre><code class="language-python">from random import random
+
+TIMES = 1000_0000
+
+
+def calculate_pi():
+    hit = 0
+
+    for _i in range(0, TIMES):
+        x = random()
+        y = random()
+        if x * x + y * y &lt;= 1.0:
+            hit += 1
+    return hit * 4 / TIMES
+</code></pre>
+<p>在上面隨機的產生了 1 千萬次的點，然後最後回傳算出 PI
+的近似值，接著我們用 timeit 這個 Python 的 module 來算耗時：</p>
+<pre><code class="language-python">print("Python:", timeit.timeit("calculate_pi()", number=3, globals=globals()))
+</code></pre>
+<p>重覆執行三次算平均，在我的電腦上大概花了 4 秒。</p>
+<p>接著我們用 Rust 實現同樣的演算法：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[pyfunction]
+fn calculate_pi() -&gt; PyResult&lt;f64&gt; {
+  let mut hit = 0;
+  for _ in 0..TIMES {
+    let x = rand::random::&lt;f64&gt;();
+    let y = rand::random::&lt;f64&gt;();
+    if x * x + y * y &lt;= 1.0 {
+      hit += 1;
+    }
+  }
+  Ok(f64::from(hit * 4) / f64::from(TIMES))
+}
+<span class="boring">}</span></code></pre></pre>
+<p>一樣在 Python 用 timeit 計算時間，這次只花了 0.7 秒，快了大約 5 倍啊。</p>
+<p>最後若我們搭配之前介紹的 rayon 做平行化：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[pyfunction]
+fn calculate_pi_parallel(py: Python) -&gt; PyResult&lt;f64&gt; {
+  let hit: i32 = py.allow_threads(|| {
+    (0..TIMES)
+      .into_par_iter()
+      .map(|_| {
+        let x = rand::random::&lt;f64&gt;();
+        let y = rand::random::&lt;f64&gt;();
+        if x * x + y * y &lt;= 1.0 {
+          1
+        } else {
+          0
+        }
+      })
+      .sum()
+  });
+  Ok(f64::from(hit * 4) / f64::from(TIMES))
+}
+<span class="boring">}</span></code></pre></pre>
+<p>使用到執行緒的部份必須包在 <code>py.allow_threads</code>
+裡，不然會出問題，這次只花了 0.3 秒，底下是在我電腦上執行的完整結果：</p>
+<pre><code class="language-plain">Python: 4.45852969000407
+Rust: 0.7022144030052004
+Rust parallel: 0.30857402100082254
+</code></pre>
+<p>PyO3 雖然需要使用到 nightly 版的 Rust ，但它真的很方便，實際上 PyO3 的
+macro 幫我們產生了很多在 Rust 與 Python
+之間轉換資料型態的程式碼，我們才能這麼簡單的寫與 Python
+的綁定，如果有興趣的話有另一個 crate 叫 cpython ，它是 PyO3
+的前身，但它並沒有提供這些自動產生的程式碼，所以可以看到這中間做了哪些轉換。</p>
+<h2 id="條件編譯"><a class="header" href="#條件編譯">條件編譯</a></h2>
+<p>因為上面正好提到了，就順便來講一下，條件編譯不只可以做出可以開關的功能，也能在不同系統或架構下提供不同的功能。</p>
+<pre><pre class="playground"><code class="language-rust">#[cfg(unix)]
+fn print_os() {
+  println!("你在使用類 Unix 的系統");
+}
+
+#[cfg(windows)]
+fn print_os() {
+  println!("你在使用 Windows 系統");
+}
+
+fn main() {
+  print_os();
+}</code></pre></pre>
+<p>上面的程式在 Windows 下與 Linux 下會印出不同的東西，因為 Rust
+的編譯器會根據不同的作業系統而選擇編譯不同的程式，這也不只可以用在函式上而已，還可以用在模組的引入：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(unix)]
+mod unix_imp;
+#[cfg(unix)]
+use unix_imp as imp;
+
+// Use imp::...
+<span class="boring">}</span></code></pre></pre>
+<p>這很類似在標準函式庫中提供在不同系統下不同實作的方法。</p>
+<p>另外也可以在 <code>Cargo.toml</code> 中宣告 <code>[features]</code> ：</p>
+<pre><code class="language-toml">[features]
+default = [] # 預設開啟的功能
+foo = [] # 一個叫 foo 的功能，後面可以放相依的功能或是支援這個功能所額外需要的 crate
+</code></pre>
+<p>然後在程式碼中使用：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(feature = "foo")]
+fn foo() {
+  // 實作 foo 功能等等
+}
+<span class="boring">}</span></code></pre></pre>
+<p>這篇展示了怎麼建立 Python 的綁定，大部份的腳本語言都有支援用 C
+擴充它的功能 (但像 Node.js 是用 C++)
+，這使得這些腳本語言能透過這些原生的擴充模組存取系統底層或是加速，而只要能夠支援
+C 就能透過 Rust 實作，有著接近 C 的速度，卻有如此大量的社群套件支援，用
+Rust 來實作這些原生套件真的不失一個選擇。</p>
+<p>下一篇來寫點應用程式吧，我們試著用 clap 來建一個指令列的程式。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../series-1/day-22-從-c-呼叫-rust.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../series-1/day-24-指令列工具與-http-client.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../series-1/day-22-從-c-呼叫-rust.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../series-1/day-24-指令列工具與-http-client.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>指令列工具與 HTTP Client - Rust Ironman 合併彙整</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust Ironman 合併彙整</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="指令列工具與-http-client"><a class="header" href="#指令列工具與-http-client">指令列工具與 HTTP Client</a></h1>
+<ul>
+<li>系列：30 天深入淺出 Rust</li>
+<li>來源系列：https://ithelp.ithome.com.tw/users/20111802/ironman/1742</li>
+<li>原文連結：https://ithelp.ithome.com.tw/articles/10204861</li>
+<li>章節：DAY 24</li>
+<li>發佈時間：2018-10-24 22:20:14</li>
+<li>作者：DanSnow</li>
+<li>清單瀏覽數：2156</li>
+<li>清單摘要：本次的程式碼在 https://github.com/DanSnow/rust-intro/tree/master/hastebin-client 這次來寫個在...</li>
+</ul>
+<h2 id="內文"><a class="header" href="#內文">內文</a></h2>
+<p>本次的程式碼在
+<a href="https://github.com/DanSnow/rust-intro/tree/master/hastebin-client">https://github.com/DanSnow/rust-intro/tree/master/hastebin-client</a></p>
+<p>這次來寫個在指令列下使用的小工具吧，各位知道
+<a href="https://hastebin.com/about.md">hastebin</a> 嗎？是個開源，而且很陽春的
+pastebin
+，今天的目標是來寫個它的用戶端，首先先建立專案並安裝幾個相依套件吧：</p>
+<pre><code class="language-shell">$ cargo init hastebin-client
+$ cd hastebin-client
+$ cargo add atty clap reqwest serde serde_derive
+</code></pre>
+<p>那幾個 crate 功能分別是：</p>
+<ul>
+<li><a href="https://github.com/softprops/atty">atty</a>： 偵測是不是終端機</li>
+<li><a href="https://github.com/clap-rs/clap">clap</a>： 分析指令列的參數</li>
+<li><a href="https://github.com/seanmonstar/reqwest">reqwest</a>： Http 的用戶端</li>
+<li><a href="https://github.com/serde-rs/serde">serde</a> 與 serde_derive ：
+序列化與反序列化的函式庫，這在 Rust 的生態系中很常用</li>
+</ul>
+<p>我們先試著用 reqwest 送出一份文件吧：</p>
+<pre><pre class="playground"><code class="language-rust">#[macro_use]
+extern crate serde_derive;
+extern crate reqwest;
+extern crate serde;
+
+use reqwest::{Client, Url};
+
+const URL: &amp;str = "https://hastebin.com";
+// 這邊會把我們的程式碼以字串的型式引入進來
+const SOURCE: &amp;str = include_str!("main.rs");
+
+// Deserialize 是 serde 提供的，只要加上去就能從資料反序列化回 Rust 的這個型態
+#[derive(Clone, Debug, Deserialize)]
+struct Data {
+    key: String,
+    // 因為這個欄位不一定會有，所以讓 serde 在沒有這個欄位時用預設值
+    #[serde(default)]
+    message: Option&lt;String&gt;,
+}
+
+fn main() -&gt; reqwest::Result&lt;()&gt; {
+  // 把網址 parse 成 Url 的型態
+  let base = Url::parse(URL).unwrap();
+  // 建一個 reqwest 的用戶端
+  let client = Client::new();
+  let res = client
+    // 建立 post 的請求，並在網址後附上 documents
+    // 完整的網址就變成 https://hastebin.com/documents 這正是 hastebin 的 api
+    .post(base.join("documents").unwrap())
+    // body 為我們的原始碼
+    .body(SOURCE)
+    // 送出請求
+    .send()?
+    // 將回傳的資料做為 json 反序列化為 data
+    .json::&lt;Data&gt;()?;
+  // 印出來
+  println!("{:?}", res);
+  Ok(())
+}</code></pre></pre>
+<p>實際執行一次會看到這樣的輸出：</p>
+<pre><code class="language-plain">Data { key: "avamicupez", message: None }
+</code></pre>
+<p>這邊的 key 是文件的代碼，你的應該不會跟我的一樣，這代表我們的文件在
+<a href="https://hastebin.com/avamicupez">https://hastebin.com/avamicupez</a> 。</p>
+<p>接著我們來加上更多功能吧，我希望這個程式可以讓我接上檔名就可以上傳該文件，若沒有接上檔名時則從標準輸入讀進來，還要顯示上傳後的網址，底下只有大概列一下改變的部份：</p>
+<pre><pre class="playground"><code class="language-rust">// ...
+extern crate clap;
+
+use clap::{App, Arg};
+use reqwest::{Body, Client, Url};
+use std::{
+    fs::File,
+    io::{stdin, Read},
+    process,
+};
+
+// ...
+
+fn main() -&gt; reqwest::Result&lt;()&gt; {
+  // 設定 clap
+  let matches = App::new("haste-client")
+    .author("DanSnow")
+    .version("0.1.0")
+    // 定義一個可選的位置的參數
+    .arg(Arg::with_name("FILE").index(1))
+    // 取得 parse 的結果
+    .get_matches();
+  // 決定要怎麼取得 body ，在有給檔名時使用檔名
+  let body = if let Some(file) = matches.value_of("FILE") {
+    // 開檔
+    match File::open(file) {
+      // 轉換成 Body
+      Ok(f) =&gt; Body::from(f),
+      Err(err) =&gt; {
+        eprintln!("開啟檔案失敗： {}", err);
+        process::exit(1);
+      }
+    }
+  } else {
+    // 這邊是讀標準輸入
+    let mut buf = String::new();
+    stdin()
+      .lock()
+      .read_to_string(&amp;mut buf)
+      .expect("讀輸入失敗");
+    Body::from(buf)
+  };
+  // ...
+  let res = client
+    .post(base.join("documents").unwrap())
+    .body(body)
+    .send()?
+    .json::&lt;Data&gt;()?;
+  println!("{}", base.join(&amp;res.key).unwrap());
+  Ok(())
+}</code></pre></pre>
+<p>到這邊就完成了一個很陽春的用戶端了，很簡單吧，我們再多加一點功能好了，如果加上參數
+<code>--raw</code> 就顯示另一個 <code>raw</code> 版本的網址，如果標準輸入是終端機的話就打開
+vim (Linux
+中在終端機下的一個老牌的文字編輯器)，讓使用者編輯檔案，編輯完再上傳，同樣的，這次只列出修改的部份：</p>
+<pre><pre class="playground"><code class="language-rust">// ...
+extern crate atty;
+
+use atty::Stream;
+use std::{
+  env,
+  fs::{self, File},
+  io::{stdin, Read},
+  process::{self, Command},
+};
+
+// ...
+
+fn main() -&gt; reqwest::Result&lt;()&gt; {
+  let matches = App::new("haste-client")
+    .author("DanSnow")
+    .version("0.1.0")
+    // 增加 RAW 這個參數，設定參數使用的是 --raw
+    .arg(Arg::with_name("RAW").long("raw"))
+    .arg(Arg::with_name("FILE").index(1))
+    .get_matches();
+  let body = if let Some(file) = matches.value_of("FILE") {
+    // ...
+    // 判斷是不是終端機
+  } else if atty::is(Stream::Stdin) {
+    // 建個放暫存檔的位置
+    let path = env::temp_dir().join("haste-client-tempfile");
+    // 啟動 vim 打開這個暫存檔
+    let mut child = Command::new("vim")
+      .arg(path.as_os_str())
+      .spawn()
+      .expect("開啟 vim 失敗");
+    child.wait().expect("等待 vim 結束失敗");
+    // 開啟暫存檔
+    let file = File::open(&amp;path).expect("開啟暫存檔失敗");
+    // 刪除暫存檔，在 Linux 就算刪除檔案，已經開啟的人還是可以正常讀寫檔案
+    // 這招在 Windows 下不適用
+    fs::remove_file(path).expect("刪除暫存檔失敗");
+    Body::from(file)
+  } else {
+    // ...
+  };
+  // 檢查有沒有 RAW 參數，若有則在網址加上 raw
+  let mut url = base;
+  if matches.is_present("RAW") {
+      url = url.join("raw/").unwrap();
+  }
+  println!("{}", url.join(&amp;res.key).unwrap());
+  Ok(())
+}</code></pre></pre>
+<p>這樣子已經挺好用的了，不過我們再加個參數好了，因為 hastebin
+可以自己架設，所以我們加個 <code>--host</code>
+的參數讓使用者決定要不要用自己的伺服器，同時也讀取 <code>HASTE_SERVER</code>
+這個環境變數來找伺服器，順序是 <code>--host</code> &gt; <code>HASTE_SERVER</code> &gt;
+預設值，以下是程式碼：</p>
+<pre><pre class="playground"><code class="language-rust">// ...
+fn main() -&gt; reqwest::Result&lt;()&gt; {
+  let matches = App::new("haste-client")
+    .author("DanSnow")
+    .version("0.1.0")
+    .arg(
+      // 定義一個叫 HOST 的參數，它需要值，這次支援使用 -h 或 --host
+      Arg::with_name("HOST")
+        .short("h")
+        .long("host")
+        .takes_value(true),
+    )
+    .arg(Arg::with_name("RAW").long("raw"))
+    .arg(Arg::with_name("FILE").index(1))
+    .get_matches();
+  // ...
+  let base = Url::parse(
+    // 先嘗試取得 HOST 的內容並轉換成 String
+    &amp;matches
+      .value_of("HOST")
+      .map(ToOwned::to_owned)
+      // 取得環境變數的值，並用 ok 將 Result 轉換成 Option
+      .or(env::var("HASTE_SERVER").ok())
+      // unwrap ，若沒有值則用預設值
+      .unwrap_or_else(|| URL.to_owned()),
+  )
+  .unwrap();
+  // ...
+}</code></pre></pre>
+<p>另外你也可以對這個程式使用 <code>--help</code> 或 <code>--version</code> 看看，這兩個是 clap
+自動幫我們加上去的 clap 還有其它的使用方法，有興趣可以去看文件，還有
+serde 系列的還有個叫 serde_json 的函式庫，可以把 Rust 的值轉換成 json
+或是從 json 轉換回來，也建議參考看看。</p>
+<p>這次實作的 hastebin 的用戶端，我覺得做起來還挺簡單的，你覺得呢？ Rust
+的社群提供了這些強大的 crate
+讓這些功能的實作都變的很容易，雖然同樣的功能用 Python
+等等的腳本語言做起來肯定更簡單，但 Rust
+的程式碼我並沒有覺得有複雜到哪裡去，而且執行速度又快又是原生的程式，如果你會寫
+Go 的話要不要試著寫一個來比較看看呢？</p>
+<p>這次的用戶端其實也還有些可以改進的地方，比如：</p>
+<ul>
+<li>錯誤處理的部份，像 <code>--host</code> 亂輸入</li>
+<li>使用 <code>EDITOR</code> 環境變數來打開使用者偏好的編輯器</li>
+</ul>
+<p>或許你也可以想想看有什麼地方能改進的。</p>
+<p>下一篇我們來玩玩資料庫吧。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../series-1/day-23-實作-python-的原生擴充與條件編譯.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../series-1/day-25-diesel-rust-的-orm.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../series-1/day-23-實作-python-的原生擴充與條件編譯.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../series-1/day-25-diesel-rust-的-orm.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

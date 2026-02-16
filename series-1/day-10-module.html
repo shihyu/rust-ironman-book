@@ -1,0 +1,392 @@
+<!DOCTYPE HTML>
+<html lang="zh-TW" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Module - Rust Ironman 合併彙整</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "../searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust Ironman 合併彙整</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="module"><a class="header" href="#module">Module</a></h1>
+<ul>
+<li>系列：30 天深入淺出 Rust</li>
+<li>來源系列：https://ithelp.ithome.com.tw/users/20111802/ironman/1742</li>
+<li>原文連結：https://ithelp.ithome.com.tw/articles/10200792</li>
+<li>章節：DAY 10</li>
+<li>發佈時間：2018-10-10 21:19:46</li>
+<li>作者：DanSnow</li>
+<li>清單瀏覽數：2709</li>
+<li>清單摘要：在 Rust 中要建立一個模組其實不難，只要像這樣： mod mymod { pub fn print_hello() { println!(&amp;qu...</li>
+</ul>
+<h2 id="內文"><a class="header" href="#內文">內文</a></h2>
+<p>在 Rust 中要建立一個模組其實不難，只要像這樣：</p>
+<pre><pre class="playground"><code class="language-rust">mod mymod {
+  pub fn print_hello() {
+    println!("Hello from mymod");
+  }
+}
+
+fn main () {
+  mymod::print_hello();
+}</code></pre></pre>
+<p>這樣你就有一個模組了，在裡面的東西只要沒有宣告 <code>pub</code>
+的話外面是不能用的：</p>
+<pre><pre class="playground"><code class="language-rust">mod mymod {
+  fn private() {
+    println!("這是私有的函式");
+  }
+  pub fn public() {
+    println!("這是公開的函式");
+    private();
+  }
+}
+
+fn main () {
+  // mymod::private(); // 如果取消註解，這邊會出現編譯錯誤
+  mymod::public();
+}</code></pre></pre>
+<p>但這樣寫還是一樣是寫在同一個檔案裡，如果要分成不同的檔案的話也很簡單，建一個
+<code>mymod.rs</code> 跟你的 <code>main.rs</code> 放在一起就好了，資料夾下會像這樣：</p>
+<pre><code class="language-plain">src
+├── main.rs
+└── mymod.rs
+</code></pre>
+<p>之後在你的 <code>main.rs</code> 加上：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>mod mymod;
+<span class="boring">}</span></code></pre></pre>
+<p>跟上面不同的是這次後面沒有大括號與裡面的內容，這樣 Rust 就會去找看有沒有
+<code>mymod.rs</code> 了。</p>
+<p>如果想要更複雜一點的話，比如我想要模組下又有子模組呢？這時我們要介紹一個特殊的檔名
+<code>mod.rs</code> 就像程式開始執行的地方也就是進入點是 <code>main.rs</code>
+一樣，模組的進入點是 <code>mod.rs</code>，我們先在 <code>main.rs</code> 旁建一個叫 <code>mymod</code>
+的資料夾，把原本的 <code>mymod.rs</code> 放進去後改名成 <code>mod.rs</code>
+，於是結構會變成像這樣：</p>
+<pre><code class="language-plain">src
+├── main.rs
+└── mymod
+    └── mod.rs
+</code></pre>
+<p>到這邊你可以試著執行看看，結果應該會跟剛才完全一樣。</p>
+<p>我們現在可以在 <code>mymod</code> 的資料夾加上子模組了，這邊加上一個叫 <code>submod.rs</code>
+的檔案：</p>
+<pre><code class="language-plain">src
+├── main.rs
+└── mymod
+    ├── mod.rs
+    └── submod.rs
+</code></pre>
+<p>然後在 <code>mymod/mod.rs</code> 中加上：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>mod submod;
+<span class="boring">}</span></code></pre></pre>
+<p>到這邊子模組已經可以使用了，如果你想讓外部也能使用你的子模組的話，就在
+<code>mod submod</code> 的前面加上 <code>pub</code> 吧：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub mod submod;
+<span class="boring">}</span></code></pre></pre>
+<h2 id="self--super"><a class="header" href="#self--super">self &amp; super</a></h2>
+<p><code>self</code> 也能被使用在引入的路徑中，它代表的是目前的模組，以上面的 <code>mymod</code>
+舉例，如果要在 <code>mod.rs</code> 中使用 <code>submod</code> 中的東西可以寫成：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use self::submod::something;
+// 或把完整的路徑寫出來
+use mymod::submod::something;
+<span class="boring">}</span></code></pre></pre>
+<p><code>super</code> 則是代表上層的模組，比如：</p>
+<pre><pre class="playground"><code class="language-rust">fn hello() {
+  println!("Hello");
+}
+
+fn main() {
+  sub::call_hello();
+}
+
+mod sub {
+  use super::hello;
+  pub fn call_hello() {
+    hello();
+  }
+}</code></pre></pre>
+<p>這邊也可以注意到，子模組可以直接使用上層模組的東西，不論它有沒有宣告為公開的。</p>
+<h2 id="use"><a class="header" href="#use">use</a></h2>
+<p><code>use</code> 用在引入模組、函式、常數、或列舉中的 variant
+等等，其實我們已經使用過很多次了，不過如果要從一個模組中引入很多東西時，你可以不用一行一行的寫，可以像這樣：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::{
+  fmt, // 引入子模組
+  fs::{File}, // 引入子模組下的 struct
+  ops::{Add, Deref}, // 同時引入多個
+  io::{self, Read}, // 這行會引入 io 這個模組本身，與在它之下的 Read
+};
+<span class="boring">}</span></code></pre></pre>
+<p>上面的用法你也可以繼續的往下組合，至於可讀性就見仁見智了。</p>
+<h2 id="再匯出-re-export"><a class="header" href="#再匯出-re-export">再匯出 (Re-export)</a></h2>
+<p>你可以在 <code>use</code> 前面加個 <code>pub</code> 把你引入的模組也再從你這個模組匯出：</p>
+<pre><pre class="playground"><code class="language-rust">mod mymod {
+  mod submod {
+    pub fn foo() {}
+  }
+
+  pub use self::submod::foo;
+  
+  // 這邊可以使用 foo
+}
+
+// 可以從 mymod 引入 foo;
+use mymod::foo;
+// use mymod::submod::foo; // 這邊拿掉註解會編譯錯誤， submod 是私有的
+
+fn main() {
+  foo();
+}</code></pre></pre>
+<p>有些 crate 所提供的 prelude 就是像這樣，把常用的東西全部在從 prelude
+下重新匯出：</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>mod mymod {
+  pub mod submod1 {
+    pub fn often_use1() {}
+    pub fn often_use2() {}
+    pub fn rare_use() {}
+  }
+
+  pub mod submod2 {
+    pub fn often_use3() {}
+  }
+
+  pub mod prelude {
+    pub use super::submod1::{often_use1, often_use2};
+    pub use super::submod2::often_use3;
+  }
+}
+
+use mymod::prelude::*;
+<span class="boring">}</span></code></pre></pre>
+<p>下一篇要來詳細介紹 Rust 的錯誤處理。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../series-1/day-09-列舉-解構-模式比對.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../series-1/day-11-錯誤處理.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../series-1/day-09-列舉-解構-模式比對.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../series-1/day-11-錯誤處理.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
